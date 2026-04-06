@@ -6,9 +6,10 @@ function parseNumber(value) {
 export default {
   name: "roll",
   aliases: ["random"],
-  descriptionKey: "commands.roll.description",
-  usageKey: "commands.roll.usage",
+  descriptionKey: "commands.fun.roll.description",
+  usageKey: "commands.fun.roll.usage",
   cooldown: 3000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { args, t, reply } = ctx;
@@ -20,7 +21,7 @@ export default {
     if (args.length === 1) {
       const parsed = parseNumber(args[0]);
       if (parsed == null) {
-        await reply(t("commands.roll.usageMessage"));
+        await reply(t("commands.fun.roll.usageMessage"));
         return;
       }
       max = parsed;
@@ -28,7 +29,7 @@ export default {
       const parsedMin = parseNumber(args[0]);
       const parsedMax = parseNumber(args[1]);
       if (parsedMin == null || parsedMax == null) {
-        await reply(t("commands.roll.usageMessage"));
+        await reply(t("commands.fun.roll.usageMessage"));
         return;
       }
       min = parsedMin;
@@ -42,11 +43,11 @@ export default {
       Math.abs(min) > maxRange ||
       Math.abs(max) > maxRange
     ) {
-      await reply(t("commands.roll.usageMessage"));
+      await reply(t("commands.fun.roll.usageMessage"));
       return;
     }
 
     const roll = Math.floor(Math.random() * (max - min + 1)) + min;
-    await reply(t("commands.roll.reply", { roll, min, max }));
+    await reply(t("commands.fun.roll.reply", { roll, min, max }));
   },
 };

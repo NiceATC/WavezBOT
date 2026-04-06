@@ -7,15 +7,16 @@ function formatLabel(title, artist) {
 
 export default {
   name: "history",
-  descriptionKey: "commands.history.description",
-  usageKey: "commands.history.usage",
+  descriptionKey: "commands.info.history.description",
+  usageKey: "commands.info.history.usage",
   cooldown: 6000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { t, reply } = ctx;
     const rows = await listTrackHistory(5);
     if (!rows?.length) {
-      await reply(t("commands.history.empty"));
+      await reply(t("commands.info.history.empty"));
       return;
     }
 
@@ -24,13 +25,13 @@ export default {
       const artist = entry.artist ?? "";
       const label = formatLabel(title, artist);
       const dj = entry.dj_name ?? t("common.someone");
-      return t("commands.history.line", {
+      return t("commands.info.history.line", {
         pos: index + 1,
         label,
         dj,
       });
     });
 
-    await reply(t("commands.history.reply", { lines: lines.join(" | ") }));
+    await reply(t("commands.info.history.reply", { lines: lines.join(" | ") }));
   },
 };

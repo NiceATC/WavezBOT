@@ -1,0 +1,10 @@
+{
+    "_comment": "Configurações principais: sala, rede, prefixo e controle de mensagens.",
+    "room": "wavez-lounge",
+    "roomUrl": "https://wavez.vps-kinghost.net/~/{room}",
+    "locale": "pt-BR",
+    "apiUrl": "https://api.wavez.vps-kinghost.net",
+    "cmdPrefix": "!",
+    "deleteCommandMessagesEnabled": true,
+    "deleteCommandMessagesDelayMs": 1000
+}

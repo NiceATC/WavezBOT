@@ -16,28 +16,29 @@ function formatUptime(seconds) {
 export default {
   name: "stats",
   aliases: ["status", "info", "bot"],
-  descriptionKey: "commands.stats.description",
-  usageKey: "commands.stats.usage",
+  descriptionKey: "commands.info.stats.description",
+  usageKey: "commands.info.stats.usage",
   cooldown: 8_000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, reply, t } = ctx;
     const s = bot.getSessionState();
 
     if (!s.startedAt) {
-      await reply(t("commands.stats.notReady"));
+      await reply(t("commands.info.stats.notReady"));
       return;
     }
 
     const uptime = formatUptime(s.uptimeSec);
     const parts = [
-      t("commands.stats.uptime", { uptime }),
-      t("commands.stats.woots", { count: s.wootCount }),
+      t("commands.info.stats.uptime", { uptime }),
+      t("commands.info.stats.woots", { count: s.wootCount }),
     ];
 
     if (s.waitlistPosition) {
       parts.push(
-        t("commands.stats.queue", {
+        t("commands.info.stats.queue", {
           position: s.waitlistPosition,
           total: s.waitlistTotal ?? "?",
         }),

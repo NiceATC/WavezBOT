@@ -7,15 +7,16 @@ import { getWaitlist } from "../../helpers/waitlist.js";
 
 const roulette = {
   name: "roulette",
-  descriptionKey: "commands.roulette.description",
-  usageKey: "commands.roulette.usage",
+  descriptionKey: "commands.fun.roulette.description",
+  usageKey: "commands.fun.roulette.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
   minRole: "bouncer",
 
   async execute(ctx) {
     const { bot, api, reply, t } = ctx;
     if (rouletteState.open) {
-      await reply(t("commands.roulette.alreadyOpen"));
+      await reply(t("commands.fun.roulette.alreadyOpen"));
       return;
     }
 
@@ -26,7 +27,7 @@ const roulette = {
     }, ROULETTE_DURATION_MS);
 
     await reply(
-      t("commands.roulette.opened", {
+      t("commands.fun.roulette.opened", {
         seconds: Math.round(ROULETTE_DURATION_MS / 1000),
       }),
     );
@@ -35,21 +36,22 @@ const roulette = {
 
 const join = {
   name: "join",
-  descriptionKey: "commands.join.description",
-  usageKey: "commands.join.usage",
+  descriptionKey: "commands.fun.join.description",
+  usageKey: "commands.fun.join.usage",
   cooldown: 3000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { sender, reply, api, bot, t } = ctx;
     if (!rouletteState.open) {
-      await reply(t("commands.join.closed"));
+      await reply(t("commands.fun.join.closed"));
       return;
     }
 
     const key = sender.userId != null ? String(sender.userId) : "";
     const name = sender.displayName ?? sender.username ?? t("common.someone");
     if (!key) {
-      await reply(t("commands.join.noUser"));
+      await reply(t("commands.fun.join.noUser"));
       return;
     }
 
@@ -59,50 +61,51 @@ const join = {
         (u) => String(u.id ?? u.userId ?? u.user_id ?? "") === key,
       );
       if (!inList) {
-        await reply(t("commands.join.mustBeInQueue"));
+        await reply(t("commands.fun.join.mustBeInQueue"));
         return;
       }
     } catch (err) {
-      await reply(t("commands.join.waitlistError", { error: err.message }));
+      await reply(t("commands.fun.join.waitlistError", { error: err.message }));
       return;
     }
 
     if (rouletteState.participants.has(key)) {
-      await reply(t("commands.join.alreadyIn"));
+      await reply(t("commands.fun.join.alreadyIn"));
       return;
     }
 
     rouletteState.participants.set(key, name);
-    await reply(t("commands.join.joined", { name }));
+    await reply(t("commands.fun.join.joined", { name }));
   },
 };
 
 const leave = {
   name: "leave",
-  descriptionKey: "commands.leave.description",
-  usageKey: "commands.leave.usage",
+  descriptionKey: "commands.fun.leave.description",
+  usageKey: "commands.fun.leave.usage",
   cooldown: 3000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { sender, reply, t } = ctx;
     if (!rouletteState.open) {
-      await reply(t("commands.leave.closed"));
+      await reply(t("commands.fun.leave.closed"));
       return;
     }
 
     const key = sender.userId != null ? String(sender.userId) : "";
     const name = sender.displayName ?? sender.username ?? t("common.someone");
     if (!key) {
-      await reply(t("commands.leave.noUser"));
+      await reply(t("commands.fun.leave.noUser"));
       return;
     }
     if (!rouletteState.participants.has(key)) {
-      await reply(t("commands.leave.notIn"));
+      await reply(t("commands.fun.leave.notIn"));
       return;
     }
 
     rouletteState.participants.delete(key);
-    await reply(t("commands.leave.left", { name }));
+    await reply(t("commands.fun.leave.left", { name }));
   },
 };
 

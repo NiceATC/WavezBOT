@@ -202,6 +202,7 @@ export default {
           detail,
           label,
         }),
+        deleteMs: bot.cfg.deleteCommandMessagesDelayMs || 60_000,
       });
     }
 

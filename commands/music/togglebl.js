@@ -9,9 +9,10 @@ import { setSetting } from "../../lib/storage.js";
 export default {
   name: "togglebl",
   aliases: ["bltoggle", "blacklisttoggle"],
-  descriptionKey: "commands.togglebl.description",
-  usageKey: "commands.togglebl.usage",
+  descriptionKey: "commands.music.togglebl.description",
+  usageKey: "commands.music.togglebl.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
   minRole: "bouncer",
 
   async execute(ctx) {
@@ -30,7 +31,7 @@ export default {
     bot.updateConfig("blacklistEnabled", enabled);
     await setSetting("blacklistEnabled", enabled);
     await reply(
-      t(enabled ? "commands.togglebl.enabled" : "commands.togglebl.disabled"),
+      t(enabled ? "commands.music.togglebl.enabled" : "commands.music.togglebl.disabled"),
     );
   },
 };

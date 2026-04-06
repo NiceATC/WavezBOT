@@ -12,9 +12,10 @@ const DC_MIN_FALLBACK = 10;
 export default {
   name: "dc",
   aliases: ["dclookup"],
-  descriptionKey: "commands.dc.description",
-  usageKey: "commands.dc.usage",
+  descriptionKey: "commands.queue.dc.description",
+  usageKey: "commands.queue.dc.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { api, bot, args, sender, senderRoleLevel, reply, t } = ctx;
@@ -23,25 +24,25 @@ export default {
       .trim();
 
     if (!targetInput) {
-      await reply(t("commands.dc.usageMessage"));
+      await reply(t("commands.queue.dc.usageMessage"));
       return;
     }
 
     const user = bot.findRoomUser(targetInput);
     if (!user) {
-      await reply(t("commands.dc.userNotFound", { user: targetInput }));
+      await reply(t("commands.queue.dc.userNotFound", { user: targetInput }));
       return;
     }
 
     const isSelf = String(user.userId) === String(sender.userId ?? "");
     if (!isSelf && senderRoleLevel < ROLE_LEVELS.bouncer) {
-      await reply(t("commands.dc.noPermission"));
+      await reply(t("commands.queue.dc.noPermission"));
       return;
     }
 
     const snap = await getWaitlistSnapshot(user.userId);
     if (!snap) {
-      await reply(t("commands.dc.noSnapshot"));
+      await reply(t("commands.queue.dc.noSnapshot"));
       return;
     }
 
@@ -49,13 +50,13 @@ export default {
     const dcWindowMs = Math.max(1, windowMin) * 60 * 1000;
     const updatedAt = Number(snap.updated_at ?? snap.updatedAt ?? 0);
     if (!updatedAt || Date.now() - updatedAt > dcWindowMs) {
-      await reply(t("commands.dc.expired"));
+      await reply(t("commands.queue.dc.expired"));
       return;
     }
 
     let position = Number(snap.position ?? 0);
     if (!Number.isFinite(position) || position < 1) {
-      await reply(t("commands.dc.invalidPosition"));
+      await reply(t("commands.queue.dc.invalidPosition"));
       return;
     }
 
@@ -67,7 +68,7 @@ export default {
         : false;
 
       if (!inList) {
-        await reply(t("commands.dc.mustJoin"));
+        await reply(t("commands.queue.dc.mustJoin"));
         return;
       }
 
@@ -77,16 +78,16 @@ export default {
       }
 
       const apiPos = position - 1;
-      await api.room.moveInWaitlist(bot.cfg.room, Number(user.userId), apiPos);
+      bot.wsReorderQueue(user.userId, apiPos);
       await reply(
-        t("commands.dc.moved", {
+        t("commands.queue.dc.moved", {
           user: user.displayName ?? user.username,
           position,
         }),
       );
     } catch (err) {
       await reply(
-        t("commands.dc.error", {
+        t("commands.queue.dc.error", {
           error: err.message,
         }),
       );

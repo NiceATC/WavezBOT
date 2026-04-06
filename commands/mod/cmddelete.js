@@ -9,9 +9,10 @@ import { setSetting } from "../../lib/storage.js";
 export default {
   name: "cmddelete",
   aliases: ["delcmds", "delcomandos", "cmdclean"],
-  descriptionKey: "commands.cmddelete.description",
-  usageKey: "commands.cmddelete.usage",
+  descriptionKey: "commands.mod.cmddelete.description",
+  usageKey: "commands.mod.cmddelete.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
   minRole: "bouncer",
 
   async execute(ctx) {
@@ -30,7 +31,7 @@ export default {
     bot.updateConfig("deleteCommandMessagesEnabled", enabled);
     await setSetting("deleteCommandMessagesEnabled", enabled);
     await reply(
-      t(enabled ? "commands.cmddelete.enabled" : "commands.cmddelete.disabled"),
+      t(enabled ? "commands.mod.cmddelete.enabled" : "commands.mod.cmddelete.disabled"),
     );
   },
 };

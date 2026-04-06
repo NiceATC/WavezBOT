@@ -31,9 +31,6 @@
         "invalidRoom": "[config] config.json: 'room' must be set to a valid room slug."
     },
     "commands": {
-        "mod": {
-            "cannotTargetBot": "I can't use this command on the bot."
-        },
         "registry": {
             "invalidCommand": "Invalid command: must have \"name\" and \"execute\".",
             "overwrite": "[CommandRegistry] Overwriting existing command: {command}",
@@ -42,961 +39,980 @@
             "userMissingRoleReply": "{user}, you need the {role} role to use {command}.",
             "cooldownReply": "{user}, wait {seconds}s before using {command} again."
         },
-        "help": {
-            "description": "List commands or show help for a command.",
-            "usage": "!help [command]",
-            "notFound": "Command not found: {name}",
-            "usageLine": "Usage: {usage}",
-            "aliasesLine": "Aliases: {aliases}",
-            "requirementLine": "Required role: {role}",
-            "list": "Commands: {list}",
-            "dashboard": "See commands in the dashboard: {url}"
-        },
-        "ping": {
-            "description": "Check if the bot is alive.",
-            "usage": "!ping",
-            "reply": "Pong, {user}! {ms}ms"
-        },
-        "cmddelete": {
-            "description": "Toggle command message cleanup.",
-            "usage": "!cmddelete [on|off]",
-            "enabled": "Command cleanup enabled.",
-            "disabled": "Command cleanup disabled."
-        },
-        "start": {
-            "description": "Resume the bot.",
-            "usage": "!start",
-            "reply": {
-                "resumed": "Bot resumed.",
-                "alreadyActive": "Bot is already running."
+        "core": {
+            "help": {
+                "description": "List commands or show help for a command.",
+                "usage": "!help [command]",
+                "notFound": "Command not found: {name}",
+                "usageLine": "Usage: {usage}",
+                "aliasesLine": "Aliases: {aliases}",
+                "requirementLine": "Required role: {role}",
+                "list": "Commands: {list}",
+                "dashboard": "See commands in the dashboard: {url}"
+            },
+            "ping": {
+                "description": "Check if the bot is alive.",
+                "usage": "!ping",
+                "reply": "Pong, {user}! {ms}ms"
+            },
+            "start": {
+                "description": "Resume the bot.",
+                "usage": "!start",
+                "reply": {
+                    "resumed": "Bot resumed.",
+                    "alreadyActive": "Bot is already running."
+                }
+            },
+            "stop": {
+                "description": "Pause the bot.",
+                "usage": "!stop",
+                "reply": {
+                    "paused": "Bot paused.",
+                    "alreadyPaused": "Bot is already paused."
+                }
+            },
+            "reload": {
+                "description": "Reconnect the bot.",
+                "usage": "!reload",
+                "reply": {
+                    "loading": "Reloading...",
+                    "error": "Reload failed: {error}"
+                }
+            },
+            "reloadcmd": {
+                "description": "Reload commands.",
+                "usage": "!reloadcmd",
+                "reply": {
+                    "successWithFailures": "Reloaded {loaded} commands ({failed} failed).",
+                    "success": "Reloaded {loaded} commands.",
+                    "error": "Failed to reload commands: {error}"
+                }
             }
         },
-        "stop": {
-            "description": "Pause the bot.",
-            "usage": "!stop",
-            "reply": {
-                "paused": "Bot paused.",
-                "alreadyPaused": "Bot is already paused."
+        "mod": {
+            "cannotTargetBot": "I can't use this command on the bot.",
+            "cmddelete": {
+                "description": "Toggle command message cleanup.",
+                "usage": "!cmddelete [on|off]",
+                "enabled": "Command cleanup enabled.",
+                "disabled": "Command cleanup disabled."
+            },
+            "skip": {
+                "description": "Skip the current track.",
+                "usage": "!skip [reason]",
+                "successWithReason": "Track skipped. Reason: {reason}",
+                "success": "Track skipped.",
+                "error": "Failed to skip: {error}"
+            },
+            "lock": {
+                "description": "Lock the waitlist.",
+                "usage": "!lock",
+                "success": "Waitlist locked.",
+                "error": "Failed to lock waitlist: {error}"
+            },
+            "unlock": {
+                "description": "Unlock the waitlist.",
+                "usage": "!unlock",
+                "success": "Waitlist unlocked.",
+                "error": "Failed to unlock waitlist: {error}"
+            },
+            "remove": {
+                "description": "Remove a user from the waitlist.",
+                "usage": "!remove <user>",
+                "usageMessage": "Usage: !remove <user>",
+                "userNotFound": "User not found: {user}",
+                "notInQueue": "{user} is not in the queue.",
+                "removed": "Removed {user} from the queue.",
+                "error": "Failed to remove: {error}"
+            },
+            "move": {
+                "description": "Move a user in the waitlist.",
+                "usage": "!move <user> <position>",
+                "usageMessage": "Usage: !move <user> <position>",
+                "userNotFound": "User not found: {user}",
+                "moved": "Moved {user} to position {position}.",
+                "error": "Failed to move: {error}"
+            },
+            "swap": {
+                "description": "Swap two users in the waitlist.",
+                "usage": "!swap <userA> <userB>",
+                "usageMessage": "Usage: !swap <userA> <userB>",
+                "userNotFound": "User(s) not found.",
+                "notInQueue": "Both users must be in the queue.",
+                "samePosition": "Users are already in the same position.",
+                "success": "Swapped {userA} and {userB}.",
+                "error": "Failed to swap: {error}"
+            },
+            "timeguard": {
+                "description": "Toggle time guard.",
+                "usage": "!timeguard [on|off]",
+                "enabled": "Time guard enabled.",
+                "disabled": "Time guard disabled."
+            },
+            "maxlength": {
+                "description": "Set the max song length.",
+                "usage": "!maxlength <minutes>",
+                "usageMessage": "Usage: !maxlength <minutes>",
+                "updated": "Max song length set to {minutes} min."
+            },
+            "kick": {
+                "description": "Kick a user from the room.",
+                "usage": "!kick <user>",
+                "usageMessage": "Usage: !kick <user>",
+                "userNotFound": "User not found: {user}",
+                "roleTooHigh": "I can't kick {user}; their role is too high.",
+                "removed": "Kicked {user}.",
+                "error": "Failed to kick: {error}"
+            },
+            "mute": {
+                "description": "Mute a user.",
+                "usage": "!mute <user> [duration] [reason]",
+                "usageMessage": "Usage: !mute <user> [duration] [reason]",
+                "userNotFound": "User not found: {user}",
+                "roleTooHigh": "I can't mute {user}; their role is too high.",
+                "muted": "Muted {user}",
+                "duration": "for {duration}",
+                "reason": "reason: {reason}",
+                "error": "Failed to mute: {error}"
+            },
+            "unmute": {
+                "description": "Unmute a user.",
+                "usage": "!unmute <user>",
+                "usageMessage": "Usage: !unmute <user>",
+                "userNotFound": "User not found: {user}",
+                "unmuted": "Unmuted {user}",
+                "error": "Failed to unmute: {error}"
+            },
+            "ban": {
+                "description": "Ban a user.",
+                "usage": "!ban <user> [duration] [reason]",
+                "usageMessage": "Usage: !ban <user> [duration] [reason]",
+                "userNotFound": "User not found: {user}",
+                "roleTooHigh": "I can't ban {user}; their role is too high.",
+                "banned": "Banned {user}",
+                "duration": "for {duration}",
+                "reason": "reason: {reason}",
+                "error": "Failed to ban: {error}"
+            },
+            "unban": {
+                "description": "Unban a user.",
+                "usage": "!unban <user>",
+                "usageMessage": "Usage: !unban <user>",
+                "notFound": "Ban not found for {user}.",
+                "removed": "Unbanned {user}.",
+                "error": "Failed to unban: {error}"
+            },
+            "nuke": {
+                "description": "Delete all cached messages in the room.",
+                "usage": "!nuke",
+                "done": "Nuked {count} message(s)."
+            },
+            "delmsg": {
+                "description": "Delete all cached messages from a user.",
+                "usage": "!delmsg <user>",
+                "usageMessage": "Usage: !delmsg <user>",
+                "userNotFound": "User not found: {user}",
+                "done": "Deleted {count} message(s) from {user}."
+            },
+            "lockchat": {
+                "description": "Lock the chat so only staff can talk.",
+                "usage": "!lockchat [on|off]",
+                "enabled": "Chat locked. Only {role}+ can send messages.",
+                "disabled": "Chat unlocked."
+            },
+            "autoskip": {
+                "description": "Toggle auto-skip for stalled tracks.",
+                "usage": "!autoskip [on|off]",
+                "enabled": "Auto-skip enabled.",
+                "disabled": "Auto-skip disabled."
+            },
+            "afkremoval": {
+                "description": "Toggle AFK removal from the waitlist.",
+                "usage": "!afkremoval [on|off]",
+                "enabled": "AFK removal enabled.",
+                "disabled": "AFK removal disabled."
+            },
+            "afklimit": {
+                "description": "Set the AFK limit in minutes.",
+                "usage": "!afklimit <minutes>",
+                "usageMessage": "Usage: !afklimit <minutes>",
+                "updated": "AFK limit set to {minutes} min."
+            },
+            "afkreset": {
+                "description": "Reset a user's AFK timer.",
+                "usage": "!afkreset [user]",
+                "usageMessage": "Usage: !afkreset [user]",
+                "userNotFound": "User not found: {user}",
+                "reset": "Reset AFK timer for {user}."
+            },
+            "afktime": {
+                "description": "Show how long a user has been AFK.",
+                "usage": "!afktime [user]",
+                "usageMessage": "Usage: !afktime [user]",
+                "userNotFound": "User not found: {user}",
+                "noRecord": "No AFK record for {user}.",
+                "reply": "{user} has been AFK for {duration}."
+            },
+            "duelmute": {
+                "description": "Set the duel loser mute duration.",
+                "usage": "!duelmute <minutes>",
+                "usageMessage": "Usage: !duelmute <minutes>",
+                "updated": "Duel mute set to {minutes} min."
             }
         },
-        "reload": {
-            "description": "Reconnect the bot.",
-            "usage": "!reload",
-            "reply": {
-                "loading": "Reloading...",
-                "error": "Reload failed: {error}"
+        "music": {
+            "woot": {
+                "description": "Cast a woot for the current track.",
+                "usage": "!woot",
+                "noTrack": "No track playing.",
+                "voted": "Wooted {title} for {user}.",
+                "error": "Woot failed: {error}"
+            },
+            "blacklist": {
+                "description": "Manage the track blacklist.",
+                "usage": "!blacklist <add|remove|list|info> ...",
+                "usageMessage": "Usage: !blacklist <add|remove|list|info> ...",
+                "noTrackInfo": "No current track to show.",
+                "currentInfo": "Current: {label} ({id})",
+                "noTrackAdd": "No track to add.",
+                "already": "That track is already blacklisted.",
+                "addedSkip": "Added to blacklist; skipping...",
+                "addedSkipError": "Added to blacklist, but failed to skip: {error}",
+                "added": "Added to blacklist.",
+                "removeUsage": "Usage: !blacklist remove <current|source:id>",
+                "removed": "Removed from blacklist.",
+                "empty": "Blacklist is empty.",
+                "list": "Blacklist ({limit}): {items}",
+                "invalidAction": "Invalid action. Use add/remove/list/info."
+            },
+            "togglebl": {
+                "description": "Enable/disable the blacklist.",
+                "usage": "!togglebl [on|off]",
+                "enabled": "Blacklist enabled.",
+                "disabled": "Blacklist disabled."
+            },
+            "motd": {
+                "description": "Manage the MOTD.",
+                "usage": "!motd [message|on|off|interval <n>]",
+                "stateOn": "on",
+                "stateOff": "off",
+                "status": "MOTD {state} | interval {interval} | message: {message}",
+                "intervalUsage": "Usage: !motd interval <n>",
+                "intervalUpdated": "MOTD interval set to {interval}.",
+                "messageUsage": "Usage: !motd <message>",
+                "updated": "MOTD updated.",
+                "enabled": "MOTD enabled.",
+                "disabled": "MOTD disabled."
+            },
+            "togglemotd": {
+                "description": "Toggle the MOTD.",
+                "usage": "!togglemotd [on|off]",
+                "enabled": "MOTD enabled.",
+                "disabled": "MOTD disabled."
+            },
+            "voteskip": {
+                "description": "Start a vote to skip the current track.",
+                "usage": "!voteskip",
+                "disabled": "Votekip is disabled.",
+                "noUser": "Could not identify you.",
+                "noTrack": "No track playing.",
+                "expired": "Vote ended without enough votes.",
+                "alreadyVoted": "You already voted.",
+                "started": "Vote started ({votes}/{needed}, active {active}). {seconds}s left.",
+                "voted": "Vote recorded ({votes}/{needed}, active {active}).",
+                "passed": "Enough votes! Skipping the track...",
+                "failed": "Could not skip the track.",
+                "noPermission": "I need the bouncer role to skip tracks."
             }
         },
-        "reloadcmd": {
-            "description": "Reload commands.",
-            "usage": "!reloadcmd",
-            "reply": {
-                "successWithFailures": "Reloaded {loaded} commands ({failed} failed).",
-                "success": "Reloaded {loaded} commands.",
-                "error": "Failed to reload commands: {error}"
+        "info": {
+            "nowplaying": {
+                "description": "Show the current track and reactions.",
+                "usage": "!np",
+                "none": "Nothing playing right now.",
+                "trackLine": "Now playing: {title}{artist}",
+                "djLine": "DJ: {dj}",
+                "reactions": "Reactions: 👍 {woots} / 👎 {mehs} / 🔁 {grabs}"
+            },
+            "stats": {
+                "description": "Show bot session stats.",
+                "usage": "!stats",
+                "notReady": "Stats are not ready yet.",
+                "uptime": "Uptime: {uptime}",
+                "woots": "Woots: {count}",
+                "queue": "Queue: {position}/{total}"
+            },
+            "queue": {
+                "description": "Show the bot's waitlist position.",
+                "usage": "!queue",
+                "notInQueue": "I'm not in the queue.",
+                "next": " — Next: {next}",
+                "status": "Position: {position}/{total}{next}"
+            },
+            "active": {
+                "description": "Show how many users chatted recently.",
+                "usage": "!active <minutes>",
+                "usageMessage": "Usage: !active <minutes>",
+                "reply": "Active in the last {window}: {count}."
+            },
+            "lastseen": {
+                "description": "Show when a user last spoke in chat.",
+                "usage": "!lastseen [user]",
+                "usageMessage": "Usage: !lastseen [user]",
+                "userNotFound": "User not found: {user}",
+                "noRecord": "No activity record for {user}.",
+                "reply": "{user} was last seen {duration} ago."
+            },
+            "jointime": {
+                "description": "Show how long a user has been in the room.",
+                "usage": "!jointime [user]",
+                "usageMessage": "Usage: !jointime [user]",
+                "userNotFound": "User not found: {user}",
+                "noRecord": "No join record for {user}.",
+                "reply": "{user} has been in the room for {duration}."
+            },
+            "link": {
+                "description": "Show the current track link.",
+                "usage": "!link",
+                "noTrack": "No track playing.",
+                "unavailable": "No link available for this source.",
+                "reply": "Link: {url}"
+            },
+            "mediaid": {
+                "description": "Show the current track ID.",
+                "usage": "!mediaid",
+                "noTrack": "No track playing.",
+                "noId": "Could not get a track ID.",
+                "reply": "Track ID: {id}"
+            },
+            "ba": {
+                "description": "Responds with BA.",
+                "usage": "!ba",
+                "reply": "BA!"
+            },
+            "lastplayed": {
+                "description": "Show the last played track.",
+                "usage": "!lastplayed",
+                "reply": "Last played: {label} (DJ: {dj})",
+                "empty": "No history yet."
+            },
+            "history": {
+                "description": "Show the last played tracks.",
+                "usage": "!history",
+                "reply": "History: {lines}",
+                "empty": "No history yet.",
+                "line": "#{pos} {label} (DJ: {dj})"
+            },
+            "topwoot": {
+                "description": "Leaderboard for woots given.",
+                "usage": "!topwoot [limit]",
+                "reply": "Top woots: {lines}",
+                "empty": "No woot data yet.",
+                "line": "#{pos} {user}: {count} woots"
+            },
+            "topdj": {
+                "description": "Leaderboard for DJs by plays.",
+                "usage": "!topdj [limit]",
+                "reply": "Top DJs: {lines}",
+                "empty": "No DJ data yet.",
+                "line": "#{pos} {user}: {count} plays"
+            },
+            "topsongs": {
+                "description": "Leaderboard for top wooted tracks.",
+                "usage": "!topsongs [limit]",
+                "reply": "Top tracks: {lines}",
+                "empty": "No track data yet.",
+                "line": "#{pos} {label}: {woots} woots / {plays} plays"
+            },
+            "rank": {
+                "description": "Show your woot/DJ rank.",
+                "usage": "!rank [user]",
+                "userNotFound": "User not found: {user}",
+                "noUser": "Could not identify you.",
+                "empty": "No rank data for {user}.",
+                "reply": "{user}: {stats}",
+                "wootLine": "Woots: #{rank} ({count})",
+                "djLine": "DJ: #{rank} ({count})"
+            },
+            "autowoot-link": {
+                "description": "Send link to auto-woot extension.",
+                "usage": "!autowoot-link",
+                "reply": "Get the auto-woot extension here: https://woot.niceatc.api.br"
             }
-        },
-        "nowplaying": {
-            "description": "Show the current track and reactions.",
-            "usage": "!np",
-            "none": "Nothing playing right now.",
-            "trackLine": "Now playing: {title}{artist}",
-            "djLine": "DJ: {dj}",
-            "reactions": "Reactions: 👍 {woots} / 👎 {mehs} / 🔁 {grabs}"
-        },
-        "stats": {
-            "description": "Show bot session stats.",
-            "usage": "!stats",
-            "notReady": "Stats are not ready yet.",
-            "uptime": "Uptime: {uptime}",
-            "woots": "Woots: {count}",
-            "queue": "Queue: {position}/{total}"
         },
         "queue": {
-            "description": "Show the bot's waitlist position.",
-            "usage": "!queue",
-            "notInQueue": "I'm not in the queue.",
-            "next": " — Next: {next}",
-            "status": "Position: {position}/{total}{next}"
-        },
-        "woot": {
-            "description": "Cast a woot for the current track.",
-            "usage": "!woot",
-            "noTrack": "No track playing.",
-            "voted": "Wooted {title} for {user}.",
-            "error": "Woot failed: {error}"
-        },
-        "blacklist": {
-            "description": "Manage the track blacklist.",
-            "usage": "!blacklist <add|remove|list|info> ...",
-            "usageMessage": "Usage: !blacklist <add|remove|list|info> ...",
-            "noTrackInfo": "No current track to show.",
-            "currentInfo": "Current: {label} ({id})",
-            "noTrackAdd": "No track to add.",
-            "already": "That track is already blacklisted.",
-            "addedSkip": "Added to blacklist; skipping...",
-            "addedSkipError": "Added to blacklist, but failed to skip: {error}",
-            "added": "Added to blacklist.",
-            "removeUsage": "Usage: !blacklist remove <current|source:id>",
-            "removed": "Removed from blacklist.",
-            "empty": "Blacklist is empty.",
-            "list": "Blacklist ({limit}): {items}",
-            "invalidAction": "Invalid action. Use add/remove/list/info."
-        },
-        "togglebl": {
-            "description": "Enable/disable the blacklist.",
-            "usage": "!togglebl [on|off]",
-            "enabled": "Blacklist enabled.",
-            "disabled": "Blacklist disabled."
-        },
-        "motd": {
-            "description": "Manage the MOTD.",
-            "usage": "!motd [message|on|off|interval <n>]",
-            "stateOn": "on",
-            "stateOff": "off",
-            "status": "MOTD {state} | interval {interval} | message: {message}",
-            "intervalUsage": "Usage: !motd interval <n>",
-            "intervalUpdated": "MOTD interval set to {interval}.",
-            "messageUsage": "Usage: !motd <message>",
-            "updated": "MOTD updated.",
-            "enabled": "MOTD enabled.",
-            "disabled": "MOTD disabled."
-        },
-        "togglemotd": {
-            "description": "Toggle the MOTD.",
-            "usage": "!togglemotd [on|off]",
-            "enabled": "MOTD enabled.",
-            "disabled": "MOTD disabled."
-        },
-        "skip": {
-            "description": "Skip the current track.",
-            "usage": "!skip [reason]",
-            "successWithReason": "Track skipped. Reason: {reason}",
-            "success": "Track skipped.",
-            "error": "Failed to skip: {error}"
-        },
-        "lock": {
-            "description": "Lock the waitlist.",
-            "usage": "!lock",
-            "success": "Waitlist locked.",
-            "error": "Failed to lock waitlist: {error}"
-        },
-        "unlock": {
-            "description": "Unlock the waitlist.",
-            "usage": "!unlock",
-            "success": "Waitlist unlocked.",
-            "error": "Failed to unlock waitlist: {error}"
-        },
-        "remove": {
-            "description": "Remove a user from the waitlist.",
-            "usage": "!remove <user>",
-            "usageMessage": "Usage: !remove <user>",
-            "userNotFound": "User not found: {user}",
-            "notInQueue": "{user} is not in the queue.",
-            "removed": "Removed {user} from the queue.",
-            "error": "Failed to remove: {error}"
-        },
-        "move": {
-            "description": "Move a user in the waitlist.",
-            "usage": "!move <user> <position>",
-            "usageMessage": "Usage: !move <user> <position>",
-            "userNotFound": "User not found: {user}",
-            "moved": "Moved {user} to position {position}.",
-            "error": "Failed to move: {error}"
-        },
-        "swap": {
-            "description": "Swap two users in the waitlist.",
-            "usage": "!swap <userA> <userB>",
-            "usageMessage": "Usage: !swap <userA> <userB>",
-            "userNotFound": "User(s) not found.",
-            "notInQueue": "Both users must be in the queue.",
-            "samePosition": "Users are already in the same position.",
-            "success": "Swapped {userA} and {userB}.",
-            "error": "Failed to swap: {error}"
-        },
-        "timeguard": {
-            "description": "Toggle time guard.",
-            "usage": "!timeguard [on|off]",
-            "enabled": "Time guard enabled.",
-            "disabled": "Time guard disabled."
-        },
-        "maxlength": {
-            "description": "Set the max song length.",
-            "usage": "!maxlength <minutes>",
-            "usageMessage": "Usage: !maxlength <minutes>",
-            "updated": "Max song length set to {minutes} min."
-        },
-        "kick": {
-            "description": "Kick a user from the room.",
-            "usage": "!kick <user>",
-            "usageMessage": "Usage: !kick <user>",
-            "userNotFound": "User not found: {user}",
-            "roleTooHigh": "I can't kick {user}; their role is too high.",
-            "removed": "Kicked {user}.",
-            "error": "Failed to kick: {error}"
-        },
-        "mute": {
-            "description": "Mute a user.",
-            "usage": "!mute <user> [duration] [reason]",
-            "usageMessage": "Usage: !mute <user> [duration] [reason]",
-            "userNotFound": "User not found: {user}",
-            "roleTooHigh": "I can't mute {user}; their role is too high.",
-            "muted": "Muted {user}",
-            "duration": "for {duration}",
-            "reason": "reason: {reason}",
-            "error": "Failed to mute: {error}"
-        },
-        "unmute": {
-            "description": "Unmute a user.",
-            "usage": "!unmute <user>",
-            "usageMessage": "Usage: !unmute <user>",
-            "userNotFound": "User not found: {user}",
-            "unmuted": "Unmuted {user}",
-            "error": "Failed to unmute: {error}"
-        },
-        "ban": {
-            "description": "Ban a user.",
-            "usage": "!ban <user> [duration] [reason]",
-            "usageMessage": "Usage: !ban <user> [duration] [reason]",
-            "userNotFound": "User not found: {user}",
-            "roleTooHigh": "I can't ban {user}; their role is too high.",
-            "banned": "Banned {user}",
-            "duration": "for {duration}",
-            "reason": "reason: {reason}",
-            "error": "Failed to ban: {error}"
-        },
-        "nuke": {
-            "description": "Delete all cached messages in the room.",
-            "usage": "!nuke",
-            "done": "Nuked {count} message(s)."
-        },
-        "delmsg": {
-            "description": "Delete all cached messages from a user.",
-            "usage": "!delmsg <user>",
-            "usageMessage": "Usage: !delmsg <user>",
-            "userNotFound": "User not found: {user}",
-            "done": "Deleted {count} message(s) from {user}."
-        },
-        "lockchat": {
-            "description": "Lock the chat so only staff can talk.",
-            "usage": "!lockchat [on|off]",
-            "enabled": "Chat locked. Only {role}+ can send messages.",
-            "disabled": "Chat unlocked."
-        },
-        "unban": {
-            "description": "Unban a user.",
-            "usage": "!unban <user>",
-            "usageMessage": "Usage: !unban <user>",
-            "notFound": "Ban not found for {user}.",
-            "removed": "Unbanned {user}.",
-            "error": "Failed to unban: {error}"
-        },
-        "dc": {
-            "description": "Restore a user's waitlist position after a DC.",
-            "usage": "!dc [user]",
-            "usageMessage": "Usage: !dc [user]",
-            "userNotFound": "User not found: {user}",
-            "noPermission": "You don't have permission to move another user.",
-            "noSnapshot": "No recent snapshot for that user.",
-            "expired": "Snapshot expired.",
-            "invalidPosition": "Invalid saved position.",
-            "mustJoin": "User must be in the waitlist.",
-            "moved": "Moved {user} back to position {position}.",
-            "error": "Failed to restore position: {error}"
-        },
-        "savequeue": {
-            "description": "Save the current waitlist snapshot.",
-            "usage": "!savequeue",
-            "empty": "Waitlist is empty.",
-            "saved": "Saved {count} entries.",
-            "error": "Failed to save queue: {error}"
-        },
-        "autowoot": {
-            "description": "Toggle auto-woot.",
-            "usage": "!autowoot [on|off]",
-            "enabled": "Auto-woot enabled.",
-            "disabled": "Auto-woot disabled."
-        },
-        "settings": {
-            "description": "Get or set persistent settings.",
-            "usage": "!settings <key> [value]",
-            "usageMessage": "Usage: !settings <key> [value]",
-            "list": "Available keys: {keys}",
-            "invalidKey": "Invalid key.",
-            "noPermission": "You need the manager role to use key {key}.",
-            "value": "{key} = {value}",
-            "notFound": "No value for {key}.",
-            "updated": "Updated {key} to {value}."
+            "dc": {
+                "description": "Restore a user's waitlist position after a DC.",
+                "usage": "!dc [user]",
+                "usageMessage": "Usage: !dc [user]",
+                "userNotFound": "User not found: {user}",
+                "noPermission": "You don't have permission to move another user.",
+                "noSnapshot": "No recent snapshot for that user.",
+                "expired": "Snapshot expired.",
+                "invalidPosition": "Invalid saved position.",
+                "mustJoin": "User must be in the waitlist.",
+                "moved": "Moved {user} back to position {position}.",
+                "error": "Failed to restore position: {error}"
+            },
+            "savequeue": {
+                "description": "Save the current waitlist snapshot.",
+                "usage": "!savequeue",
+                "empty": "Waitlist is empty.",
+                "saved": "Saved {count} entries.",
+                "error": "Failed to save queue: {error}"
+            }
         },
         "economy": {
-            "description": "Economy commands.",
-            "usage": "!economy <balance|transfer|top> ...",
-            "usageMessage": "Usage: !economy <balance|transfer|top> ..."
-        },
-        "balance": {
-            "description": "Show your point balance.",
-            "usage": "!balance",
-            "reply": "Balance: {balance} points.",
-            "disabled": "Economy is disabled.",
-            "noUser": "Could not identify you.",
-            "cardTitle": "Balance",
-            "cardBalance": "Balance",
-            "cardPoints": "points"
-        },
-        "transfer": {
-            "description": "Transfer points to another user.",
-            "usage": "!transfer <user> <points>",
-            "usageMessage": "Usage: !transfer <user> <points>",
-            "invalidAmount": "Invalid amount.",
-            "minAmount": "Minimum amount: {min} points.",
-            "noUser": "Could not identify you.",
-            "userNotFound": "User not found: {user}",
-            "self": "You cannot transfer to yourself.",
-            "cannotTargetBot": "I cannot transfer to the bot.",
-            "insufficient": "Insufficient balance. You have {balance} points.",
-            "success": "Transferred {amount} points to {user}. Balance: {balance}.",
-            "disabled": "Economy is disabled.",
-            "failed": "Failed to transfer points."
-        },
-        "top": {
-            "description": "Show the points leaderboard.",
-            "usage": "!top [limit]",
-            "empty": "No economy data yet.",
-            "line": "#{pos} {user}: {balance} points",
-            "disabled": "Economy is disabled."
-        },
-        "perfil": {
-            "description": "Show your level and XP.",
-            "usage": "!perfil [user]",
-            "usageMessage": "Usage: !perfil [user]",
-            "userNotFound": "User not found: {user}",
-            "noRecord": "No XP record for {user}.",
-            "reply": "Level {level} | XP {xp}/{next} ({remaining} left) | Next reward: {reward} points | Balance: {balance}.",
-            "disabled": "XP is disabled.",
-            "nextBadge": "Next badge: {badge}",
-            "nextAchievement": "Next achievement: {achievement}",
-            "cardTitle": "Profile",
-            "cardLevel": "Level",
-            "cardXp": "XP",
-            "cardReward": "Next reward",
-            "cardBalance": "Balance",
-            "cardPoints": "points"
-        },
-        "xptop": {
-            "description": "XP leaderboard.",
-            "usage": "!xptop [limit]",
-            "empty": "No XP data yet.",
-            "line": "#{pos} {user}: level {level} ({xp} XP)",
-            "disabled": "XP is disabled."
-        },
-        "welcome": {
-            "description": "Toggle join welcome messages.",
-            "usage": "!welcome [on|off]",
-            "enabled": "Welcome messages enabled.",
-            "disabled": "Welcome messages disabled."
-        },
-        "autowoot-link": {
-            "description": "Send link to auto-woot extension.",
-            "usage": "!autowoot-link",
-            "reply": "Get the auto-woot extension here: https://woot.niceatc.api.br"
-        },
-        "ba": {
-            "description": "Responds with BA.",
-            "usage": "!ba",
-            "reply": "BA!"
-        },
-        "eightball": {
-            "description": "Magic 8-ball.",
-            "usage": "!8ball <question>",
-            "usageMessage": "Ask a question.",
-            "reply": "{question} — {answer}",
-            "responses": [
-                "Yes.",
-                "No.",
-                "Maybe.",
-                "Ask again later.",
-                "Definitely.",
-                "Absolutely not.",
-                "Very likely.",
-                "Unlikely.",
-                "Without a doubt.",
-                "I wouldn't count on it.",
-                "Signs point to yes.",
-                "Cannot predict now."
-            ]
-        },
-        "cookie": {
-            "description": "Give someone a cookie.",
-            "usage": "!cookie [user]",
-            "userNotFound": "User not found: {user}",
-            "selfLines": [
-                "{sender} grabs a cookie for themselves 🍪",
-                "{sender}, here is your cookie 🍪",
-                "{sender} treats themselves to a cookie 🍪"
-            ],
-            "giftLines": [
-                "{sender} gives {target} a cookie 🍪",
-                "{sender} hands {target} a cookie 🍪",
-                "{sender} shares a cookie with {target} 🍪"
-            ]
-        },
-        "ghostbuster": {
-            "description": "Check if a user is in the room.",
-            "usage": "!ghostbuster <user>",
-            "present": "{name} is in the room.",
-            "absent": "{name} is not in the room."
-        },
-        "gif": {
-            "description": "Fetch a GIF.",
-            "usage": "!gif <query>",
-            "notFound": "No GIF found.",
-            "result": "Here you go: {url}",
-            "error": "GIF error: {error}"
-        },
-        "roulette": {
-            "description": "Open the roulette.",
-            "usage": "!roulette",
-            "alreadyOpen": "Roulette is already open.",
-            "opened": "Roulette open for {seconds}s. Use !join."
-        },
-        "join": {
-            "description": "Join the roulette.",
-            "usage": "!join",
-            "closed": "Roulette is closed.",
-            "noUser": "Could not identify you.",
-            "mustBeInQueue": "You must be in the waitlist to join.",
-            "waitlistError": "Failed to check waitlist: {error}",
-            "alreadyIn": "You're already in.",
-            "joined": "{name} joined the roulette."
-        },
-        "leave": {
-            "description": "Leave the roulette.",
-            "usage": "!leave",
-            "closed": "Roulette is closed.",
-            "noUser": "Could not identify you.",
-            "notIn": "You're not in the roulette.",
-            "left": "{name} left the roulette."
-        },
-        "thor": {
-            "description": "Spin Thor's hammer on the waitlist.",
-            "usage": "!thor",
-            "noUser": "Could not identify you.",
-            "apiUnavailable": "Waitlist API unavailable.",
-            "noPermission": "I need the bouncer role for that.",
-            "waitlistError": "Failed to fetch waitlist: {error}",
-            "mustBeInQueue": "You must be in the waitlist.",
-            "moveError": "Failed to move {user}: {error}",
-            "removeError": "Failed to remove {user}: {error}",
-            "goodLines": [
-                "{name} is blessed and goes to the top! ⚡",
-                "{name} rises to the top of the queue!",
-                "{name} gets the top spot!"
-            ],
-            "neutralLines": [
-                "{name} survives this round.",
-                "{name} stays where they are.",
-                "{name} is spared."
-            ],
-            "badLines": [
-                "{name} gets zapped and leaves the queue! ⚡",
-                "{name} is removed from the queue!",
-                "{name} loses the spot and leaves!"
-            ]
-        },
-        "active": {
-            "description": "Show how many users chatted recently.",
-            "usage": "!active <minutes>",
-            "usageMessage": "Usage: !active <minutes>",
-            "reply": "Active in the last {window}: {count}."
-        },
-        "lastseen": {
-            "description": "Show when a user last spoke in chat.",
-            "usage": "!lastseen [user]",
-            "usageMessage": "Usage: !lastseen [user]",
-            "userNotFound": "User not found: {user}",
-            "noRecord": "No activity record for {user}.",
-            "reply": "{user} was last seen {duration} ago."
-        },
-        "jointime": {
-            "description": "Show how long a user has been in the room.",
-            "usage": "!jointime [user]",
-            "usageMessage": "Usage: !jointime [user]",
-            "userNotFound": "User not found: {user}",
-            "noRecord": "No join record for {user}.",
-            "reply": "{user} has been in the room for {duration}."
-        },
-        "link": {
-            "description": "Show the current track link.",
-            "usage": "!link",
-            "noTrack": "No track playing.",
-            "unavailable": "No link available for this source.",
-            "reply": "Link: {url}"
-        },
-        "mediaid": {
-            "description": "Show the current track ID.",
-            "usage": "!mediaid",
-            "noTrack": "No track playing.",
-            "noId": "Could not get a track ID.",
-            "reply": "Track ID: {id}"
-        },
-        "autoskip": {
-            "description": "Toggle auto-skip for stalled tracks.",
-            "usage": "!autoskip [on|off]",
-            "enabled": "Auto-skip enabled.",
-            "disabled": "Auto-skip disabled."
-        },
-        "afkremoval": {
-            "description": "Toggle AFK removal from the waitlist.",
-            "usage": "!afkremoval [on|off]",
-            "enabled": "AFK removal enabled.",
-            "disabled": "AFK removal disabled."
-        },
-        "afklimit": {
-            "description": "Set the AFK limit in minutes.",
-            "usage": "!afklimit <minutes>",
-            "usageMessage": "Usage: !afklimit <minutes>",
-            "updated": "AFK limit set to {minutes} min."
-        },
-        "afkreset": {
-            "description": "Reset a user's AFK timer.",
-            "usage": "!afkreset [user]",
-            "usageMessage": "Usage: !afkreset [user]",
-            "userNotFound": "User not found: {user}",
-            "reset": "Reset AFK timer for {user}."
-        },
-        "afktime": {
-            "description": "Show how long a user has been AFK.",
-            "usage": "!afktime [user]",
-            "usageMessage": "Usage: !afktime [user]",
-            "userNotFound": "User not found: {user}",
-            "noRecord": "No AFK record for {user}.",
-            "reply": "{user} has been AFK for {duration}."
-        },
-        "duelmute": {
-            "description": "Set the duel loser mute duration.",
-            "usage": "!duelmute <minutes>",
-            "usageMessage": "Usage: !duelmute <minutes>",
-            "updated": "Duel mute set to {minutes} min."
-        },
-        "fortune": {
-            "description": "Show a fortune.",
-            "usage": "!fortune",
-            "reply": "Fortune: {fortune}",
-            "lines": [
-                "A new path opens soon.",
-                "Something unexpected will help you.",
-                "Trust your pace.",
-                "Good news arrives shortly.",
-                "Patience will pay off.",
-                "A small gesture brings a big return.",
-                "Positive change is on the way.",
-                "You are closer than you think."
-            ]
-        },
-        "duel": {
-            "description": "Challenge a user to a duel.",
-            "usage": "!duel <user>",
-            "usageMessage": "Usage: !duel <user>",
-            "userNotFound": "User not found: {user}",
-            "self": "You cannot duel yourself.",
-            "cannotTargetBot": "I cannot duel the bot.",
-            "alreadyPending": "A duel is already pending between {challenger} and {target} (expires in {seconds}s).",
-            "challenge": "{challenger} challenged {target}! {target}, use {accept} or {recuse}.",
-            "accepted": "{target} accepted the duel!",
-            "suspenseLines": [
-                "Silence falls over the arena...",
-                "Dust rises as fate decides...",
-                "Preparing the duel verdict..."
-            ],
-            "result": "Winner: {winner} | Loser: {loser}.",
-            "muted": "{user} was muted for {minutes} min.",
-            "muteReason": "Lost a duel",
-            "muteFailed": "Failed to mute {user}: {error}",
-            "muteUnavailable": "Mute is unavailable right now.",
-            "muteRoleTooHigh": "I cannot mute {user} (role too high).",
-            "noPermission": "I need the bouncer role to apply duel mutes.",
-            "deleteMessagesFallback": "Messages from {user} will be deleted for {minutes} min.",
-            "noPending": "There is no pending duel.",
-            "notTarget": "This duel is not for you.",
-            "alreadyAccepted": "This duel was already accepted.",
-            "expired": "The duel expired.",
-            "refused": "{target} refused the duel.",
-            "timeout": "{target} did not accept in time.",
-            "cowardLines": [
-                "Ran from the arena!",
-                "Fled the duel!",
-                "Fear won this time.",
-                "Vanished into the mist."
-            ]
-        },
-        "accept": {
-            "description": "Accept a pending duel.",
-            "usage": "!accept"
-        },
-        "recuse": {
-            "description": "Refuse a pending duel.",
-            "usage": "!recuse"
-        },
-        "hug": {
-            "description": "Hug a user.",
-            "usage": "!hug [user]",
-            "userNotFound": "User not found: {user}",
-            "selfLines": [
-                "{sender} gives themselves a hug.",
-                "{sender} gets a cozy hug.",
-                "{sender} hugs themselves to recharge."
-            ],
-            "targetLines": [
-                "{sender} hugs {target}.",
-                "Hug sent from {sender} to {target}.",
-                "{sender} gives {target} a warm hug."
-            ]
-        },
-        "slap": {
-            "description": "Give a playful tap.",
-            "usage": "!slap [user]",
-            "userNotFound": "User not found: {user}",
-            "selfLines": [
-                "{sender} gives themselves a gentle tap.",
-                "{sender} gets a friendly bonk.",
-                "{sender} taps themselves to wake up."
-            ],
-            "targetLines": [
-                "{sender} gives {target} a gentle tap.",
-                "{sender} lands a friendly bonk on {target}.",
-                "{sender} gives {target} a playful slap."
-            ]
-        },
-        "ship": {
-            "description": "Ship two people.",
-            "usage": "!ship [user1] [user2]",
-            "reply": "{left} + {right} = {percent}%"
-        },
-        "coin": {
-            "description": "Flip a coin.",
-            "usage": "!coin",
-            "reply": "Result: {result}",
-            "results": [
-                "heads",
-                "tails"
-            ]
-        },
-        "dice": {
-            "description": "Roll a die.",
-            "usage": "!dice [sides]",
-            "reply": "d{sides}: {roll}",
-            "invalidSides": "Invalid sides (use 2 to 100)."
-        },
-        "roll": {
-            "description": "Generate a random number.",
-            "usage": "!roll [min] [max]",
-            "usageMessage": "Usage: !roll [min] [max]",
-            "reply": "Result: {roll} (between {min} and {max})"
-        },
-        "rps": {
-            "description": "Rock, paper, scissors.",
-            "usage": "!rps <rock|paper|scissors>",
-            "usageMessage": "Usage: !rps <rock|paper|scissors>",
-            "reply": "You: {user} | Bot: {bot} | {result}",
-            "choice": {
-                "rock": "rock",
-                "paper": "paper",
-                "scissors": "scissors"
+            "economy": {
+                "description": "Economy commands.",
+                "usage": "!economy <balance|transfer|top> ...",
+                "usageMessage": "Usage: !economy <balance|transfer|top> ..."
             },
-            "result": {
-                "win": "you win",
-                "lose": "you lose",
-                "draw": "draw"
+            "balance": {
+                "description": "Show your point balance.",
+                "usage": "!balance",
+                "reply": "Balance: {balance} points.",
+                "disabled": "Economy is disabled.",
+                "noUser": "Could not identify you.",
+                "cardTitle": "Balance",
+                "cardBalance": "Balance",
+                "cardPoints": "points"
+            },
+            "transfer": {
+                "description": "Transfer points to another user.",
+                "usage": "!transfer <user> <points>",
+                "usageMessage": "Usage: !transfer <user> <points>",
+                "invalidAmount": "Invalid amount.",
+                "minAmount": "Minimum amount: {min} points.",
+                "noUser": "Could not identify you.",
+                "userNotFound": "User not found: {user}",
+                "self": "You cannot transfer to yourself.",
+                "cannotTargetBot": "I cannot transfer to the bot.",
+                "insufficient": "Insufficient balance. You have {balance} points.",
+                "success": "Transferred {amount} points to {user}. Balance: {balance}.",
+                "disabled": "Economy is disabled.",
+                "failed": "Failed to transfer points."
+            },
+            "top": {
+                "description": "Show the points leaderboard.",
+                "usage": "!top [limit]",
+                "empty": "No economy data yet.",
+                "line": "#{pos} {user}: {balance} points",
+                "disabled": "Economy is disabled."
+            },
+            "daily": {
+                "description": "Claim the daily reward.",
+                "usage": "!daily",
+                "disabled": "Economy is disabled.",
+                "noUser": "Could not identify you.",
+                "unavailable": "Daily reward unavailable.",
+                "cooldown": "Come back in {remaining}.",
+                "claimed": "You received {amount} points. Streak: {streak}."
+            },
+            "shop": {
+                "description": "Show the points shop.",
+                "usage": "!shop",
+                "disabled": "Economy is disabled.",
+                "empty": "The shop is empty.",
+                "list": "Shop: {items}",
+                "line": "[{key}] {name} — {price} points{description}"
+            },
+            "buy": {
+                "description": "Buy a shop item.",
+                "usage": "!buy <item>",
+                "usageMessage": "Usage: !buy <item>",
+                "disabled": "Economy is disabled.",
+                "noUser": "Could not identify you.",
+                "notFound": "Item not found: {item}",
+                "alreadyOwned": "You already bought: {item}",
+                "invalidItem": "Invalid item.",
+                "insufficient": "Insufficient balance. You have {balance} points.",
+                "noPermission": "I don't have permission to move the waitlist.",
+                "notInQueue": "You're not in the waitlist.",
+                "noMove": "No movement is possible right now.",
+                "success": "Purchase complete: {item}{extra}.",
+                "failed": "Failed to apply purchase: {error}"
+            },
+            "work": {
+                "description": "Daily work system.",
+                "usage": "!work <list|choose|claim|status>",
+                "usageMessage": "Usage: !work <list|choose|claim|status>",
+                "disabled": "Economy is disabled.",
+                "noUser": "Could not identify you.",
+                "empty": "No jobs configured.",
+                "noJob": "You have not chosen a job yet.",
+                "ready": "ready",
+                "status": "Job: {job} | Pay: {pay} points | Next: {remaining}",
+                "available": "available",
+                "locked": "locked",
+                "list": "Jobs: {items}",
+                "listLine": "[{key}] {name} (XP {xp}) — {pay} points [{status}]",
+                "chooseUsage": "Usage: !work choose <job>",
+                "jobNotFound": "Job not found: {job}",
+                "jobLocked": "{job} requires XP {xp}.",
+                "alreadySelected": "You already have this job.",
+                "upgradeOnly": "You can only switch to a higher-level job.",
+                "selected": "Job selected: {job}.",
+                "cooldown": "Come back in {remaining}.",
+                "claimed": "Pay received ({job}): {pay} points."
+            },
+            "steal": {
+                "description": "Try to steal points from someone.",
+                "usage": "!steal <user>",
+                "usageMessage": "Usage: !steal <user>",
+                "disabled": "Steal is disabled.",
+                "noUser": "Could not identify you.",
+                "userNotFound": "User not found: {user}",
+                "cannotTargetBot": "I cannot steal from the bot.",
+                "self": "You cannot steal from yourself.",
+                "targetPoor": "{user} does not have enough points to steal.",
+                "success": "You stole {amount} points from {user}.",
+                "failed": "The steal failed.",
+                "bailPaid": "You were caught and paid {amount} points bail.",
+                "noPermission": "No bail and no permission to mute.",
+                "muted": "You were jailed and muted for {minutes} min.",
+                "muteReason": "Failed steal",
+                "muteFailed": "Failed to mute: {error}"
+            },
+            "casino": {
+                "description": "Casino games with bets.",
+                "usage": "!casino <slots|roulette|dice> <bet> [option]",
+                "usageMessage": "Usage: !casino <slots|roulette|dice> <bet> [option]",
+                "disabled": "Casino is disabled.",
+                "noUser": "Could not identify you.",
+                "invalidBet": "Invalid bet.",
+                "minBet": "Minimum bet: {min} points.",
+                "maxBet": "Maximum bet: {max} points.",
+                "insufficient": "Insufficient balance. You have {balance} points.",
+                "cooldown": "Wait {seconds}s before betting again.",
+                "slots": {
+                    "win": "🎰 {reels} | You won {win} points ({net}).",
+                    "lose": "🎰 {reels} | Not this time.",
+                    "jackpot": "🎰 {reels} | JACKPOT! {jackpot} points in the pot. Won {win} ({net}).",
+                    "cardTitle": "Slots",
+                    "cardBet": "Bet",
+                    "cardWin": "Win",
+                    "cardNet": "Net",
+                    "cardJackpot": "Jackpot"
+                },
+                "roulette": {
+                    "usageMessage": "Usage: !casino roulette <bet> <red|black|green>",
+                    "win": "🎡 {choice} vs {result} ({number}) — won {win} ({net}).",
+                    "lose": "🎡 {choice} vs {result} ({number}) — lost.",
+                    "color": {
+                        "red": "red",
+                        "black": "black",
+                        "green": "green"
+                    },
+                    "cardTitle": "Roulette",
+                    "cardBet": "Bet",
+                    "cardWin": "Win",
+                    "cardNet": "Net",
+                    "cardPick": "Pick",
+                    "cardResult": "Result"
+                },
+                "dice": {
+                    "usageMessage": "Usage: !casino dice <bet> <number> (1-{sides})",
+                    "win": "🎲 Rolled {roll}, you picked {guess} — won {win} ({net}).",
+                    "lose": "🎲 Rolled {roll}, you picked {guess} — lost."
+                }
             }
         },
-        "trivia": {
-            "description": "Trivia question.",
-            "usage": "!trivia [answer]",
-            "question": "Trivia: {question}",
-            "options": "Options: {options}",
-            "answer": "Answer: {answer}",
-            "noActive": "No active trivia.",
-            "noQuestion": "Could not load a question right now.",
-            "error": "Trivia error: {error}"
+        "xp": {
+            "perfil": {
+                "description": "Show your level and XP.",
+                "usage": "!perfil [user]",
+                "usageMessage": "Usage: !perfil [user]",
+                "userNotFound": "User not found: {user}",
+                "noRecord": "No XP record for {user}.",
+                "reply": "Level {level} | XP {xp}/{next} ({remaining} left) | Next reward: {reward} points | Balance: {balance}.",
+                "disabled": "XP is disabled.",
+                "nextBadge": "Next badge: {badge}",
+                "nextAchievement": "Next achievement: {achievement}",
+                "cardTitle": "Profile",
+                "cardLevel": "Level",
+                "cardXp": "XP",
+                "cardReward": "Next reward",
+                "cardBalance": "Balance",
+                "cardPoints": "points"
+            },
+            "xptop": {
+                "description": "XP leaderboard.",
+                "usage": "!xptop [limit]",
+                "empty": "No XP data yet.",
+                "line": "#{pos} {user}: level {level} ({xp} XP)",
+                "disabled": "XP is disabled."
+            }
         },
-        "roast": {
-            "description": "Deliver a mild roast.",
-            "usage": "!roast [user]",
-            "lines": [
-                "{target}, your alarm clock asked for a day off.",
-                "{target}, you are proof that coffee is magic.",
-                "{target}, even the bot loaded faster.",
-                "{target}, your Monday energy is strong.",
-                "{target}, your battery saver seems permanent."
-            ]
+        "system": {
+            "autowoot": {
+                "description": "Toggle auto-woot.",
+                "usage": "!autowoot [on|off]",
+                "enabled": "Auto-woot enabled.",
+                "disabled": "Auto-woot disabled."
+            },
+            "settings": {
+                "description": "Get or set persistent settings.",
+                "usage": "!settings <key> [value]",
+                "usageMessage": "Usage: !settings <key> [value]",
+                "list": "Available keys: {keys}",
+                "invalidKey": "Invalid key.",
+                "noPermission": "You need the manager role to use key {key}.",
+                "value": "{key} = {value}",
+                "notFound": "No value for {key}.",
+                "updated": "Updated {key} to {value}."
+            },
+            "welcome": {
+                "description": "Toggle join welcome messages.",
+                "usage": "!welcome [on|off]",
+                "enabled": "Welcome messages enabled.",
+                "disabled": "Welcome messages disabled."
+            }
         },
-        "compliment": {
-            "description": "Give someone a compliment.",
-            "usage": "!compliment [user]",
-            "lines": [
-                "{target}, you nailed it today.",
-                "{target}, your vibe is contagious.",
-                "{target}, you shine without trying.",
-                "{target}, you have excellent music taste.",
-                "{target}, your presence makes things better."
-            ]
-        },
-        "fact": {
-            "description": "Share a fun fact.",
-            "usage": "!fact",
-            "reply": "Fact: {fact}",
-            "lines": [
-                "Octopuses have three hearts.",
-                "Honey never really spoils.",
-                "A day on Venus is longer than a year on Venus.",
-                "Some turtles can breathe through their backsides.",
-                "Bananas are technically berries.",
-                "Sound travels faster in water than in air."
-            ]
-        },
-        "joke": {
-            "description": "Tell a joke.",
-            "usage": "!joke",
-            "reply": "Joke: {joke}",
-            "lines": [
-                "Why did the computer go to the doctor? It had a virus.",
-                "Why did the scarecrow win an award? It was outstanding in its field.",
-                "What did zero say to eight? Nice belt!",
-                "Why did the book go to therapy? It had too many problems.",
-                "Why did the music get arrested? It was too loud.",
-                "Why did the math book look sad? It had too many problems."
-            ]
-        },
-        "meme": {
-            "description": "Fetch a meme from Reddit.",
-            "usage": "!meme",
-            "reply": "{title} — {url} (r/{subreddit})",
-            "notFound": "No meme found right now.",
-            "error": "Meme error: {error}"
-        },
-        "lastplayed": {
-            "description": "Show the last played track.",
-            "usage": "!lastplayed",
-            "reply": "Last played: {label} (DJ: {dj})",
-            "empty": "No history yet."
-        },
-        "history": {
-            "description": "Show the last played tracks.",
-            "usage": "!history",
-            "reply": "History: {lines}",
-            "empty": "No history yet.",
-            "line": "#{pos} {label} (DJ: {dj})"
-        },
-        "topwoot": {
-            "description": "Leaderboard for woots given.",
-            "usage": "!topwoot [limit]",
-            "reply": "Top woots: {lines}",
-            "empty": "No woot data yet.",
-            "line": "#{pos} {user}: {count} woots"
-        },
-        "topdj": {
-            "description": "Leaderboard for DJs by plays.",
-            "usage": "!topdj [limit]",
-            "reply": "Top DJs: {lines}",
-            "empty": "No DJ data yet.",
-            "line": "#{pos} {user}: {count} plays"
-        },
-        "topsongs": {
-            "description": "Leaderboard for top wooted tracks.",
-            "usage": "!topsongs [limit]",
-            "reply": "Top tracks: {lines}",
-            "empty": "No track data yet.",
-            "line": "#{pos} {label}: {woots} woots / {plays} plays"
-        },
-        "rank": {
-            "description": "Show your woot/DJ rank.",
-            "usage": "!rank [user]",
-            "userNotFound": "User not found: {user}",
-            "noUser": "Could not identify you.",
-            "empty": "No rank data for {user}.",
-            "reply": "{user}: {stats}",
-            "wootLine": "Woots: #{rank} ({count})",
-            "djLine": "DJ: #{rank} ({count})"
-        },
-        "casino": {
-            "description": "Casino games with bets.",
-            "usage": "!casino <slots|roulette|dice> <bet> [option]",
-            "usageMessage": "Usage: !casino <slots|roulette|dice> <bet> [option]",
-            "disabled": "Casino is disabled.",
-            "noUser": "Could not identify you.",
-            "invalidBet": "Invalid bet.",
-            "minBet": "Minimum bet: {min} points.",
-            "maxBet": "Maximum bet: {max} points.",
-            "insufficient": "Insufficient balance. You have {balance} points.",
-            "cooldown": "Wait {seconds}s before betting again.",
-            "slots": {
-                "win": "🎰 {reels} | You won {win} points ({net}).",
-                "lose": "🎰 {reels} | Not this time.",
-                "jackpot": "🎰 {reels} | JACKPOT! {jackpot} points in the pot. Won {win} ({net}).",
-                "cardTitle": "Slots",
-                "cardBet": "Bet",
-                "cardWin": "Win",
-                "cardNet": "Net",
-                "cardJackpot": "Jackpot"
+        "fun": {
+            "eightball": {
+                "description": "Magic 8-ball.",
+                "usage": "!8ball <question>",
+                "usageMessage": "Ask a question.",
+                "reply": "{question} — {answer}",
+                "responses": [
+                    "Yes.",
+                    "No.",
+                    "Maybe.",
+                    "Ask again later.",
+                    "Definitely.",
+                    "Absolutely not.",
+                    "Very likely.",
+                    "Unlikely.",
+                    "Without a doubt.",
+                    "I wouldn't count on it.",
+                    "Signs point to yes.",
+                    "Cannot predict now."
+                ]
+            },
+            "cookie": {
+                "description": "Give someone a cookie.",
+                "usage": "!cookie [user]",
+                "userNotFound": "User not found: {user}",
+                "selfLines": [
+                    "{sender} grabs a cookie for themselves 🍪",
+                    "{sender}, here is your cookie 🍪",
+                    "{sender} treats themselves to a cookie 🍪"
+                ],
+                "giftLines": [
+                    "{sender} gives {target} a cookie 🍪",
+                    "{sender} hands {target} a cookie 🍪",
+                    "{sender} shares a cookie with {target} 🍪"
+                ]
+            },
+            "ghostbuster": {
+                "description": "Check if a user is in the room.",
+                "usage": "!ghostbuster <user>",
+                "present": "{name} is in the room.",
+                "absent": "{name} is not in the room."
+            },
+            "gif": {
+                "description": "Fetch a GIF.",
+                "usage": "!gif <query>",
+                "notFound": "No GIF found.",
+                "result": "Here you go: {url}",
+                "error": "GIF error: {error}"
             },
             "roulette": {
-                "usageMessage": "Usage: !casino roulette <bet> <red|black|green>",
-                "win": "🎡 {choice} vs {result} ({number}) — won {win} ({net}).",
-                "lose": "🎡 {choice} vs {result} ({number}) — lost.",
-                "color": {
-                    "red": "red",
-                    "black": "black",
-                    "green": "green"
-                },
-                "cardTitle": "Roulette",
-                "cardBet": "Bet",
-                "cardWin": "Win",
-                "cardNet": "Net",
-                "cardPick": "Pick",
-                "cardResult": "Result"
+                "description": "Open the roulette.",
+                "usage": "!roulette",
+                "alreadyOpen": "Roulette is already open.",
+                "opened": "Roulette open for {seconds}s. Use !join."
+            },
+            "join": {
+                "description": "Join the roulette.",
+                "usage": "!join",
+                "closed": "Roulette is closed.",
+                "noUser": "Could not identify you.",
+                "mustBeInQueue": "You must be in the waitlist to join.",
+                "waitlistError": "Failed to check waitlist: {error}",
+                "alreadyIn": "You're already in.",
+                "joined": "{name} joined the roulette."
+            },
+            "leave": {
+                "description": "Leave the roulette.",
+                "usage": "!leave",
+                "closed": "Roulette is closed.",
+                "noUser": "Could not identify you.",
+                "notIn": "You're not in the roulette.",
+                "left": "{name} left the roulette."
+            },
+            "thor": {
+                "description": "Spin Thor's hammer on the waitlist.",
+                "usage": "!thor",
+                "noUser": "Could not identify you.",
+                "apiUnavailable": "Waitlist API unavailable.",
+                "noPermission": "I need the bouncer role for that.",
+                "waitlistError": "Failed to fetch waitlist: {error}",
+                "mustBeInQueue": "You must be in the waitlist.",
+                "moveError": "Failed to move {user}: {error}",
+                "removeError": "Failed to remove {user}: {error}",
+                "goodLines": [
+                    "{name} is blessed and goes to the top! ⚡",
+                    "{name} rises to the top of the queue!",
+                    "{name} gets the top spot!"
+                ],
+                "neutralLines": [
+                    "{name} survives this round.",
+                    "{name} stays where they are.",
+                    "{name} is spared."
+                ],
+                "badLines": [
+                    "{name} gets zapped and leaves the queue! ⚡",
+                    "{name} is removed from the queue!",
+                    "{name} loses the spot and leaves!"
+                ]
+            },
+            "duel": {
+                "description": "Challenge a user to a duel.",
+                "usage": "!duel <user>",
+                "usageMessage": "Usage: !duel <user>",
+                "userNotFound": "User not found: {user}",
+                "self": "You cannot duel yourself.",
+                "cannotTargetBot": "I cannot duel the bot.",
+                "alreadyPending": "A duel is already pending between {challenger} and {target} (expires in {seconds}s).",
+                "challenge": "{challenger} challenged {target}! {target}, use {accept} or {recuse}.",
+                "accepted": "{target} accepted the duel!",
+                "suspenseLines": [
+                    "Silence falls over the arena...",
+                    "Dust rises as fate decides...",
+                    "Preparing the duel verdict..."
+                ],
+                "result": "Winner: {winner} | Loser: {loser}.",
+                "muted": "{user} was muted for {minutes} min.",
+                "muteReason": "Lost a duel",
+                "muteFailed": "Failed to mute {user}: {error}",
+                "muteUnavailable": "Mute is unavailable right now.",
+                "muteRoleTooHigh": "I cannot mute {user} (role too high).",
+                "noPermission": "I need the bouncer role to apply duel mutes.",
+                "deleteMessagesFallback": "Messages from {user} will be deleted for {minutes} min.",
+                "noPending": "There is no pending duel.",
+                "notTarget": "This duel is not for you.",
+                "alreadyAccepted": "This duel was already accepted.",
+                "expired": "The duel expired.",
+                "refused": "{target} refused the duel.",
+                "timeout": "{target} did not accept in time.",
+                "cowardLines": [
+                    "Ran from the arena!",
+                    "Fled the duel!",
+                    "Fear won this time.",
+                    "Vanished into the mist."
+                ]
+            },
+            "accept": {
+                "description": "Accept a pending duel.",
+                "usage": "!accept"
+            },
+            "recuse": {
+                "description": "Refuse a pending duel.",
+                "usage": "!recuse"
+            },
+            "hug": {
+                "description": "Hug a user.",
+                "usage": "!hug [user]",
+                "userNotFound": "User not found: {user}",
+                "selfLines": [
+                    "{sender} gives themselves a hug.",
+                    "{sender} gets a cozy hug.",
+                    "{sender} hugs themselves to recharge."
+                ],
+                "targetLines": [
+                    "{sender} hugs {target}.",
+                    "Hug sent from {sender} to {target}.",
+                    "{sender} gives {target} a warm hug."
+                ]
+            },
+            "slap": {
+                "description": "Give a playful tap.",
+                "usage": "!slap [user]",
+                "userNotFound": "User not found: {user}",
+                "selfLines": [
+                    "{sender} gives themselves a gentle tap.",
+                    "{sender} gets a friendly bonk.",
+                    "{sender} taps themselves to wake up."
+                ],
+                "targetLines": [
+                    "{sender} gives {target} a gentle tap.",
+                    "{sender} lands a friendly bonk on {target}.",
+                    "{sender} gives {target} a playful slap."
+                ]
+            },
+            "ship": {
+                "description": "Ship two people.",
+                "usage": "!ship [user1] [user2]",
+                "reply": "{left} + {right} = {percent}%"
+            },
+            "coin": {
+                "description": "Flip a coin.",
+                "usage": "!coin",
+                "reply": "Result: {result}",
+                "results": [
+                    "heads",
+                    "tails"
+                ]
             },
             "dice": {
-                "usageMessage": "Usage: !casino dice <bet> <number> (1-{sides})",
-                "win": "🎲 Rolled {roll}, you picked {guess} — won {win} ({net}).",
-                "lose": "🎲 Rolled {roll}, you picked {guess} — lost."
+                "description": "Roll a die.",
+                "usage": "!dice [sides]",
+                "reply": "d{sides}: {roll}",
+                "invalidSides": "Invalid sides (use 2 to 100)."
+            },
+            "roll": {
+                "description": "Generate a random number.",
+                "usage": "!roll [min] [max]",
+                "usageMessage": "Usage: !roll [min] [max]",
+                "reply": "Result: {roll} (between {min} and {max})"
+            },
+            "rps": {
+                "description": "Rock, paper, scissors.",
+                "usage": "!rps <rock|paper|scissors>",
+                "usageMessage": "Usage: !rps <rock|paper|scissors>",
+                "reply": "You: {user} | Bot: {bot} | {result}",
+                "choice": {
+                    "rock": "rock",
+                    "paper": "paper",
+                    "scissors": "scissors"
+                },
+                "result": {
+                    "win": "you win",
+                    "lose": "you lose",
+                    "draw": "draw"
+                }
+            },
+            "trivia": {
+                "description": "Trivia question.",
+                "usage": "!trivia [answer]",
+                "question": "Trivia: {question}",
+                "options": "Options: {options}",
+                "answer": "Answer: {answer}",
+                "noActive": "No active trivia.",
+                "noQuestion": "Could not load a question right now.",
+                "error": "Trivia error: {error}"
+            },
+            "roast": {
+                "description": "Deliver a mild roast.",
+                "usage": "!roast [user]",
+                "lines": [
+                    "{target}, your alarm clock asked for a day off.",
+                    "{target}, you are proof that coffee is magic.",
+                    "{target}, even the bot loaded faster.",
+                    "{target}, your Monday energy is strong.",
+                    "{target}, your battery saver seems permanent."
+                ]
+            },
+            "compliment": {
+                "description": "Give someone a compliment.",
+                "usage": "!compliment [user]",
+                "lines": [
+                    "{target}, you nailed it today.",
+                    "{target}, your vibe is contagious.",
+                    "{target}, you shine without trying.",
+                    "{target}, you have excellent music taste.",
+                    "{target}, your presence makes things better."
+                ]
+            },
+            "fact": {
+                "description": "Share a fun fact.",
+                "usage": "!fact",
+                "reply": "Fact: {fact}",
+                "lines": [
+                    "Octopuses have three hearts.",
+                    "Honey never really spoils.",
+                    "A day on Venus is longer than a year on Venus.",
+                    "Some turtles can breathe through their backsides.",
+                    "Bananas are technically berries.",
+                    "Sound travels faster in water than in air."
+                ]
+            },
+            "joke": {
+                "description": "Tell a joke.",
+                "usage": "!joke",
+                "reply": "Joke: {joke}",
+                "lines": [
+                    "Why did the computer go to the doctor? It had a virus.",
+                    "Why did the scarecrow win an award? It was outstanding in its field.",
+                    "What did zero say to eight? Nice belt!",
+                    "Why did the book go to therapy? It had too many problems.",
+                    "Why did the music get arrested? It was too loud.",
+                    "Why did the math book look sad? It had too many problems."
+                ]
+            },
+            "meme": {
+                "description": "Fetch a meme from Reddit.",
+                "usage": "!meme",
+                "reply": "{title} — {url} (r/{subreddit})",
+                "notFound": "No meme found right now.",
+                "error": "Meme error: {error}"
+            },
+            "hack": {
+                "description": "Fake hack a user.",
+                "usage": "!hack <user>",
+                "usageMessage": "Usage: !hack <user>",
+                "lines": [
+                    "🔓 Hacking {target}...",
+                    "📂 Searching files...",
+                    "💳 Card found...",
+                    "❌ Just kidding 😂"
+                ]
+            },
+            "virus": {
+                "description": "Launch a fake virus.",
+                "usage": "!virus",
+                "lines": [
+                    "🦠 Preparing virus...",
+                    "📡 Sending to the network...",
+                    "⚠️ System unstable...",
+                    "✅ Just kidding!"
+                ]
+            },
+            "summon": {
+                "description": "Summon something mysterious.",
+                "usage": "!summon",
+                "lines": [
+                    "✨ Opening the portal...",
+                    "🔮 Energy is building...",
+                    "⚡ Something has been summoned!"
+                ]
+            },
+            "explode": {
+                "description": "Fake explosion effect.",
+                "usage": "!explode",
+                "lines": [
+                    "💥 Loading explosives...",
+                    "💣 Countdown started...",
+                    "💥 BOOM!"
+                ]
+            },
+            "fakeban": {
+                "description": "Fake ban a user.",
+                "usage": "!fakeban <user>",
+                "usageMessage": "Usage: !fakeban <user>",
+                "lines": [
+                    "🚨 {target} was reported...",
+                    "⛔ Banning {target}...",
+                    "✅ Just kidding, {target} is safe!"
+                ]
+            },
+            "fortune": {
+                "description": "Show a fortune.",
+                "usage": "!fortune",
+                "reply": "Fortune: {fortune}",
+                "lines": [
+                    "A new path opens soon.",
+                    "Something unexpected will help you.",
+                    "Trust your pace.",
+                    "Good news arrives shortly.",
+                    "Patience will pay off.",
+                    "A small gesture brings a big return.",
+                    "Positive change is on the way.",
+                    "You are closer than you think."
+                ]
             }
-        },
-        "daily": {
-            "description": "Claim the daily reward.",
-            "usage": "!daily",
-            "disabled": "Economy is disabled.",
-            "noUser": "Could not identify you.",
-            "unavailable": "Daily reward unavailable.",
-            "cooldown": "Come back in {remaining}.",
-            "claimed": "You received {amount} points. Streak: {streak}."
-        },
-        "shop": {
-            "description": "Show the points shop.",
-            "usage": "!shop",
-            "disabled": "Economy is disabled.",
-            "empty": "The shop is empty.",
-            "list": "Shop: {items}",
-            "line": "[{key}] {name} — {price} points{description}"
-        },
-        "buy": {
-            "description": "Buy a shop item.",
-            "usage": "!buy <item>",
-            "usageMessage": "Usage: !buy <item>",
-            "disabled": "Economy is disabled.",
-            "noUser": "Could not identify you.",
-            "notFound": "Item not found: {item}",
-            "alreadyOwned": "You already bought: {item}",
-            "invalidItem": "Invalid item.",
-            "insufficient": "Insufficient balance. You have {balance} points.",
-            "noPermission": "I don't have permission to move the waitlist.",
-            "notInQueue": "You're not in the waitlist.",
-            "noMove": "No movement is possible right now.",
-            "success": "Purchase complete: {item}{extra}.",
-            "failed": "Failed to apply purchase: {error}"
-        },
-        "work": {
-            "description": "Daily work system.",
-            "usage": "!work <list|choose|claim|status>",
-            "usageMessage": "Usage: !work <list|choose|claim|status>",
-            "disabled": "Economy is disabled.",
-            "noUser": "Could not identify you.",
-            "empty": "No jobs configured.",
-            "noJob": "You have not chosen a job yet.",
-            "ready": "ready",
-            "status": "Job: {job} | Pay: {pay} points | Next: {remaining}",
-            "available": "available",
-            "locked": "locked",
-            "list": "Jobs: {items}",
-            "listLine": "[{key}] {name} (XP {xp}) — {pay} points [{status}]",
-            "chooseUsage": "Usage: !work choose <job>",
-            "jobNotFound": "Job not found: {job}",
-            "jobLocked": "{job} requires XP {xp}.",
-            "alreadySelected": "You already have this job.",
-            "upgradeOnly": "You can only switch to a higher-level job.",
-            "selected": "Job selected: {job}.",
-            "cooldown": "Come back in {remaining}.",
-            "claimed": "Pay received ({job}): {pay} points."
-        },
-        "steal": {
-            "description": "Try to steal points from someone.",
-            "usage": "!steal <user>",
-            "usageMessage": "Usage: !steal <user>",
-            "disabled": "Steal is disabled.",
-            "noUser": "Could not identify you.",
-            "userNotFound": "User not found: {user}",
-            "cannotTargetBot": "I cannot steal from the bot.",
-            "self": "You cannot steal from yourself.",
-            "targetPoor": "{user} does not have enough points to steal.",
-            "success": "You stole {amount} points from {user}.",
-            "failed": "The steal failed.",
-            "bailPaid": "You were caught and paid {amount} points bail.",
-            "noPermission": "No bail and no permission to mute.",
-            "muted": "You were jailed and muted for {minutes} min.",
-            "muteReason": "Failed steal",
-            "muteFailed": "Failed to mute: {error}"
-        },
-        "voteskip": {
-            "description": "Start a vote to skip the current track.",
-            "usage": "!voteskip",
-            "disabled": "Votekip is disabled.",
-            "noUser": "Could not identify you.",
-            "noTrack": "No track playing.",
-            "expired": "Vote ended without enough votes.",
-            "alreadyVoted": "You already voted.",
-            "started": "Vote started ({votes}/{needed}, active {active}). {seconds}s left.",
-            "voted": "Vote recorded ({votes}/{needed}, active {active}).",
-            "passed": "Enough votes! Skipping the track...",
-            "failed": "Could not skip the track.",
-            "noPermission": "I need the bouncer role to skip tracks."
-        },
-        "hack": {
-            "description": "Fake hack a user.",
-            "usage": "!hack <user>",
-            "usageMessage": "Usage: !hack <user>",
-            "lines": [
-                "🔓 Hacking {target}...",
-                "📂 Searching files...",
-                "💳 Card found...",
-                "❌ Just kidding 😂"
-            ]
-        },
-        "virus": {
-            "description": "Launch a fake virus.",
-            "usage": "!virus",
-            "lines": [
-                "🦠 Preparing virus...",
-                "📡 Sending to the network...",
-                "⚠️ System unstable...",
-                "✅ Just kidding!"
-            ]
-        },
-        "summon": {
-            "description": "Summon something mysterious.",
-            "usage": "!summon",
-            "lines": [
-                "✨ Opening the portal...",
-                "🔮 Energy is building...",
-                "⚡ Something has been summoned!"
-            ]
-        },
-        "explode": {
-            "description": "Fake explosion effect.",
-            "usage": "!explode",
-            "lines": [
-                "💥 Loading explosives...",
-                "💣 Countdown started...",
-                "💥 BOOM!"
-            ]
-        },
-        "fakeban": {
-            "description": "Fake ban a user.",
-            "usage": "!fakeban <user>",
-            "usageMessage": "Usage: !fakeban <user>",
-            "lines": [
-                "🚨 {target} was reported...",
-                "⛔ Banning {target}...",
-                "✅ Just kidding, {target} is safe!"
-            ]
         }
     },
     "events": {

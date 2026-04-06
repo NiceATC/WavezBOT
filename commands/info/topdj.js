@@ -8,9 +8,10 @@ function parseLimit(input) {
 
 export default {
   name: "topdj",
-  descriptionKey: "commands.topdj.description",
-  usageKey: "commands.topdj.usage",
+  descriptionKey: "commands.info.topdj.description",
+  usageKey: "commands.info.topdj.usage",
   cooldown: 8000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, args, t, reply } = ctx;
@@ -18,18 +19,18 @@ export default {
     const limit = parseLimit(args[0]);
     const rows = await listTopDjUsers(limit);
     if (!rows?.length) {
-      await reply(t("commands.topdj.empty"));
+      await reply(t("commands.info.topdj.empty"));
       return;
     }
 
     const lines = rows.map((row, index) =>
-      t("commands.topdj.line", {
+      t("commands.info.topdj.line", {
         pos: index + 1,
         user: row.display_name ?? row.username ?? t("common.someone"),
         count: row.plays ?? 0,
       }),
     );
 
-    await reply(t("commands.topdj.reply", { lines: lines.join(" | ") }));
+    await reply(t("commands.info.topdj.reply", { lines: lines.join(" | ") }));
   },
 };

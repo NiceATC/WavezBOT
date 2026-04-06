@@ -28,26 +28,27 @@ function resetState(bot) {
 export default {
   name: "voteskip",
   aliases: ["skipvote"],
-  descriptionKey: "commands.voteskip.description",
-  usageKey: "commands.voteskip.usage",
+  descriptionKey: "commands.music.voteskip.description",
+  usageKey: "commands.music.voteskip.usage",
   cooldown: 3000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, sender, reply, t } = ctx;
     if (!bot.cfg.voteSkipEnabled) {
-      await reply(t("commands.voteskip.disabled"));
+      await reply(t("commands.music.voteskip.disabled"));
       return;
     }
 
     const userId = sender.userId;
     if (userId == null) {
-      await reply(t("commands.voteskip.noUser"));
+      await reply(t("commands.music.voteskip.noUser"));
       return;
     }
 
     const trackKey = getTrackKey(bot);
     if (!trackKey) {
-      await reply(t("commands.voteskip.noTrack"));
+      await reply(t("commands.music.voteskip.noTrack"));
       return;
     }
 
@@ -69,7 +70,7 @@ export default {
         expiresAt: now + durationMs,
         timeoutId: setTimeout(() => {
           if (bot._voteSkipState?.trackKey === trackKey) {
-            bot.sendChat(bot.t("commands.voteskip.expired")).catch(() => {});
+            bot.sendChat(bot.t("commands.music.voteskip.expired")).catch(() => {});
             resetState(bot);
           }
         }, durationMs),
@@ -78,7 +79,7 @@ export default {
 
     const state = bot._voteSkipState;
     if (state.votes.has(String(userId))) {
-      await reply(t("commands.voteskip.alreadyVoted"));
+      await reply(t("commands.music.voteskip.alreadyVoted"));
       return;
     }
 
@@ -89,16 +90,16 @@ export default {
 
     if (currentVotes >= needed) {
       if (bot.getBotRoleLevel() < getRoleLevel("bouncer")) {
-        await reply(t("commands.voteskip.noPermission"));
+        await reply(t("commands.music.voteskip.noPermission"));
         resetState(bot);
         return;
       }
 
       const skipped = await bot.safeSkip({
-        message: t("commands.voteskip.passed"),
+        message: t("commands.music.voteskip.passed"),
       });
       if (!skipped) {
-        await reply(t("commands.voteskip.failed"));
+        await reply(t("commands.music.voteskip.failed"));
       }
       resetState(bot);
       return;
@@ -106,7 +107,7 @@ export default {
 
     if (currentVotes === 1) {
       await reply(
-        t("commands.voteskip.started", {
+        t("commands.music.voteskip.started", {
           votes: currentVotes,
           needed,
           active,
@@ -117,7 +118,7 @@ export default {
     }
 
     await reply(
-      t("commands.voteskip.voted", {
+      t("commands.music.voteskip.voted", {
         votes: currentVotes,
         needed,
         active,

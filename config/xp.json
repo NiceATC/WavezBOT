@@ -1,0 +1,26 @@
+{
+    "_comment": "Sistema de XP e níveis: pontos, recompensas, badges e conquistas.",
+    "xpEnabled": true,
+    "xpChatPoints": 0.2,
+    "xpChatCooldownMs": 90000,
+    "xpDjPoints": 2,
+    "xpWootPoints": 0.1,
+    "xpGrabPoints": 0.2,
+    "xpOnlinePointsPerHour": 0.25,
+    "xpBase": 80,
+    "xpExponent": 1.5,
+    "xpRewardBasePoints": 1,
+    "xpRewardStepPoints": 0.5,
+    "xpBadgeRewards": {
+        "5": "bronze",
+        "10": "silver",
+        "20": "gold",
+        "35": "platinum"
+    },
+    "xpAchievementRewards": {
+        "15": "regular",
+        "25": "veteran",
+        "40": "legend"
+    },
+    "leaderboardReset": "weekly"
+}

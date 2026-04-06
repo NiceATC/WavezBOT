@@ -19,9 +19,10 @@ const dashboardPort = Number(process.env.DASHBOARD_PORT) || 3000;
 export default {
   name: "help",
   aliases: ["comandos", "commands", "ajuda"],
-  descriptionKey: "commands.help.description",
-  usageKey: "commands.help.usage",
+  descriptionKey: "commands.core.help.description",
+  usageKey: "commands.core.help.usage",
   cooldown: 5_000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { args, bot, reply, t, senderRoleLevel } = ctx;
@@ -33,7 +34,7 @@ export default {
 
     if (dashboardEnabled) {
       const url = dashboardUrl || `http://localhost:${dashboardPort}`;
-      await reply(t("commands.help.dashboard", { url }));
+      await reply(t("commands.core.help.dashboard", { url }));
       return;
     }
 
@@ -41,22 +42,22 @@ export default {
       // Detailed help for one command
       const cmd = bot.commands.resolve(args[0].toLowerCase());
       if (!cmd) {
-        await reply(t("commands.help.notFound", { name: args[0] }));
+        await reply(t("commands.core.help.notFound", { name: args[0] }));
         return;
       }
       const lines = [`!${cmd.name} — ${getDesc(cmd)}`];
       const usage = getUsage(cmd);
-      if (usage) lines.push(t("commands.help.usageLine", { usage }));
+      if (usage) lines.push(t("commands.core.help.usageLine", { usage }));
       if (cmd.aliases?.length) {
         lines.push(
-          t("commands.help.aliasesLine", {
+          t("commands.core.help.aliasesLine", {
             aliases: cmd.aliases.map((a) => `!${a}`).join(", "),
           }),
         );
       }
       if (cmd.minRole) {
         lines.push(
-          t("commands.help.requirementLine", {
+          t("commands.core.help.requirementLine", {
             role: cmd.minRole,
           }),
         );
@@ -76,7 +77,7 @@ export default {
       .map((c) => `!${c.name}`)
       .sort()
       .join("  ");
-    const message = t("commands.help.list", {
+    const message = t("commands.core.help.list", {
       list,
     });
     await sendChatChunks(reply, message);

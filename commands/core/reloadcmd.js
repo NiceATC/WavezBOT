@@ -5,9 +5,10 @@
 export default {
   name: "reloadcmd",
   aliases: ["reloadcommands", "recarregar"],
-  descriptionKey: "commands.reloadcmd.description",
-  usageKey: "commands.reloadcmd.usage",
+  descriptionKey: "commands.core.reloadcmd.description",
+  usageKey: "commands.core.reloadcmd.usage",
   cooldown: 10_000,
+  deleteOn: 60_000,
   minRole: "manager",
 
   async execute(ctx) {
@@ -17,14 +18,14 @@ export default {
       const failed = summary?.failed ?? 0;
       const loaded = summary?.loaded ?? 0;
       const msg = failed
-        ? t("commands.reloadcmd.reply.successWithFailures", {
+        ? t("commands.core.reloadcmd.reply.successWithFailures", {
             loaded,
             failed,
           })
-        : t("commands.reloadcmd.reply.success", { loaded });
+        : t("commands.core.reloadcmd.reply.success", { loaded });
       await reply(msg);
     } catch (err) {
-      await reply(t("commands.reloadcmd.reply.error", { error: err.message }));
+      await reply(t("commands.core.reloadcmd.reply.error", { error: err.message }));
     }
   },
 };

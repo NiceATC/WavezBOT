@@ -10,9 +10,10 @@ import { setSetting } from "../../lib/storage.js";
 const motd = {
   name: "motd",
   aliases: ["mensagem"],
-  descriptionKey: "commands.motd.description",
-  usageKey: "commands.motd.usage",
+  descriptionKey: "commands.music.motd.description",
+  usageKey: "commands.music.motd.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
   minRole: "bouncer",
 
   async execute(ctx) {
@@ -23,10 +24,10 @@ const motd = {
       const interval = bot.cfg.motdInterval ?? 0;
       const msg = bot.cfg.motd ?? "";
       const state = enabled
-        ? t("commands.motd.stateOn")
-        : t("commands.motd.stateOff");
+        ? t("commands.music.motd.stateOn")
+        : t("commands.music.motd.stateOff");
       await reply(
-        t("commands.motd.status", {
+        t("commands.music.motd.status", {
           state,
           interval,
           message: msg,
@@ -41,7 +42,7 @@ const motd = {
       bot.updateConfig("motdEnabled", enabled);
       await setSetting("motdEnabled", enabled);
       await reply(
-        t(enabled ? "commands.motd.enabled" : "commands.motd.disabled"),
+        t(enabled ? "commands.music.motd.enabled" : "commands.music.motd.disabled"),
       );
       return;
     }
@@ -49,13 +50,13 @@ const motd = {
     if (sub === "interval") {
       const n = Number(args[1]);
       if (!Number.isFinite(n) || n <= 0) {
-        await reply(t("commands.motd.intervalUsage"));
+        await reply(t("commands.music.motd.intervalUsage"));
         return;
       }
       bot.updateConfig("motdInterval", Math.floor(n));
       await setSetting("motdInterval", Math.floor(n));
       await reply(
-        t("commands.motd.intervalUpdated", {
+        t("commands.music.motd.intervalUpdated", {
           interval: Math.floor(n),
         }),
       );
@@ -64,7 +65,7 @@ const motd = {
 
     const message = args.join(" ").trim();
     if (!message) {
-      await reply(t("commands.motd.messageUsage"));
+      await reply(t("commands.music.motd.messageUsage"));
       return;
     }
 
@@ -72,16 +73,17 @@ const motd = {
     bot.updateConfig("motdEnabled", true);
     await setSetting("motd", message);
     await setSetting("motdEnabled", true);
-    await reply(t("commands.motd.updated"));
+    await reply(t("commands.music.motd.updated"));
   },
 };
 
 const togglemotd = {
   name: "togglemotd",
   aliases: ["motdtoggle"],
-  descriptionKey: "commands.togglemotd.description",
-  usageKey: "commands.togglemotd.usage",
+  descriptionKey: "commands.music.togglemotd.description",
+  usageKey: "commands.music.togglemotd.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
   minRole: "bouncer",
 
   async execute(ctx) {
@@ -102,8 +104,8 @@ const togglemotd = {
     await reply(
       t(
         enabled
-          ? "commands.togglemotd.enabled"
-          : "commands.togglemotd.disabled",
+          ? "commands.music.togglemotd.enabled"
+          : "commands.music.togglemotd.disabled",
       ),
     );
   },

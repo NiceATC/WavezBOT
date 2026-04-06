@@ -11,9 +11,10 @@ function formatThorLine(line, name) {
 
 export default {
   name: "thor",
-  descriptionKey: "commands.thor.description",
-  usageKey: "commands.thor.usage",
+  descriptionKey: "commands.fun.thor.description",
+  usageKey: "commands.fun.thor.usage",
   cooldown: 1000_000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, api, sender, reply, t, tArray } = ctx;
@@ -22,17 +23,17 @@ export default {
     const tag = `@${name}`;
 
     if (!userId) {
-      await reply(t("commands.thor.noUser"));
+      await reply(t("commands.fun.thor.noUser"));
       return;
     }
 
     if (!api?.room?.getWaitlist) {
-      await reply(t("commands.thor.apiUnavailable"));
+      await reply(t("commands.fun.thor.apiUnavailable"));
       return;
     }
 
     if (bot.getBotRoleLevel() < getRoleLevel("bouncer")) {
-      await reply(t("commands.thor.noPermission"));
+      await reply(t("commands.fun.thor.noPermission"));
       return;
     }
 
@@ -40,7 +41,7 @@ export default {
     try {
       waitlist = await getWaitlist(api, bot.cfg.room);
     } catch (err) {
-      await reply(t("commands.thor.waitlistError", { error: err.message }));
+      await reply(t("commands.fun.thor.waitlistError", { error: err.message }));
       return;
     }
 
@@ -48,22 +49,22 @@ export default {
       (u) => String(u.id ?? u.userId ?? u.user_id ?? "") === userId,
     );
     if (!inList) {
-      await reply(t("commands.thor.mustBeInQueue"));
+      await reply(t("commands.fun.thor.mustBeInQueue"));
       return;
     }
 
     const roll = Math.floor(Math.random() * 100);
     if (roll < GOOD_CHANCE) {
       try {
-        await api.room.moveInWaitlist(bot.cfg.room, Number(userId), 0);
+        bot.wsReorderQueue(userId, 0);
         const msg = formatThorLine(
-          pickRandom(tArray("commands.thor.goodLines")) ?? "",
+          pickRandom(tArray("commands.fun.thor.goodLines")) ?? "",
           tag,
         );
         await reply(msg);
       } catch (err) {
         await reply(
-          t("commands.thor.moveError", { user: tag, error: err.message }),
+          t("commands.fun.thor.moveError", { user: tag, error: err.message }),
         );
       }
       return;
@@ -71,7 +72,7 @@ export default {
 
     if (roll < GOOD_CHANCE + NEUTRAL_CHANCE) {
       const msg = formatThorLine(
-        pickRandom(tArray("commands.thor.neutralLines")) ?? "",
+        pickRandom(tArray("commands.fun.thor.neutralLines")) ?? "",
         tag,
       );
       await reply(msg);
@@ -79,15 +80,15 @@ export default {
     }
 
     try {
-      await api.room.removeFromWaitlist(bot.cfg.room, Number(userId));
+      bot.wsRemoveFromQueue(userId);
       const msg = formatThorLine(
-        pickRandom(tArray("commands.thor.badLines")) ?? "",
+        pickRandom(tArray("commands.fun.thor.badLines")) ?? "",
         tag,
       );
       await reply(msg);
     } catch (err) {
       await reply(
-        t("commands.thor.removeError", { user: tag, error: err.message }),
+        t("commands.fun.thor.removeError", { user: tag, error: err.message }),
       );
     }
   },

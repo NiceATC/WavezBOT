@@ -61,7 +61,7 @@ export default {
         t("common.someone");
 
       try {
-        await api.room.removeFromWaitlist(bot.cfg.room, Number(userId));
+        bot.wsRemoveFromQueue(userId);
         removed++;
         await reply(
           t("events.afkRemoval.removed", {

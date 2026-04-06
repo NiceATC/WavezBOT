@@ -14,20 +14,21 @@ function randomInt(min, max) {
 export default {
   name: "steal",
   aliases: ["roubar"],
-  descriptionKey: "commands.steal.description",
-  usageKey: "commands.steal.usage",
+  descriptionKey: "commands.economy.steal.description",
+  usageKey: "commands.economy.steal.usage",
   cooldown: 15000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, api, sender, args, reply, t } = ctx;
     if (!bot.cfg.economyEnabled || !bot.cfg.stealEnabled) {
-      await reply(t("commands.steal.disabled"));
+      await reply(t("commands.economy.steal.disabled"));
       return;
     }
 
     const userId = sender.userId;
     if (userId == null) {
-      await reply(t("commands.steal.noUser"));
+      await reply(t("commands.economy.steal.noUser"));
       return;
     }
 
@@ -35,23 +36,23 @@ export default {
       .replace(/^@/, "")
       .trim();
     if (!targetInput) {
-      await reply(t("commands.steal.usageMessage"));
+      await reply(t("commands.economy.steal.usageMessage"));
       return;
     }
 
     const target = bot.findRoomUser(targetInput);
     if (!target) {
-      await reply(t("commands.steal.userNotFound", { user: targetInput }));
+      await reply(t("commands.economy.steal.userNotFound", { user: targetInput }));
       return;
     }
 
     if (bot.isBotUser(target.userId)) {
-      await reply(t("commands.steal.cannotTargetBot"));
+      await reply(t("commands.economy.steal.cannotTargetBot"));
       return;
     }
 
     if (String(target.userId) === String(userId)) {
-      await reply(t("commands.steal.self"));
+      await reply(t("commands.economy.steal.self"));
       return;
     }
 
@@ -68,7 +69,7 @@ export default {
 
     if (targetBalance < minInt) {
       await reply(
-        t("commands.steal.targetPoor", {
+        t("commands.economy.steal.targetPoor", {
           user: target.displayName ?? target.username ?? targetInput,
         }),
       );
@@ -91,12 +92,12 @@ export default {
         targetIdentity,
       );
       if (took == null) {
-        await reply(t("commands.steal.failed"));
+        await reply(t("commands.economy.steal.failed"));
         return;
       }
       await bot.awardEconomyPoints(userId, amount, identity);
       await reply(
-        t("commands.steal.success", {
+        t("commands.economy.steal.success", {
           user: target.displayName ?? target.username ?? targetInput,
           amount: formatPoints(amountInt),
         }),
@@ -110,7 +111,7 @@ export default {
     if (bailInt > 0 && balance >= bailInt) {
       await bot.spendEconomyPoints(userId, bailInt / POINT_SCALE, identity);
       await reply(
-        t("commands.steal.bailPaid", {
+        t("commands.economy.steal.bailPaid", {
           amount: formatPoints(bailInt),
         }),
       );
@@ -118,7 +119,7 @@ export default {
     }
 
     if (bot.getBotRoleLevel() < getRoleLevel("bouncer")) {
-      await reply(t("commands.steal.noPermission"));
+      await reply(t("commands.economy.steal.noPermission"));
       return;
     }
 
@@ -127,17 +128,14 @@ export default {
       Math.floor(Number(bot.cfg.stealMuteMinutes) || 10),
     );
     try {
-      await api.room.mute(bot.cfg.room, userId, {
-        duration,
-        reason: t("commands.steal.muteReason"),
-      });
+      bot.wsMuteUser(userId, duration * 60_000);
       await reply(
-        t("commands.steal.muted", {
+        t("commands.economy.steal.muted", {
           minutes: duration,
         }),
       );
     } catch (err) {
-      await reply(t("commands.steal.muteFailed", { error: err.message }));
+      await reply(t("commands.economy.steal.muteFailed", { error: err.message }));
     }
   },
 };

@@ -7,16 +7,17 @@
 export default {
   name: "np",
   aliases: ["nowplaying", "tocando", "musica"],
-  descriptionKey: "commands.nowplaying.description",
-  usageKey: "commands.nowplaying.usage",
+  descriptionKey: "commands.info.nowplaying.description",
+  usageKey: "commands.info.nowplaying.usage",
   cooldown: 5_000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, reply, t } = ctx;
     const state = bot.getSessionState();
 
     if (!state.currentTrack?.title) {
-      await reply(t("commands.nowplaying.none"));
+      await reply(t("commands.info.nowplaying.none"));
       return;
     }
 
@@ -24,15 +25,15 @@ export default {
     const dj = state.djName ?? "?";
     const r = state.currentTrackReactions;
     const parts = [
-      t("commands.nowplaying.trackLine", {
+      t("commands.info.nowplaying.trackLine", {
         title,
         artist: artist ? ` — ${artist}` : "",
       }),
-      t("commands.nowplaying.djLine", { dj }),
+      t("commands.info.nowplaying.djLine", { dj }),
     ];
 
     parts.push(
-      t("commands.nowplaying.reactions", {
+      t("commands.info.nowplaying.reactions", {
         woots: r.woots,
         mehs: r.mehs,
         grabs: r.grabs,

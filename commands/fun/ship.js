@@ -14,9 +14,10 @@ function resolveName(bot, input) {
 
 export default {
   name: "ship",
-  descriptionKey: "commands.ship.description",
-  usageKey: "commands.ship.usage",
+  descriptionKey: "commands.fun.ship.description",
+  usageKey: "commands.fun.ship.usage",
   cooldown: 4000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, sender, t, reply } = ctx;
@@ -41,7 +42,7 @@ export default {
 
     const percent = Math.floor(Math.random() * 101);
     await reply(
-      t("commands.ship.reply", {
+      t("commands.fun.ship.reply", {
         left,
         right,
         percent,

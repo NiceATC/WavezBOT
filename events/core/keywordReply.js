@@ -211,7 +211,15 @@ export default {
       });
       if (!selected) continue;
 
-      await reply(selected.output);
+      const replyRes = await reply(selected.output);
+      const deleteMs = Number(bot.cfg.deleteCommandMessagesDelayMs);
+      if (deleteMs > 0) {
+        const sentMsg =
+          replyRes?.data?.data?.message ?? replyRes?.data?.message ?? null;
+        const sentId =
+          sentMsg?.id ?? replyRes?.data?.data?.id ?? replyRes?.data?.id ?? null;
+        if (sentId) bot.scheduleMessageDelete(sentId, deleteMs);
+      }
       lastReplyAt = Date.now();
       rememberReply(senderId, selected.key, lastReplyAt, sameReplyCooldownMs);
       return;

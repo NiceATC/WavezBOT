@@ -5,21 +5,22 @@ import { sendChatChunks } from "../../helpers/chat.js";
 export default {
   name: "top",
   aliases: ["rank", "ranking", "topmoney"],
-  descriptionKey: "commands.top.description",
-  usageKey: "commands.top.usage",
+  descriptionKey: "commands.economy.top.description",
+  usageKey: "commands.economy.top.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, args, reply, t } = ctx;
     if (!bot.cfg.economyEnabled) {
-      await reply(t("commands.top.disabled"));
+      await reply(t("commands.economy.top.disabled"));
       return;
     }
 
     const limit = Math.max(1, Math.min(20, Number(args[0]) || 10));
     const rows = await listEconomyTop(limit);
     if (!rows.length) {
-      await reply(t("commands.top.empty"));
+      await reply(t("commands.economy.top.empty"));
       return;
     }
 
@@ -30,7 +31,7 @@ export default {
         row.username ??
         bot.getRoomUserDisplayName(row.user_id) ??
         row.user_id;
-      return t("commands.top.line", {
+      return t("commands.economy.top.line", {
         pos: idx + 1,
         user: name,
         balance: formatPoints(row.balance ?? 0),

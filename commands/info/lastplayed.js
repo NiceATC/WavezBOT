@@ -8,16 +8,17 @@ function formatLabel(title, artist) {
 export default {
   name: "lastplayed",
   aliases: ["lp"],
-  descriptionKey: "commands.lastplayed.description",
-  usageKey: "commands.lastplayed.usage",
+  descriptionKey: "commands.info.lastplayed.description",
+  usageKey: "commands.info.lastplayed.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { t, reply } = ctx;
     const rows = await listTrackHistory(1);
     const entry = rows?.[0];
     if (!entry) {
-      await reply(t("commands.lastplayed.empty"));
+      await reply(t("commands.info.lastplayed.empty"));
       return;
     }
 
@@ -26,6 +27,6 @@ export default {
     const label = formatLabel(title, artist);
     const dj = entry.dj_name ?? t("common.someone");
 
-    await reply(t("commands.lastplayed.reply", { label, dj }));
+    await reply(t("commands.info.lastplayed.reply", { label, dj }));
   },
 };

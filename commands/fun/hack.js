@@ -8,9 +8,10 @@ function formatLine(line, senderName, targetName) {
 
 export default {
   name: "hack",
-  descriptionKey: "commands.hack.description",
-  usageKey: "commands.hack.usage",
+  descriptionKey: "commands.fun.hack.description",
+  usageKey: "commands.fun.hack.usage",
   cooldown: 8000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, sender, t, tArray, reply } = ctx;
@@ -18,14 +19,14 @@ export default {
       .replace(/^@/, "")
       .trim();
     if (!targetInput) {
-      await reply(t("commands.hack.usageMessage"));
+      await reply(t("commands.fun.hack.usageMessage"));
       return;
     }
 
     const senderName =
       sender.displayName ?? sender.username ?? t("common.someone");
     const targetName = targetInput;
-    const lines = tArray("commands.hack.lines").map((line) =>
+    const lines = tArray("commands.fun.hack.lines").map((line) =>
       formatLine(line, senderName, targetName),
     );
 

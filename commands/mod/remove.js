@@ -7,22 +7,23 @@ import { getWaitlist } from "../../helpers/waitlist.js";
 export default {
   name: "remove",
   aliases: ["remover", "rm"],
-  descriptionKey: "commands.remove.description",
-  usageKey: "commands.remove.usage",
+  descriptionKey: "commands.mod.remove.description",
+  usageKey: "commands.mod.remove.usage",
   cooldown: 5_000,
+  deleteOn: 60_000,
   minRole: "bouncer",
 
   async execute(ctx) {
     const { api, bot, args, reply, t } = ctx;
     const target = (args[0] ?? "").replace(/^@/, "").trim();
     if (!target) {
-      await reply(t("commands.remove.usageMessage"));
+      await reply(t("commands.mod.remove.usageMessage"));
       return;
     }
 
     const user = bot.findRoomUser(target);
     if (!user) {
-      await reply(t("commands.remove.userNotFound", { user: target }));
+      await reply(t("commands.mod.remove.userNotFound", { user: target }));
       return;
     }
 
@@ -38,18 +39,18 @@ export default {
       );
 
       if (!inList) {
-        await reply(t("commands.remove.notInQueue", { user: target }));
+        await reply(t("commands.mod.remove.notInQueue", { user: target }));
         return;
       }
 
-      await api.room.removeFromWaitlist(bot.cfg.room, Number(user.userId));
+      bot.wsRemoveFromQueue(user.userId);
       await reply(
-        t("commands.remove.removed", {
+        t("commands.mod.remove.removed", {
           user: user.displayName ?? user.username,
         }),
       );
     } catch (err) {
-      await reply(t("commands.remove.error", { error: err.message }));
+      await reply(t("commands.mod.remove.error", { error: err.message }));
     }
   },
 };

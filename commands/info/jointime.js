@@ -3,9 +3,10 @@ import { formatDuration } from "../../helpers/time.js";
 export default {
   name: "jointime",
   aliases: ["tempo", "tempoonline"],
-  descriptionKey: "commands.jointime.description",
-  usageKey: "commands.jointime.usage",
+  descriptionKey: "commands.info.jointime.description",
+  usageKey: "commands.info.jointime.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, args, sender, reply, t } = ctx;
@@ -14,26 +15,26 @@ export default {
       .trim();
 
     if (!targetInput) {
-      await reply(t("commands.jointime.usageMessage"));
+      await reply(t("commands.info.jointime.usageMessage"));
       return;
     }
 
     const user = bot.findRoomUser(targetInput);
     if (!user) {
-      await reply(t("commands.jointime.userNotFound", { user: targetInput }));
+      await reply(t("commands.info.jointime.userNotFound", { user: targetInput }));
       return;
     }
 
     const joinedAt = bot.getUserJoinAt(user.userId);
     const name = user.displayName ?? user.username ?? targetInput;
     if (!joinedAt) {
-      await reply(t("commands.jointime.noRecord", { user: name }));
+      await reply(t("commands.info.jointime.noRecord", { user: name }));
       return;
     }
 
     const duration = formatDuration(Date.now() - joinedAt);
     await reply(
-      t("commands.jointime.reply", {
+      t("commands.info.jointime.reply", {
         user: name,
         duration,
       }),

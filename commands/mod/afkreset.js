@@ -1,9 +1,10 @@
 export default {
   name: "afkreset",
   aliases: ["afkclear"],
-  descriptionKey: "commands.afkreset.description",
-  usageKey: "commands.afkreset.usage",
+  descriptionKey: "commands.mod.afkreset.description",
+  usageKey: "commands.mod.afkreset.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
   minRole: "bouncer",
 
   async execute(ctx) {
@@ -13,13 +14,13 @@ export default {
       .trim();
 
     if (!targetInput) {
-      await reply(t("commands.afkreset.usageMessage"));
+      await reply(t("commands.mod.afkreset.usageMessage"));
       return;
     }
 
     const user = bot.findRoomUser(targetInput);
     if (!user) {
-      await reply(t("commands.afkreset.userNotFound", { user: targetInput }));
+      await reply(t("commands.mod.afkreset.userNotFound", { user: targetInput }));
       return;
     }
 
@@ -30,6 +31,6 @@ export default {
 
     bot.setUserLastChatAt(user.userId);
     const name = user.displayName ?? user.username ?? targetInput;
-    await reply(t("commands.afkreset.reset", { user: name }));
+    await reply(t("commands.mod.afkreset.reset", { user: name }));
   },
 };

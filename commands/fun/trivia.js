@@ -39,9 +39,10 @@ function shuffle(list) {
 
 export default {
   name: "trivia",
-  descriptionKey: "commands.trivia.description",
-  usageKey: "commands.trivia.usage",
+  descriptionKey: "commands.fun.trivia.description",
+  usageKey: "commands.fun.trivia.usage",
   cooldown: 8000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { args, t, reply } = ctx;
@@ -51,10 +52,10 @@ export default {
 
     if (["answer", "reveal", "resposta"].includes(action)) {
       if (!lastTrivia || Date.now() - lastTrivia.at > TRIVIA_TTL_MS) {
-        await reply(t("commands.trivia.noActive"));
+        await reply(t("commands.fun.trivia.noActive"));
         return;
       }
-      await reply(t("commands.trivia.answer", { answer: lastTrivia.answer }));
+      await reply(t("commands.fun.trivia.answer", { answer: lastTrivia.answer }));
       return;
     }
 
@@ -62,7 +63,7 @@ export default {
       const data = await fetchJson(TRIVIA_URL);
       const item = Array.isArray(data?.results) ? data.results[0] : null;
       if (!item?.question || !item?.correct_answer) {
-        await reply(t("commands.trivia.noQuestion"));
+        await reply(t("commands.fun.trivia.noQuestion"));
         return;
       }
 
@@ -81,15 +82,15 @@ export default {
       };
 
       await reply(
-        `${t("commands.trivia.question", { question })} ${t(
-          "commands.trivia.options",
+        `${t("commands.fun.trivia.question", { question })} ${t(
+          "commands.fun.trivia.options",
           {
             options: labeled.join(" | "),
           },
         )}`,
       );
     } catch (err) {
-      await reply(t("commands.trivia.error", { error: err.message }));
+      await reply(t("commands.fun.trivia.error", { error: err.message }));
     }
   },
 };

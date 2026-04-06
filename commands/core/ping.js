@@ -7,8 +7,8 @@
 export default {
   name: "ping",
   aliases: ["pong"],
-  descriptionKey: "commands.ping.description",
-  usageKey: "commands.ping.usage",
+  descriptionKey: "commands.core.ping.description",
+  usageKey: "commands.core.ping.usage",
   cooldown: 5_000,
   deleteOn: 5000,
 
@@ -16,7 +16,7 @@ export default {
     const start = Date.now();
     const user = ctx.sender.username ?? ctx.t("common.you");
     await ctx.reply(
-      ctx.t("commands.ping.reply", {
+      ctx.t("commands.core.ping.reply", {
         user,
         ms: Date.now() - start,
       }),

@@ -9,9 +9,10 @@ function formatLine(line, senderName, targetName) {
 export default {
   name: "roast",
   aliases: ["toaster"],
-  descriptionKey: "commands.roast.description",
-  usageKey: "commands.roast.usage",
+  descriptionKey: "commands.fun.roast.description",
+  usageKey: "commands.fun.roast.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, sender, t, tArray, reply } = ctx;
@@ -27,7 +28,7 @@ export default {
       targetName = user?.displayName ?? user?.username ?? targetInput;
     }
 
-    const line = pickRandom(tArray("commands.roast.lines"));
+    const line = pickRandom(tArray("commands.fun.roast.lines"));
     await reply(formatLine(line, senderName, targetName));
   },
 };

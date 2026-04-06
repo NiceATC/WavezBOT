@@ -9,15 +9,16 @@ const TOP_ALIASES = new Set(["top", "rank", "ranking"]);
 export default {
   name: "economy",
   aliases: ["eco", "money"],
-  descriptionKey: "commands.economy.description",
-  usageKey: "commands.economy.usage",
+  descriptionKey: "commands.economy.economy.description",
+  usageKey: "commands.economy.economy.usage",
   cooldown: 3000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { args, reply, t } = ctx;
     const sub = String(args[0] ?? "").toLowerCase();
     if (!sub) {
-      await reply(t("commands.economy.usageMessage"));
+      await reply(t("commands.economy.economy.usageMessage"));
       return;
     }
 
@@ -36,6 +37,6 @@ export default {
       return;
     }
 
-    await reply(t("commands.economy.usageMessage"));
+    await reply(t("commands.economy.economy.usageMessage"));
   },
 };

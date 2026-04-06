@@ -24,9 +24,10 @@ function splitTrackId(trackId) {
 export default {
   name: "blacklist",
   aliases: ["bl"],
-  descriptionKey: "commands.blacklist.description",
-  usageKey: "commands.blacklist.usage",
+  descriptionKey: "commands.music.blacklist.description",
+  usageKey: "commands.music.blacklist.usage",
   cooldown: 3000,
+  deleteOn: 60_000,
   minRole: "bouncer",
 
   async execute(ctx) {
@@ -34,7 +35,7 @@ export default {
     const action = (args[0] ?? "").toLowerCase();
 
     if (!action) {
-      await reply(t("commands.blacklist.usageMessage"));
+      await reply(t("commands.music.blacklist.usageMessage"));
       return;
     }
 
@@ -43,14 +44,14 @@ export default {
       const title = bot._currentTrack?.title ?? null;
       const artist = bot._currentTrack?.artist ?? null;
       if (!id) {
-        await reply(t("commands.blacklist.noTrackInfo"));
+        await reply(t("commands.music.blacklist.noTrackInfo"));
         return;
       }
       const label = artist
         ? `${artist} - ${title}`
         : (title ?? t("common.song"));
       await reply(
-        t("commands.blacklist.currentInfo", {
+        t("commands.music.blacklist.currentInfo", {
           label,
           id,
         }),
@@ -64,7 +65,7 @@ export default {
         trackId = bot.getCurrentTrackId();
       }
       if (!trackId) {
-        await reply(t("commands.blacklist.noTrackAdd"));
+        await reply(t("commands.music.blacklist.noTrackAdd"));
         return;
       }
 
@@ -73,7 +74,7 @@ export default {
 
       const existing = await getTrackBlacklist(trackId);
       if (existing) {
-        await reply(t("commands.blacklist.already"));
+        await reply(t("commands.music.blacklist.already"));
         return;
       }
 
@@ -92,11 +93,11 @@ export default {
 
       if (isCurrent) {
         try {
-          await reply(t("commands.blacklist.addedSkip"));
-          await api.room.skipTrack(bot.cfg.room);
+          await reply(t("commands.music.blacklist.addedSkip"));
+          await bot.safeSkip();
         } catch (err) {
           await reply(
-            t("commands.blacklist.addedSkipError", {
+            t("commands.music.blacklist.addedSkipError", {
               error: err.message,
             }),
           );
@@ -104,7 +105,7 @@ export default {
         return;
       }
 
-      await reply(t("commands.blacklist.added"));
+      await reply(t("commands.music.blacklist.added"));
       return;
     }
 
@@ -114,11 +115,11 @@ export default {
         trackId = bot.getCurrentTrackId() ?? "";
       }
       if (!trackId) {
-        await reply(t("commands.blacklist.removeUsage"));
+        await reply(t("commands.music.blacklist.removeUsage"));
         return;
       }
       await removeTrackBlacklist(trackId);
-      await reply(t("commands.blacklist.removed"));
+      await reply(t("commands.music.blacklist.removed"));
       return;
     }
 
@@ -126,12 +127,12 @@ export default {
       const limit = Math.max(1, Math.min(50, Number(args[1]) || 10));
       const list = await listTrackBlacklist(limit);
       if (!list.length) {
-        await reply(t("commands.blacklist.empty"));
+        await reply(t("commands.music.blacklist.empty"));
         return;
       }
       const items = list.map((t) => t.track_id ?? t.trackId);
       await reply(
-        t("commands.blacklist.list", {
+        t("commands.music.blacklist.list", {
           limit,
           items: items.join(", "),
         }),
@@ -139,6 +140,6 @@ export default {
       return;
     }
 
-    await reply(t("commands.blacklist.invalidAction"));
+    await reply(t("commands.music.blacklist.invalidAction"));
   },
 };

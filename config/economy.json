@@ -1,0 +1,131 @@
+{
+    "_comment": "Sistema de economia: pontos, daily, trabalho, roubo, loja e casino.",
+    "economyEnabled": true,
+    "economyChatPoints": 0.2,
+    "economyChatCooldownMs": 90000,
+    "economyDjPoints": 2,
+    "economyWootPoints": 0.1,
+    "economyGrabPoints": 0.2,
+    "economyOnlinePointsPerHour": 0.25,
+    "economyTransferMin": 5,
+    "dailyRewardAmount": 5,
+    "dailyRewardCooldownMs": 86400000,
+    "shopItems": [
+        {
+            "key": "queue_jump_2",
+            "name": {
+                "pt-BR": "Pular 2 posicoes",
+                "en-US": "Jump 2 spots"
+            },
+            "description": {
+                "pt-BR": "Move voce 2 posicoes para cima na fila",
+                "en-US": "Move you up 2 spots in the waitlist"
+            },
+            "price": 2,
+            "type": "moveUp",
+            "positions": 2
+        },
+        {
+            "key": "queue_top",
+            "name": {
+                "pt-BR": "Ir para o topo",
+                "en-US": "Go to the top"
+            },
+            "description": {
+                "pt-BR": "Move voce para a primeira posicao da fila",
+                "en-US": "Move you to the first position"
+            },
+            "price": 5,
+            "type": "moveTo",
+            "position": 1
+        }
+    ],
+    "workJobs": [
+        {
+            "key": "estagiario",
+            "name": {
+                "pt-BR": "Estagiario",
+                "en-US": "Intern"
+            },
+            "xpMin": 1,
+            "pay": 1.5
+        },
+        {
+            "key": "assistente",
+            "name": {
+                "pt-BR": "Assistente",
+                "en-US": "Assistant"
+            },
+            "xpMin": 5,
+            "pay": 2.5
+        },
+        {
+            "key": "analista",
+            "name": {
+                "pt-BR": "Analista",
+                "en-US": "Analyst"
+            },
+            "xpMin": 10,
+            "pay": 4
+        },
+        {
+            "key": "gerente",
+            "name": {
+                "pt-BR": "Gerente",
+                "en-US": "Manager"
+            },
+            "xpMin": 20,
+            "pay": 6
+        }
+    ],
+    "workCooldownMs": 86400000,
+    "stealEnabled": true,
+    "stealMinAmount": 0.5,
+    "stealMaxAmount": 2,
+    "stealFailChance": 0.3,
+    "stealBailAmount": 3,
+    "stealMuteMinutes": 10,
+    "casinoEnabled": true,
+    "casinoMinBet": 1,
+    "casinoMaxBet": 100,
+    "casinoCooldownMs": 5000,
+    "casinoBetMultiplierFactor": 0.01,
+    "casinoMultiplierMax": 6,
+    "casinoSlotsSymbols": [
+        {
+            "emoji": "🍒",
+            "weight": 30,
+            "multiplier": 2
+        },
+        {
+            "emoji": "🍋",
+            "weight": 25,
+            "multiplier": 2.5
+        },
+        {
+            "emoji": "🍉",
+            "weight": 20,
+            "multiplier": 3
+        },
+        {
+            "emoji": "🔔",
+            "weight": 15,
+            "multiplier": 4
+        },
+        {
+            "emoji": "💎",
+            "weight": 10,
+            "multiplier": 6
+        }
+    ],
+    "casinoSlotsPairMultiplier": 1.2,
+    "casinoJackpotEnabled": true,
+    "casinoJackpotLossShare": 0.1,
+    "casinoJackpotSymbol": "💎",
+    "casinoRouletteBetMultiplierFactor": 0,
+    "casinoRouletteRedMultiplier": 2,
+    "casinoRouletteBlackMultiplier": 2,
+    "casinoRouletteGreenMultiplier": 14,
+    "casinoDiceSides": 6,
+    "casinoDiceWinMultiplier": 6
+}

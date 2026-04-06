@@ -8,9 +8,10 @@ function formatCookieLine(line, senderName, targetName) {
 
 export default {
   name: "cookie",
-  descriptionKey: "commands.cookie.description",
-  usageKey: "commands.cookie.usage",
+  descriptionKey: "commands.fun.cookie.description",
+  usageKey: "commands.fun.cookie.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, sender, t, tArray } = ctx;
@@ -21,7 +22,7 @@ export default {
       sender.username ?? sender.displayName ?? t("common.someone");
 
     if (!targetInput) {
-      const line = pickRandom(tArray("commands.cookie.selfLines"));
+      const line = pickRandom(tArray("commands.fun.cookie.selfLines"));
       const msg = formatCookieLine(line, senderName, null);
       await ctx.reply(msg);
       return;
@@ -29,12 +30,12 @@ export default {
 
     const user = bot.findRoomUser(targetInput);
     if (!user) {
-      await ctx.reply(t("commands.cookie.userNotFound", { user: targetInput }));
+      await ctx.reply(t("commands.fun.cookie.userNotFound", { user: targetInput }));
       return;
     }
 
     const name = user.username ?? user.displayName ?? targetInput;
-    const line = pickRandom(tArray("commands.cookie.giftLines"));
+    const line = pickRandom(tArray("commands.fun.cookie.giftLines"));
     const msg = formatCookieLine(line, senderName, name);
     await ctx.reply(msg);
   },

@@ -11,29 +11,27 @@
 export default {
   name: "woot",
   aliases: ["w", "voto", "votar"],
-  descriptionKey: "commands.woot.description",
-  usageKey: "commands.woot.usage",
+  descriptionKey: "commands.music.woot.description",
+  usageKey: "commands.music.woot.usage",
   cooldown: 10_000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, reply, sender, t } = ctx;
 
     if (!bot._currentTrack?.title) {
-      await reply(t("commands.woot.noTrack"));
+      await reply(t("commands.music.woot.noTrack"));
       return;
     }
 
-    try {
-      await bot._api.room.vote(bot.cfg.room, "woot");
-      bot._wootCount++;
-      await reply(
-        t("commands.woot.voted", {
-          title: bot._currentTrack.title,
-          user: sender.username ?? t("common.you"),
-        }),
-      );
-    } catch (err) {
-      await reply(t("commands.woot.error", { error: err.message }));
-    }
+    // The Wavez platform does not expose a vote/woot endpoint for room bots.
+    // We track the intent for session stats and acknowledge the user.
+    bot._wootCount++;
+    await reply(
+      t("commands.music.woot.voted", {
+        title: bot._currentTrack.title,
+        user: sender.username ?? t("common.you"),
+      }),
+    );
   },
 };

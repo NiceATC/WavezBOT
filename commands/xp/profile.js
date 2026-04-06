@@ -5,14 +5,15 @@ import { uploadToImgbb } from "../../helpers/imgbb.js";
 export default {
   name: "perfil",
   aliases: ["profile", "xp", "level"],
-  descriptionKey: "commands.perfil.description",
-  usageKey: "commands.perfil.usage",
+  descriptionKey: "commands.xp.perfil.description",
+  usageKey: "commands.xp.perfil.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, args, sender, reply, t } = ctx;
     if (!bot.cfg.xpEnabled) {
-      await reply(t("commands.perfil.disabled"));
+      await reply(t("commands.xp.perfil.disabled"));
       return;
     }
 
@@ -21,13 +22,13 @@ export default {
       .trim();
 
     if (!targetInput) {
-      await reply(t("commands.perfil.usageMessage"));
+      await reply(t("commands.xp.perfil.usageMessage"));
       return;
     }
 
     const user = bot.findRoomUser(targetInput);
     if (!user) {
-      await reply(t("commands.perfil.userNotFound", { user: targetInput }));
+      await reply(t("commands.xp.perfil.userNotFound", { user: targetInput }));
       return;
     }
 
@@ -38,7 +39,7 @@ export default {
     const profile = await bot.getXpProfile(user.userId, identity);
     if (!profile) {
       await reply(
-        t("commands.perfil.noRecord", {
+        t("commands.xp.perfil.noRecord", {
           user: user.displayName ?? user.username ?? targetInput,
         }),
       );
@@ -50,12 +51,12 @@ export default {
     if (bot.cfg.imageRenderingEnabled && process.env.IMGBB_API_KEY) {
       try {
         const labels = {
-          title: t("commands.perfil.cardTitle"),
-          level: t("commands.perfil.cardLevel"),
-          xp: t("commands.perfil.cardXp"),
-          reward: t("commands.perfil.cardReward"),
-          balance: t("commands.perfil.cardBalance"),
-          points: t("commands.perfil.cardPoints"),
+          title: t("commands.xp.perfil.cardTitle"),
+          level: t("commands.xp.perfil.cardLevel"),
+          xp: t("commands.xp.perfil.cardXp"),
+          reward: t("commands.xp.perfil.cardReward"),
+          balance: t("commands.xp.perfil.cardBalance"),
+          points: t("commands.xp.perfil.cardPoints"),
         };
         const buffer = renderProfileCard({
           username: identity.displayName ?? identity.username ?? "User",
@@ -74,7 +75,7 @@ export default {
       }
     }
 
-    const base = t("commands.perfil.reply", {
+    const base = t("commands.xp.perfil.reply", {
       user: user.displayName ?? user.username ?? targetInput,
       level: profile.level,
       xp: formatPoints(profile.xp),
@@ -86,14 +87,14 @@ export default {
     const extras = [];
     if (profile.nextBadge) {
       extras.push(
-        t("commands.perfil.nextBadge", {
+        t("commands.xp.perfil.nextBadge", {
           badge: profile.nextBadge,
         }),
       );
     }
     if (profile.nextAchievement) {
       extras.push(
-        t("commands.perfil.nextAchievement", {
+        t("commands.xp.perfil.nextAchievement", {
           achievement: profile.nextAchievement,
         }),
       );

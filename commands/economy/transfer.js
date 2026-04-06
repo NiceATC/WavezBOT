@@ -11,19 +11,20 @@ function parseAmount(input) {
 export default {
   name: "transfer",
   aliases: ["pay", "send"],
-  descriptionKey: "commands.transfer.description",
-  usageKey: "commands.transfer.usage",
+  descriptionKey: "commands.economy.transfer.description",
+  usageKey: "commands.economy.transfer.usage",
   cooldown: 3000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, sender, args, reply, t } = ctx;
     if (!bot.cfg.economyEnabled) {
-      await reply(t("commands.transfer.disabled"));
+      await reply(t("commands.economy.transfer.disabled"));
       return;
     }
 
     if (sender.userId == null) {
-      await reply(t("commands.transfer.noUser"));
+      await reply(t("commands.economy.transfer.noUser"));
       return;
     }
 
@@ -32,13 +33,13 @@ export default {
       .trim();
     const amountRaw = args[1];
     if (!targetInput || amountRaw == null) {
-      await reply(t("commands.transfer.usageMessage"));
+      await reply(t("commands.economy.transfer.usageMessage"));
       return;
     }
 
     const amount = parseAmount(amountRaw);
     if (amount == null || amount <= 0) {
-      await reply(t("commands.transfer.invalidAmount"));
+      await reply(t("commands.economy.transfer.invalidAmount"));
       return;
     }
 
@@ -46,7 +47,7 @@ export default {
     const minInt = toPointsInt(bot.cfg.economyTransferMin ?? 1);
     if (amountInt < minInt) {
       await reply(
-        t("commands.transfer.minAmount", {
+        t("commands.economy.transfer.minAmount", {
           min: formatPoints(minInt),
         }),
       );
@@ -55,17 +56,17 @@ export default {
 
     const target = bot.findRoomUser(targetInput);
     if (!target) {
-      await reply(t("commands.transfer.userNotFound", { user: targetInput }));
+      await reply(t("commands.economy.transfer.userNotFound", { user: targetInput }));
       return;
     }
 
     if (bot.isBotUser(target.userId)) {
-      await reply(t("commands.transfer.cannotTargetBot"));
+      await reply(t("commands.economy.transfer.cannotTargetBot"));
       return;
     }
 
     if (String(target.userId) === String(sender.userId ?? "")) {
-      await reply(t("commands.transfer.self"));
+      await reply(t("commands.economy.transfer.self"));
       return;
     }
 
@@ -81,7 +82,7 @@ export default {
     );
     if (currentBalance < amountInt) {
       await reply(
-        t("commands.transfer.insufficient", {
+        t("commands.economy.transfer.insufficient", {
           balance: formatPoints(currentBalance),
         }),
       );
@@ -97,12 +98,12 @@ export default {
     );
 
     if (!result) {
-      await reply(t("commands.transfer.failed"));
+      await reply(t("commands.economy.transfer.failed"));
       return;
     }
 
     await reply(
-      t("commands.transfer.success", {
+      t("commands.economy.transfer.success", {
         user: target.displayName ?? target.username ?? targetInput,
         amount: formatPoints(amountInt),
         balance: formatPoints(result.fromBalance),

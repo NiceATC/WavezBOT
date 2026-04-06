@@ -1,9 +1,10 @@
 export default {
   name: "mediaid",
   aliases: ["songid"],
-  descriptionKey: "commands.mediaid.description",
-  usageKey: "commands.mediaid.usage",
+  descriptionKey: "commands.info.mediaid.description",
+  usageKey: "commands.info.mediaid.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
   minRole: "resident_dj",
 
   async execute(ctx) {
@@ -12,17 +13,17 @@ export default {
     const track = state.currentTrack;
 
     if (!track?.title) {
-      await reply(t("commands.mediaid.noTrack"));
+      await reply(t("commands.info.mediaid.noTrack"));
       return;
     }
 
     const trackId =
       bot.getCurrentTrackId() ?? track.sourceId ?? track.youtubeId ?? null;
     if (!trackId) {
-      await reply(t("commands.mediaid.noId"));
+      await reply(t("commands.info.mediaid.noId"));
       return;
     }
 
-    await reply(t("commands.mediaid.reply", { id: trackId }));
+    await reply(t("commands.info.mediaid.reply", { id: trackId }));
   },
 };

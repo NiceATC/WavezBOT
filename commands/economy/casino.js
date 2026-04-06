@@ -99,20 +99,21 @@ function formatNet(intValue) {
 
 export default {
   name: "casino",
-  descriptionKey: "commands.casino.description",
-  usageKey: "commands.casino.usage",
+  descriptionKey: "commands.economy.casino.description",
+  usageKey: "commands.economy.casino.usage",
   cooldown: 0,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, sender, args, reply, t } = ctx;
     if (!bot.cfg.economyEnabled || !bot.cfg.casinoEnabled) {
-      await reply(t("commands.casino.disabled"));
+      await reply(t("commands.economy.casino.disabled"));
       return;
     }
 
     const userId = sender.userId;
     if (userId == null) {
-      await reply(t("commands.casino.noUser"));
+      await reply(t("commands.economy.casino.noUser"));
       return;
     }
 
@@ -120,7 +121,7 @@ export default {
     const remaining = getRemainingCooldown(userId, cooldownMs);
     if (remaining > 0) {
       await reply(
-        t("commands.casino.cooldown", {
+        t("commands.economy.casino.cooldown", {
           seconds: Math.ceil(remaining / 1000),
         }),
       );
@@ -131,14 +132,14 @@ export default {
       .trim()
       .toLowerCase();
     if (!game) {
-      await reply(t("commands.casino.usageMessage"));
+      await reply(t("commands.economy.casino.usageMessage"));
       return;
     }
 
     const betRaw = args[1];
     const bet = parseAmount(betRaw);
     if (bet == null || bet <= 0) {
-      await reply(t("commands.casino.invalidBet"));
+      await reply(t("commands.economy.casino.invalidBet"));
       return;
     }
 
@@ -146,13 +147,13 @@ export default {
     const maxBet = Number(bot.cfg.casinoMaxBet ?? 100) || 100;
     if (bet < minBet) {
       await reply(
-        t("commands.casino.minBet", { min: formatPoints(toPointsInt(minBet)) }),
+        t("commands.economy.casino.minBet", { min: formatPoints(toPointsInt(minBet)) }),
       );
       return;
     }
     if (bet > maxBet) {
       await reply(
-        t("commands.casino.maxBet", { max: formatPoints(toPointsInt(maxBet)) }),
+        t("commands.economy.casino.maxBet", { max: formatPoints(toPointsInt(maxBet)) }),
       );
       return;
     }
@@ -162,7 +163,7 @@ export default {
     const betInt = toPointsInt(bet);
     if (balance < betInt) {
       await reply(
-        t("commands.casino.insufficient", { balance: formatPoints(balance) }),
+        t("commands.economy.casino.insufficient", { balance: formatPoints(balance) }),
       );
       return;
     }
@@ -170,7 +171,7 @@ export default {
     if (
       !["slots", "slot", "roleta", "roulette", "dados", "dice"].includes(game)
     ) {
-      await reply(t("commands.casino.usageMessage"));
+      await reply(t("commands.economy.casino.usageMessage"));
       return;
     }
 
@@ -178,7 +179,7 @@ export default {
       const spent = await bot.spendEconomyPoints(userId, bet, identity);
       if (spent == null) {
         await reply(
-          t("commands.casino.insufficient", { balance: formatPoints(balance) }),
+          t("commands.economy.casino.insufficient", { balance: formatPoints(balance) }),
         );
         return;
       }
@@ -245,11 +246,11 @@ export default {
       if (bot.cfg.imageRenderingEnabled && process.env.IMGBB_API_KEY) {
         try {
           const labels = {
-            title: t("commands.casino.slots.cardTitle"),
+            title: t("commands.economy.casino.slots.cardTitle"),
             subtitle: identity.displayName ?? identity.username ?? "Player",
-            bet: t("commands.casino.slots.cardBet"),
-            win: t("commands.casino.slots.cardWin"),
-            net: t("commands.casino.slots.cardNet"),
+            bet: t("commands.economy.casino.slots.cardBet"),
+            win: t("commands.economy.casino.slots.cardWin"),
+            net: t("commands.economy.casino.slots.cardNet"),
           };
           const buffer = renderSlotsCard({
             username: identity.displayName ?? identity.username ?? "Player",
@@ -271,7 +272,7 @@ export default {
 
       if (payoutInt > 0 && jackpotWonInt) {
         await reply(
-          t("commands.casino.slots.jackpot", {
+          t("commands.economy.casino.slots.jackpot", {
             reels: reelsText,
             jackpot: formatPoints(jackpotWonInt),
             win: formatPoints(payoutInt),
@@ -280,14 +281,14 @@ export default {
         );
       } else if (payoutInt > 0) {
         await reply(
-          t("commands.casino.slots.win", {
+          t("commands.economy.casino.slots.win", {
             reels: reelsText,
             win: formatPoints(payoutInt),
             net: formatNet(netInt),
           }),
         );
       } else {
-        await reply(t("commands.casino.slots.lose", { reels: reelsText }));
+        await reply(t("commands.economy.casino.slots.lose", { reels: reelsText }));
       }
       return;
     }
@@ -306,14 +307,14 @@ export default {
       };
       const choice = choiceMap[choiceRaw];
       if (!choice) {
-        await reply(t("commands.casino.roulette.usageMessage"));
+        await reply(t("commands.economy.casino.roulette.usageMessage"));
         return;
       }
 
       const spent = await bot.spendEconomyPoints(userId, bet, identity);
       if (spent == null) {
         await reply(
-          t("commands.casino.insufficient", { balance: formatPoints(balance) }),
+          t("commands.economy.casino.insufficient", { balance: formatPoints(balance) }),
         );
         return;
       }
@@ -348,13 +349,13 @@ export default {
       if (bot.cfg.imageRenderingEnabled && process.env.IMGBB_API_KEY) {
         try {
           const labels = {
-            title: t("commands.casino.roulette.cardTitle"),
+            title: t("commands.economy.casino.roulette.cardTitle"),
             subtitle: identity.displayName ?? identity.username ?? "Player",
-            bet: t("commands.casino.roulette.cardBet"),
-            win: t("commands.casino.roulette.cardWin"),
-            net: t("commands.casino.roulette.cardNet"),
-            pick: t("commands.casino.roulette.cardPick"),
-            result: t("commands.casino.roulette.cardResult"),
+            bet: t("commands.economy.casino.roulette.cardBet"),
+            win: t("commands.economy.casino.roulette.cardWin"),
+            net: t("commands.economy.casino.roulette.cardNet"),
+            pick: t("commands.economy.casino.roulette.cardPick"),
+            result: t("commands.economy.casino.roulette.cardResult"),
           };
           const buffer = renderRouletteCard({
             username: identity.displayName ?? identity.username ?? "Player",
@@ -376,7 +377,7 @@ export default {
 
       if (payoutInt > 0) {
         await reply(
-          t("commands.casino.roulette.win", {
+          t("commands.economy.casino.roulette.win", {
             choice: t(`commands.casino.roulette.color.${choice}`),
             result: t(`commands.casino.roulette.color.${result.color}`),
             number: result.number,
@@ -386,7 +387,7 @@ export default {
         );
       } else {
         await reply(
-          t("commands.casino.roulette.lose", {
+          t("commands.economy.casino.roulette.lose", {
             choice: t(`commands.casino.roulette.color.${choice}`),
             result: t(`commands.casino.roulette.color.${result.color}`),
             number: result.number,
@@ -403,14 +404,14 @@ export default {
         Math.min(100, Number(bot.cfg.casinoDiceSides) || 6),
       );
       if (!guess || guess < 1 || guess > sides) {
-        await reply(t("commands.casino.dice.usageMessage", { sides }));
+        await reply(t("commands.economy.casino.dice.usageMessage", { sides }));
         return;
       }
 
       const spent = await bot.spendEconomyPoints(userId, bet, identity);
       if (spent == null) {
         await reply(
-          t("commands.casino.insufficient", { balance: formatPoints(balance) }),
+          t("commands.economy.casino.insufficient", { balance: formatPoints(balance) }),
         );
         return;
       }
@@ -434,7 +435,7 @@ export default {
 
       if (payoutInt > 0) {
         await reply(
-          t("commands.casino.dice.win", {
+          t("commands.economy.casino.dice.win", {
             roll,
             guess,
             win: formatPoints(payoutInt),
@@ -443,7 +444,7 @@ export default {
         );
       } else {
         await reply(
-          t("commands.casino.dice.lose", {
+          t("commands.economy.casino.dice.lose", {
             roll,
             guess,
           }),

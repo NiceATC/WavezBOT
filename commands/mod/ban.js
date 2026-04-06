@@ -17,22 +17,23 @@ function isBotName(bot, target) {
 const ban = {
   name: "ban",
   aliases: ["banir"],
-  descriptionKey: "commands.ban.description",
-  usageKey: "commands.ban.usage",
+  descriptionKey: "commands.mod.ban.description",
+  usageKey: "commands.mod.ban.usage",
   cooldown: 5_000,
+  deleteOn: 60_000,
   minRole: "manager",
 
   async execute(ctx) {
     const { api, bot, args, reply, t } = ctx;
     const target = (args[0] ?? "").replace(/^@/, "").trim();
     if (!target) {
-      await reply(t("commands.ban.usageMessage"));
+      await reply(t("commands.mod.ban.usageMessage"));
       return;
     }
 
     const user = bot.findRoomUser(target);
     if (!user) {
-      await reply(t("commands.ban.userNotFound", { user: target }));
+      await reply(t("commands.mod.ban.userNotFound", { user: target }));
       return;
     }
 
@@ -43,7 +44,7 @@ const ban = {
 
     if (bot.getUserRoleLevel(user.userId) >= bot.getBotRoleLevel()) {
       await reply(
-        t("commands.ban.roleTooHigh", {
+        t("commands.mod.ban.roleTooHigh", {
           user: user.displayName ?? user.username,
         }),
       );
@@ -52,22 +53,18 @@ const ban = {
 
     const { duration, label, reason } = extractDurationAndReason(args.slice(1));
 
-    const data = {};
-    if (duration != null) data.duration = duration;
-    if (reason) data.reason = reason;
-
     try {
-      await api.room.ban(bot.cfg.room, user.userId, data);
+      bot.wsBanUser(user.userId, { duration, reason });
       const parts = [
-        t("commands.ban.banned", {
+        t("commands.mod.ban.banned", {
           user: user.displayName ?? user.username,
         }),
       ];
-      if (label) parts.push(t("commands.ban.duration", { duration: label }));
-      if (reason) parts.push(t("commands.ban.reason", { reason }));
+      if (label) parts.push(t("commands.mod.ban.duration", { duration: label }));
+      if (reason) parts.push(t("commands.mod.ban.reason", { reason }));
       await reply(parts.join(" ") + ".");
     } catch (err) {
-      await reply(t("commands.ban.error", { error: err.message }));
+      await reply(t("commands.mod.ban.error", { error: err.message }));
     }
   },
 };
@@ -75,16 +72,17 @@ const ban = {
 const unban = {
   name: "unban",
   aliases: ["desbanir"],
-  descriptionKey: "commands.unban.description",
-  usageKey: "commands.unban.usage",
+  descriptionKey: "commands.mod.unban.description",
+  usageKey: "commands.mod.unban.usage",
   cooldown: 5_000,
+  deleteOn: 60_000,
   minRole: "manager",
 
   async execute(ctx) {
     const { api, bot, args, reply, t } = ctx;
     const target = (args[0] ?? "").replace(/^@/, "").trim();
     if (!target) {
-      await reply(t("commands.unban.usageMessage"));
+      await reply(t("commands.mod.unban.usageMessage"));
       return;
     }
 
@@ -103,8 +101,9 @@ const unban = {
 
     if (!userId) {
       try {
-        const bansRes = await api.room.getBans(bot.cfg.room);
-        const bans = bansRes?.data?.data ?? bansRes?.data ?? [];
+        const bansRes = await api.room.getBans(bot.roomId);
+        const bans =
+          bansRes?.data?.data ?? bansRes?.data?.bans ?? bansRes?.data ?? [];
         const lower = target.toLowerCase();
         const found = (Array.isArray(bans) ? bans : []).find(
           (b) =>
@@ -120,15 +119,15 @@ const unban = {
     }
 
     if (!userId) {
-      await reply(t("commands.unban.notFound", { user: target }));
+      await reply(t("commands.mod.unban.notFound", { user: target }));
       return;
     }
 
     try {
-      await api.room.unban(bot.cfg.room, userId);
-      await reply(t("commands.unban.removed", { user: target }));
+      await api.room.unban(bot.roomId, userId);
+      await reply(t("commands.mod.unban.removed", { user: target }));
     } catch (err) {
-      await reply(t("commands.unban.error", { error: err.message }));
+      await reply(t("commands.mod.unban.error", { error: err.message }));
     }
   },
 };

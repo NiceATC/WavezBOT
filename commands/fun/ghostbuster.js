@@ -1,8 +1,9 @@
 export default {
   name: "ghostbuster",
-  descriptionKey: "commands.ghostbuster.description",
-  usageKey: "commands.ghostbuster.usage",
+  descriptionKey: "commands.fun.ghostbuster.description",
+  usageKey: "commands.fun.ghostbuster.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, sender, t } = ctx;
@@ -16,9 +17,9 @@ export default {
       t("common.someone");
     const user = bot.findRoomUser(name);
     if (user) {
-      await ctx.reply(t("commands.ghostbuster.present", { name }));
+      await ctx.reply(t("commands.fun.ghostbuster.present", { name }));
       return;
     }
-    await ctx.reply(t("commands.ghostbuster.absent", { name }));
+    await ctx.reply(t("commands.fun.ghostbuster.absent", { name }));
   },
 };

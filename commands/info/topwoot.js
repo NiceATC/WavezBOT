@@ -8,9 +8,10 @@ function parseLimit(input) {
 
 export default {
   name: "topwoot",
-  descriptionKey: "commands.topwoot.description",
-  usageKey: "commands.topwoot.usage",
+  descriptionKey: "commands.info.topwoot.description",
+  usageKey: "commands.info.topwoot.usage",
   cooldown: 8000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, args, t, reply } = ctx;
@@ -18,18 +19,18 @@ export default {
     const limit = parseLimit(args[0]);
     const rows = await listTopWootUsers(limit);
     if (!rows?.length) {
-      await reply(t("commands.topwoot.empty"));
+      await reply(t("commands.info.topwoot.empty"));
       return;
     }
 
     const lines = rows.map((row, index) =>
-      t("commands.topwoot.line", {
+      t("commands.info.topwoot.line", {
         pos: index + 1,
         user: row.display_name ?? row.username ?? t("common.someone"),
         count: row.woots ?? 0,
       }),
     );
 
-    await reply(t("commands.topwoot.reply", { lines: lines.join(" | ") }));
+    await reply(t("commands.info.topwoot.reply", { lines: lines.join(" | ") }));
   },
 };

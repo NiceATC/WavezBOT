@@ -14,9 +14,10 @@ function formatLabel(title, artist) {
 export default {
   name: "topsongs",
   aliases: ["topsong"],
-  descriptionKey: "commands.topsongs.description",
-  usageKey: "commands.topsongs.usage",
+  descriptionKey: "commands.info.topsongs.description",
+  usageKey: "commands.info.topsongs.usage",
   cooldown: 8000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, args, t, reply } = ctx;
@@ -24,7 +25,7 @@ export default {
     const limit = parseLimit(args[0]);
     const rows = await listTopSongs(limit);
     if (!rows?.length) {
-      await reply(t("commands.topsongs.empty"));
+      await reply(t("commands.info.topsongs.empty"));
       return;
     }
 
@@ -32,7 +33,7 @@ export default {
       const title = row.title ?? t("common.song");
       const artist = row.artist ?? "";
       const label = formatLabel(title, artist);
-      return t("commands.topsongs.line", {
+      return t("commands.info.topsongs.line", {
         pos: index + 1,
         label,
         woots: row.woots ?? 0,
@@ -40,6 +41,6 @@ export default {
       });
     });
 
-    await reply(t("commands.topsongs.reply", { lines: lines.join(" | ") }));
+    await reply(t("commands.info.topsongs.reply", { lines: lines.join(" | ") }));
   },
 };

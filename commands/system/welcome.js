@@ -9,9 +9,10 @@ import { setSetting } from "../../lib/storage.js";
 export default {
   name: "welcome",
   aliases: ["greet", "boasvindas"],
-  descriptionKey: "commands.welcome.description",
-  usageKey: "commands.welcome.usage",
+  descriptionKey: "commands.system.welcome.description",
+  usageKey: "commands.system.welcome.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
   minRole: "bouncer",
 
   async execute(ctx) {
@@ -30,7 +31,7 @@ export default {
     bot.updateConfig("greetEnabled", enabled);
     await setSetting("greetEnabled", enabled);
     await reply(
-      t(enabled ? "commands.welcome.enabled" : "commands.welcome.disabled"),
+      t(enabled ? "commands.system.welcome.enabled" : "commands.system.welcome.disabled"),
     );
   },
 };

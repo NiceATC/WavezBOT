@@ -89,11 +89,6 @@ export async function closeRoulette(bot, api) {
   const moveInstead = roll < ROULETTE_MOVE_CHANCE;
 
   if (moveInstead) {
-    if (!api?.room?.moveInWaitlist) {
-      await bot.sendChat(bot.t("helpers.roulette.closed.apiUnavailable"));
-      return;
-    }
-
     const pos = Math.floor(Math.random() * waitlist.length) + 1;
     const apiPos = pos - 1;
     const line = pickRandom(bot.tArray("helpers.roulette.moveLines")) ?? "";
@@ -103,24 +98,17 @@ export async function closeRoulette(bot, api) {
     await bot.sendChat(msg);
 
     setTimeout(() => {
-      void (async () => {
-        try {
-          await api.room.moveInWaitlist(bot.cfg.room, Number(loserId), apiPos);
-        } catch (err) {
-          await bot.sendChat(
-            bot.t("helpers.roulette.moveError", {
-              user: loserTag,
-              error: err.message ?? bot.t("common.unknownError"),
-            }),
-          );
-        }
-      })();
+      try {
+        bot.wsReorderQueue(loserId, apiPos);
+      } catch (err) {
+        void bot.sendChat(
+          bot.t("helpers.roulette.moveError", {
+            user: loserTag,
+            error: err.message ?? bot.t("common.unknownError"),
+          }),
+        );
+      }
     }, 1000);
-    return;
-  }
-
-  if (!api?.room?.removeFromWaitlist) {
-    await bot.sendChat(bot.t("helpers.roulette.closed.apiUnavailable"));
     return;
   }
 
@@ -129,17 +117,15 @@ export async function closeRoulette(bot, api) {
   await bot.sendChat(msg);
 
   setTimeout(() => {
-    void (async () => {
-      try {
-        await api.room.removeFromWaitlist(bot.cfg.room, Number(loserId));
-      } catch (err) {
-        await bot.sendChat(
-          bot.t("helpers.roulette.removeError", {
-            user: loserTag,
-            error: err.message ?? bot.t("common.unknownError"),
-          }),
-        );
-      }
-    })();
+    try {
+      bot.wsRemoveFromQueue(loserId);
+    } catch (err) {
+      void bot.sendChat(
+        bot.t("helpers.roulette.removeError", {
+          user: loserTag,
+          error: err.message ?? bot.t("common.unknownError"),
+        }),
+      );
+    }
   }, 1000);
 }

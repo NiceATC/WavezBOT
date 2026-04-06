@@ -24,9 +24,10 @@ function buildTrackLink(track) {
 export default {
   name: "link",
   aliases: ["songlink"],
-  descriptionKey: "commands.link.description",
-  usageKey: "commands.link.usage",
+  descriptionKey: "commands.info.link.description",
+  usageKey: "commands.info.link.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
   minRole: "resident_dj",
 
   async execute(ctx) {
@@ -35,16 +36,16 @@ export default {
     const track = state.currentTrack;
 
     if (!track?.title) {
-      await reply(t("commands.link.noTrack"));
+      await reply(t("commands.info.link.noTrack"));
       return;
     }
 
     const url = buildTrackLink(track);
     if (!url) {
-      await reply(t("commands.link.unavailable"));
+      await reply(t("commands.info.link.unavailable"));
       return;
     }
 
-    await reply(t("commands.link.reply", { url }));
+    await reply(t("commands.info.link.reply", { url }));
   },
 };

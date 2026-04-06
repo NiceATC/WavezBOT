@@ -1,0 +1,42 @@
+{
+    "_comment": "Comportamento do bot: auto-woot, mensagens, saudações, MOTD e respostas por palavra-chave.",
+    "autoWoot": true,
+    "autowootUrl": "",
+    "botMessage": "Oi! Sou um bot e não consigo conversar. 🤖 Use !help para ver o que posso fazer!",
+    "botMentionCooldownMs": 30000,
+    "greetEnabled": true,
+    "greetMessage": "🎵 Bem-vindo(a) à sala, @{name}!",
+    "greetBackMessage": "🎵 Bem-vindo(a) de volta, @{name}!",
+    "greetMessages": [],
+    "greetBackMessages": [],
+    "greetDeleteMs": 5000,
+    "greetCooldownMs": 3600000,
+    "motdEnabled": false,
+    "motdInterval": 5,
+    "motd": "Mensagem do dia",
+    "intervalMessages": [],
+    "messageInterval": 5,
+    "chatKeywordReplyEnabled": false,
+    "chatKeywordReplyCooldownMs": 3000,
+    "chatKeywordReplySameReplyCooldownMs": 86400000,
+    "chatKeywordReplyRules": [
+        {
+            "keyword": [
+                "oi",
+                "oie",
+                "ola",
+                "olá"
+            ],
+            "mode": 1,
+            "reply": [
+                "Oi, tudo bem?",
+                "Opa! Seja bem-vindo(a)."
+            ]
+        },
+        {
+            "keyword": "boa noite",
+            "mode": 0,
+            "reply": "Boa noite, pessoal!"
+        }
+    ]
+}

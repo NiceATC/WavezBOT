@@ -12,9 +12,10 @@ import { setSetting } from "../../lib/storage.js";
 const lockchat = {
   name: "lockchat",
   aliases: ["chatlock"],
-  descriptionKey: "commands.lockchat.description",
-  usageKey: "commands.lockchat.usage",
+  descriptionKey: "commands.mod.lockchat.description",
+  usageKey: "commands.mod.lockchat.usage",
   cooldown: 3_000,
+  deleteOn: 60_000,
   minRole: "manager",
 
   async execute(ctx) {
@@ -37,12 +38,12 @@ const lockchat = {
 
     if (enable) {
       await reply(
-        t("commands.lockchat.enabled", {
+        t("commands.mod.lockchat.enabled", {
           role: bot.cfg.lockChatMinRole ?? "resident_dj",
         }),
       );
     } else {
-      await reply(t("commands.lockchat.disabled"));
+      await reply(t("commands.mod.lockchat.disabled"));
     }
   },
 };

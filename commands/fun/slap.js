@@ -9,9 +9,10 @@ function formatLine(line, senderName, targetName) {
 export default {
   name: "slap",
   aliases: ["tapa"],
-  descriptionKey: "commands.slap.description",
-  usageKey: "commands.slap.usage",
+  descriptionKey: "commands.fun.slap.description",
+  usageKey: "commands.fun.slap.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, sender, t, tArray, reply } = ctx;
@@ -22,19 +23,19 @@ export default {
       sender.displayName ?? sender.username ?? t("common.someone");
 
     if (!targetInput) {
-      const line = pickRandom(tArray("commands.slap.selfLines"));
+      const line = pickRandom(tArray("commands.fun.slap.selfLines"));
       await reply(formatLine(line, senderName, null));
       return;
     }
 
     const user = bot.findRoomUser(targetInput);
     if (!user) {
-      await reply(t("commands.slap.userNotFound", { user: targetInput }));
+      await reply(t("commands.fun.slap.userNotFound", { user: targetInput }));
       return;
     }
 
     const targetName = user.displayName ?? user.username ?? targetInput;
-    const line = pickRandom(tArray("commands.slap.targetLines"));
+    const line = pickRandom(tArray("commands.fun.slap.targetLines"));
     await reply(formatLine(line, senderName, targetName));
   },
 };

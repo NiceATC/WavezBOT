@@ -1,0 +1,17 @@
+{
+    "_comment": "Moderação: blacklist, timeguard, AFK, lock de chat, vote skip e DC restore.",
+    "lockChatEnabled": false,
+    "lockChatMinRole": "resident_dj",
+    "blacklistEnabled": true,
+    "timeGuardEnabled": false,
+    "maxSongLengthMin": 10,
+    "autoSkipEnabled": false,
+    "afkRemovalEnabled": false,
+    "afkLimitMin": 60,
+    "duelMuteMin": 5,
+    "dcWindowMin": 10,
+    "voteSkipEnabled": true,
+    "voteSkipThreshold": 0.3,
+    "voteSkipDurationMs": 60000,
+    "voteSkipActiveWindowMs": 1800000
+}

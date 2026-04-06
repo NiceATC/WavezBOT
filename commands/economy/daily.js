@@ -5,27 +5,28 @@ import { getDailyRewardState, setDailyRewardState } from "../../lib/storage.js";
 export default {
   name: "daily",
   aliases: ["diario", "reward"],
-  descriptionKey: "commands.daily.description",
-  usageKey: "commands.daily.usage",
+  descriptionKey: "commands.economy.daily.description",
+  usageKey: "commands.economy.daily.usage",
   cooldown: 3000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, sender, reply, t } = ctx;
     if (!bot.cfg.economyEnabled) {
-      await reply(t("commands.daily.disabled"));
+      await reply(t("commands.economy.daily.disabled"));
       return;
     }
 
     const userId = sender.userId;
     if (userId == null) {
-      await reply(t("commands.daily.noUser"));
+      await reply(t("commands.economy.daily.noUser"));
       return;
     }
 
     const cooldownMs = Math.max(0, Number(bot.cfg.dailyRewardCooldownMs) || 0);
     const amount = Math.max(0, Number(bot.cfg.dailyRewardAmount) || 0);
     if (!amount || cooldownMs <= 0) {
-      await reply(t("commands.daily.unavailable"));
+      await reply(t("commands.economy.daily.unavailable"));
       return;
     }
 
@@ -37,7 +38,7 @@ export default {
     if (lastClaim && now - lastClaim < cooldownMs) {
       const remaining = cooldownMs - (now - lastClaim);
       await reply(
-        t("commands.daily.cooldown", {
+        t("commands.economy.daily.cooldown", {
           remaining: formatDuration(remaining),
         }),
       );
@@ -59,7 +60,7 @@ export default {
     });
 
     await reply(
-      t("commands.daily.claimed", {
+      t("commands.economy.daily.claimed", {
         amount: formatPoints(toPointsInt(amount)),
         streak: nextStreak,
       }),

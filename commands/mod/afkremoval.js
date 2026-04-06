@@ -3,9 +3,10 @@ import { setSetting } from "../../lib/storage.js";
 export default {
   name: "afkremoval",
   aliases: ["afkremove"],
-  descriptionKey: "commands.afkremoval.description",
-  usageKey: "commands.afkremoval.usage",
+  descriptionKey: "commands.mod.afkremoval.description",
+  usageKey: "commands.mod.afkremoval.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
   minRole: "bouncer",
 
   async execute(ctx) {
@@ -26,8 +27,8 @@ export default {
     await reply(
       t(
         enabled
-          ? "commands.afkremoval.enabled"
-          : "commands.afkremoval.disabled",
+          ? "commands.mod.afkremoval.enabled"
+          : "commands.mod.afkremoval.disabled",
       ),
     );
   },

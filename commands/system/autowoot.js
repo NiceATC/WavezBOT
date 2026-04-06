@@ -9,9 +9,10 @@ import { setSetting } from "../../lib/storage.js";
 export default {
   name: "autowoot",
   aliases: ["aw"],
-  descriptionKey: "commands.autowoot.description",
-  usageKey: "commands.autowoot.usage",
+  descriptionKey: "commands.system.autowoot.description",
+  usageKey: "commands.system.autowoot.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
   minRole: "manager",
 
   async execute(ctx) {
@@ -30,7 +31,7 @@ export default {
     bot.updateConfig("autoWoot", enabled);
     await setSetting("autoWoot", enabled);
     await reply(
-      t(enabled ? "commands.autowoot.enabled" : "commands.autowoot.disabled"),
+      t(enabled ? "commands.system.autowoot.enabled" : "commands.system.autowoot.disabled"),
     );
   },
 };

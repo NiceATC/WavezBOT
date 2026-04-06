@@ -33,27 +33,28 @@ async function getUserLevel(bot, userId, identity) {
 const work = {
   name: "work",
   aliases: ["job", "trabalho"],
-  descriptionKey: "commands.work.description",
-  usageKey: "commands.work.usage",
+  descriptionKey: "commands.economy.work.description",
+  usageKey: "commands.economy.work.usage",
   cooldown: 3000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, sender, args, reply, t } = ctx;
     if (!bot.cfg.economyEnabled) {
-      await reply(t("commands.work.disabled"));
+      await reply(t("commands.economy.work.disabled"));
       return;
     }
 
     const userId = sender.userId;
     if (userId == null) {
-      await reply(t("commands.work.noUser"));
+      await reply(t("commands.economy.work.noUser"));
       return;
     }
 
     const identity = bot._getUserIdentity(userId, sender);
     const jobs = normalizeJobs(bot.cfg.workJobs);
     if (!jobs.length) {
-      await reply(t("commands.work.empty"));
+      await reply(t("commands.economy.work.empty"));
       return;
     }
 
@@ -66,7 +67,7 @@ const work = {
 
     if (!action || action === "status") {
       if (!currentJob) {
-        await reply(t("commands.work.noJob"));
+        await reply(t("commands.economy.work.noJob"));
         return;
       }
 
@@ -77,12 +78,12 @@ const work = {
         : 0;
 
       await reply(
-        t("commands.work.status", {
+        t("commands.economy.work.status", {
           job: resolveJobName(bot, currentJob),
           pay: formatPoints(toPointsInt(currentJob.pay)),
           remaining: remaining
             ? formatDuration(remaining)
-            : t("commands.work.ready"),
+            : t("commands.economy.work.ready"),
         }),
       );
       return;
@@ -93,9 +94,9 @@ const work = {
         const name = resolveJobName(bot, job);
         const status =
           level >= job.xpMin
-            ? t("commands.work.available")
-            : t("commands.work.locked");
-        return t("commands.work.listLine", {
+            ? t("commands.economy.work.available")
+            : t("commands.economy.work.locked");
+        return t("commands.economy.work.listLine", {
           key: job.key,
           name,
           xp: job.xpMin,
@@ -105,7 +106,7 @@ const work = {
       });
       await sendChatChunks(
         reply,
-        t("commands.work.list", { items: lines.join(" | ") }),
+        t("commands.economy.work.list", { items: lines.join(" | ") }),
       );
       return;
     }
@@ -113,19 +114,19 @@ const work = {
     if (action === "choose") {
       const key = String(args[1] ?? "").trim();
       if (!key) {
-        await reply(t("commands.work.chooseUsage"));
+        await reply(t("commands.economy.work.chooseUsage"));
         return;
       }
 
       const job = jobs.find((j) => j.key.toLowerCase() === key.toLowerCase());
       if (!job) {
-        await reply(t("commands.work.jobNotFound", { job: key }));
+        await reply(t("commands.economy.work.jobNotFound", { job: key }));
         return;
       }
 
       if (level < job.xpMin) {
         await reply(
-          t("commands.work.jobLocked", {
+          t("commands.economy.work.jobLocked", {
             job: resolveJobName(bot, job),
             xp: job.xpMin,
           }),
@@ -134,12 +135,12 @@ const work = {
       }
 
       if (currentJob && currentJob.key === job.key) {
-        await reply(t("commands.work.alreadySelected"));
+        await reply(t("commands.economy.work.alreadySelected"));
         return;
       }
 
       if (currentJob && job.xpMin <= currentJob.xpMin) {
-        await reply(t("commands.work.upgradeOnly"));
+        await reply(t("commands.economy.work.upgradeOnly"));
         return;
       }
 
@@ -149,7 +150,7 @@ const work = {
         lastClaimAt: state?.last_claim_at ?? null,
       });
       await reply(
-        t("commands.work.selected", {
+        t("commands.economy.work.selected", {
           job: resolveJobName(bot, job),
         }),
       );
@@ -158,7 +159,7 @@ const work = {
 
     if (action === "claim") {
       if (!currentJob) {
-        await reply(t("commands.work.noJob"));
+        await reply(t("commands.economy.work.noJob"));
         return;
       }
       const cooldownMs = Math.max(0, Number(bot.cfg.workCooldownMs) || 0);
@@ -166,7 +167,7 @@ const work = {
       if (lastClaim && Date.now() - lastClaim < cooldownMs) {
         const remaining = cooldownMs - (Date.now() - lastClaim);
         await reply(
-          t("commands.work.cooldown", {
+          t("commands.economy.work.cooldown", {
             remaining: formatDuration(remaining),
           }),
         );
@@ -180,7 +181,7 @@ const work = {
         lastClaimAt: Date.now(),
       });
       await reply(
-        t("commands.work.claimed", {
+        t("commands.economy.work.claimed", {
           job: resolveJobName(bot, currentJob),
           pay: formatPoints(toPointsInt(currentJob.pay)),
         }),
@@ -188,7 +189,7 @@ const work = {
       return;
     }
 
-    await reply(t("commands.work.usageMessage"));
+    await reply(t("commands.economy.work.usageMessage"));
   },
 };
 

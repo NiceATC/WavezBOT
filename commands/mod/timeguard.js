@@ -7,9 +7,10 @@ import { setSetting } from "../../lib/storage.js";
 const timeguard = {
   name: "timeguard",
   aliases: ["tg"],
-  descriptionKey: "commands.timeguard.description",
-  usageKey: "commands.timeguard.usage",
+  descriptionKey: "commands.mod.timeguard.description",
+  usageKey: "commands.mod.timeguard.usage",
   cooldown: 5_000,
+  deleteOn: 60_000,
   minRole: "bouncer",
 
   async execute(ctx) {
@@ -28,7 +29,7 @@ const timeguard = {
     bot.updateConfig("timeGuardEnabled", enabled);
     await setSetting("timeGuardEnabled", enabled);
     await reply(
-      t(enabled ? "commands.timeguard.enabled" : "commands.timeguard.disabled"),
+      t(enabled ? "commands.mod.timeguard.enabled" : "commands.mod.timeguard.disabled"),
     );
   },
 };
@@ -36,23 +37,24 @@ const timeguard = {
 const maxlength = {
   name: "maxlength",
   aliases: ["maxlen", "maxsong"],
-  descriptionKey: "commands.maxlength.description",
-  usageKey: "commands.maxlength.usage",
+  descriptionKey: "commands.mod.maxlength.description",
+  usageKey: "commands.mod.maxlength.usage",
   cooldown: 5_000,
+  deleteOn: 60_000,
   minRole: "manager",
 
   async execute(ctx) {
     const { bot, args, reply, t } = ctx;
     const minutes = Number(args[0]);
     if (!Number.isFinite(minutes) || minutes < 1) {
-      await reply(t("commands.maxlength.usageMessage"));
+      await reply(t("commands.mod.maxlength.usageMessage"));
       return;
     }
     const value = Math.floor(minutes);
     bot.updateConfig("maxSongLengthMin", value);
     await setSetting("maxSongLengthMin", value);
     await reply(
-      t("commands.maxlength.updated", {
+      t("commands.mod.maxlength.updated", {
         minutes: value,
       }),
     );

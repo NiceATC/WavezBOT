@@ -8,15 +8,16 @@
 const nuke = {
   name: "nuke",
   aliases: ["clearchat"],
-  descriptionKey: "commands.nuke.description",
-  usageKey: "commands.nuke.usage",
+  descriptionKey: "commands.mod.nuke.description",
+  usageKey: "commands.mod.nuke.usage",
   cooldown: 10_000,
+  deleteOn: 60_000,
   minRole: "manager",
 
   async execute(ctx) {
     const { bot, reply, t } = ctx;
     const count = bot.deleteAllCachedMessages();
-    await reply(t("commands.nuke.done", { count }));
+    await reply(t("commands.mod.nuke.done", { count }));
   },
 };
 

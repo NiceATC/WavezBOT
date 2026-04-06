@@ -7,9 +7,10 @@ import { getWaitlist } from "../../helpers/waitlist.js";
 export default {
   name: "swap",
   aliases: ["trocar"],
-  descriptionKey: "commands.swap.description",
-  usageKey: "commands.swap.usage",
+  descriptionKey: "commands.mod.swap.description",
+  usageKey: "commands.mod.swap.usage",
   cooldown: 5_000,
+  deleteOn: 60_000,
   minRole: "bouncer",
 
   async execute(ctx) {
@@ -18,14 +19,14 @@ export default {
     const targetB = (args[1] ?? "").replace(/^@/, "").trim();
 
     if (!targetA || !targetB) {
-      await reply(t("commands.swap.usageMessage"));
+      await reply(t("commands.mod.swap.usageMessage"));
       return;
     }
 
     const userA = bot.findRoomUser(targetA);
     const userB = bot.findRoomUser(targetB);
     if (!userA || !userB) {
-      await reply(t("commands.swap.userNotFound"));
+      await reply(t("commands.mod.swap.userNotFound"));
       return;
     }
 
@@ -44,31 +45,31 @@ export default {
       );
 
       if (idxA < 0 || idxB < 0) {
-        await reply(t("commands.swap.notInQueue"));
+        await reply(t("commands.mod.swap.notInQueue"));
         return;
       }
 
       if (idxA === idxB) {
-        await reply(t("commands.swap.samePosition"));
+        await reply(t("commands.mod.swap.samePosition"));
         return;
       }
 
       if (idxA < idxB) {
-        await api.room.moveInWaitlist(bot.cfg.room, Number(userB.userId), idxA);
-        await api.room.moveInWaitlist(bot.cfg.room, Number(userA.userId), idxB);
+        bot.wsReorderQueue(userB.userId, idxA);
+        bot.wsReorderQueue(userA.userId, idxB);
       } else {
-        await api.room.moveInWaitlist(bot.cfg.room, Number(userA.userId), idxB);
-        await api.room.moveInWaitlist(bot.cfg.room, Number(userB.userId), idxA);
+        bot.wsReorderQueue(userA.userId, idxB);
+        bot.wsReorderQueue(userB.userId, idxA);
       }
 
       await reply(
-        t("commands.swap.success", {
+        t("commands.mod.swap.success", {
           userA: userA.displayName ?? userA.username,
           userB: userB.displayName ?? userB.username,
         }),
       );
     } catch (err) {
-      await reply(t("commands.swap.error", { error: err.message }));
+      await reply(t("commands.mod.swap.error", { error: err.message }));
     }
   },
 };

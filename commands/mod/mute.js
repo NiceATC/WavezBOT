@@ -11,22 +11,23 @@ function isBotTarget(bot, user) {
 const mute = {
   name: "mute",
   aliases: ["silenciar", "calar"],
-  descriptionKey: "commands.mute.description",
-  usageKey: "commands.mute.usage",
+  descriptionKey: "commands.mod.mute.description",
+  usageKey: "commands.mod.mute.usage",
   cooldown: 5_000,
+  deleteOn: 60_000,
   minRole: "bouncer",
 
   async execute(ctx) {
     const { api, bot, args, reply, t } = ctx;
     const target = (args[0] ?? "").replace(/^@/, "").trim();
     if (!target) {
-      await reply(t("commands.mute.usageMessage"));
+      await reply(t("commands.mod.mute.usageMessage"));
       return;
     }
 
     const user = bot.findRoomUser(target);
     if (!user) {
-      await reply(t("commands.mute.userNotFound", { user: target }));
+      await reply(t("commands.mod.mute.userNotFound", { user: target }));
       return;
     }
 
@@ -37,7 +38,7 @@ const mute = {
 
     if (bot.getUserRoleLevel(user.userId) >= bot.getBotRoleLevel()) {
       await reply(
-        t("commands.mute.roleTooHigh", {
+        t("commands.mod.mute.roleTooHigh", {
           user: user.displayName ?? user.username,
         }),
       );
@@ -46,22 +47,19 @@ const mute = {
 
     const { duration, label, reason } = extractDurationAndReason(args.slice(1));
 
-    const data = {};
-    if (duration != null) data.duration = duration;
-    if (reason) data.reason = reason;
-
     try {
-      await api.room.mute(bot.cfg.room, user.userId, data);
+      const durationMs = duration != null ? duration * 1000 : 0;
+      bot.wsMuteUser(user.userId, durationMs);
       const parts = [
-        t("commands.mute.muted", {
+        t("commands.mod.mute.muted", {
           user: user.displayName ?? user.username,
         }),
       ];
-      if (label) parts.push(t("commands.mute.duration", { duration: label }));
-      if (reason) parts.push(t("commands.mute.reason", { reason }));
+      if (label) parts.push(t("commands.mod.mute.duration", { duration: label }));
+      if (reason) parts.push(t("commands.mod.mute.reason", { reason }));
       await reply(parts.join(" ") + ".");
     } catch (err) {
-      await reply(t("commands.mute.error", { error: err.message }));
+      await reply(t("commands.mod.mute.error", { error: err.message }));
     }
   },
 };
@@ -69,22 +67,23 @@ const mute = {
 const unmute = {
   name: "unmute",
   aliases: ["dessilenciar"],
-  descriptionKey: "commands.unmute.description",
-  usageKey: "commands.unmute.usage",
+  descriptionKey: "commands.mod.unmute.description",
+  usageKey: "commands.mod.unmute.usage",
   cooldown: 5_000,
+  deleteOn: 60_000,
   minRole: "bouncer",
 
   async execute(ctx) {
     const { api, bot, args, reply, t } = ctx;
     const target = (args[0] ?? "").replace(/^@/, "").trim();
     if (!target) {
-      await reply(t("commands.unmute.usageMessage"));
+      await reply(t("commands.mod.unmute.usageMessage"));
       return;
     }
 
     const user = bot.findRoomUser(target);
     if (!user) {
-      await reply(t("commands.unmute.userNotFound", { user: target }));
+      await reply(t("commands.mod.unmute.userNotFound", { user: target }));
       return;
     }
 
@@ -94,14 +93,14 @@ const unmute = {
     }
 
     try {
-      await api.room.unmute(bot.cfg.room, user.userId);
+      bot.wsUnmuteUser(user.userId);
       await reply(
-        t("commands.unmute.unmuted", {
+        t("commands.mod.unmute.unmuted", {
           user: user.displayName ?? user.username,
         }),
       );
     } catch (err) {
-      await reply(t("commands.unmute.error", { error: err.message }));
+      await reply(t("commands.mod.unmute.error", { error: err.message }));
     }
   },
 };

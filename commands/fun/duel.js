@@ -55,7 +55,7 @@ async function resolveDuel(bot, api, pending) {
   const loserTag = toTag(loser.name);
 
   await bot.sendChat(
-    bot.t("commands.duel.result", {
+    bot.t("commands.fun.duel.result", {
       winner: winnerTag,
       loser: loserTag,
     }),
@@ -64,10 +64,10 @@ async function resolveDuel(bot, api, pending) {
   const minutes = getMuteMinutes(bot);
 
   if (!api?.room?.mute) {
-    await bot.sendChat(bot.t("commands.duel.muteUnavailable"));
+    await bot.sendChat(bot.t("commands.fun.duel.muteUnavailable"));
     bot.startAutoDeletingUser(loser.id, minutes * 60_000);
     await bot.sendChat(
-      bot.t("commands.duel.deleteMessagesFallback", {
+      bot.t("commands.fun.duel.deleteMessagesFallback", {
         user: loserTag,
         minutes,
       }),
@@ -77,13 +77,13 @@ async function resolveDuel(bot, api, pending) {
 
   if (bot.getUserRoleLevel(loser.id) >= bot.getBotRoleLevel()) {
     await bot.sendChat(
-      bot.t("commands.duel.muteRoleTooHigh", {
+      bot.t("commands.fun.duel.muteRoleTooHigh", {
         user: loserTag,
       }),
     );
     bot.startAutoDeletingUser(loser.id, minutes * 60_000);
     await bot.sendChat(
-      bot.t("commands.duel.deleteMessagesFallback", {
+      bot.t("commands.fun.duel.deleteMessagesFallback", {
         user: loserTag,
         minutes,
       }),
@@ -92,28 +92,18 @@ async function resolveDuel(bot, api, pending) {
   }
 
   try {
-    await api.room.mute(bot.cfg.room, Number(loser.id), {
-      duration: minutes,
-      reason: bot.t("commands.duel.muteReason"),
-    });
+    bot.wsMuteUser(loser.id, minutes * 60_000);
     await bot.sendChat(
-      bot.t("commands.duel.muted", {
+      bot.t("commands.fun.duel.muted", {
         user: loserTag,
         minutes,
       }),
     );
   } catch (err) {
     await bot.sendChat(
-      bot.t("commands.duel.muteFailed", {
+      bot.t("commands.fun.duel.muteFailed", {
         user: loserTag,
         error: err.message,
-      }),
-    );
-    bot.startAutoDeletingUser(loser.id, minutes * 60_000);
-    await bot.sendChat(
-      bot.t("commands.duel.deleteMessagesFallback", {
-        user: loserTag,
-        minutes,
       }),
     );
   }
@@ -122,31 +112,32 @@ async function resolveDuel(bot, api, pending) {
 const duel = {
   name: "duel",
   aliases: ["duelo"],
-  descriptionKey: "commands.duel.description",
-  usageKey: "commands.duel.usage",
+  descriptionKey: "commands.fun.duel.description",
+  usageKey: "commands.fun.duel.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, args, sender, reply, t } = ctx;
     const targetInput = (args[0] ?? "").replace(/^@/, "").trim();
     if (!targetInput) {
-      await reply(t("commands.duel.usageMessage"));
+      await reply(t("commands.fun.duel.usageMessage"));
       return;
     }
 
     const target = bot.findRoomUser(targetInput);
     if (!target) {
-      await reply(t("commands.duel.userNotFound", { user: targetInput }));
+      await reply(t("commands.fun.duel.userNotFound", { user: targetInput }));
       return;
     }
 
     if (bot.isBotUser(target.userId)) {
-      await reply(t("commands.duel.cannotTargetBot"));
+      await reply(t("commands.fun.duel.cannotTargetBot"));
       return;
     }
 
     if (String(target.userId) === String(sender.userId ?? "")) {
-      await reply(t("commands.duel.self"));
+      await reply(t("commands.fun.duel.self"));
       return;
     }
 
@@ -156,7 +147,7 @@ const duel = {
         Math.ceil((duelState.current.expiresAt - Date.now()) / 1000),
       );
       await reply(
-        t("commands.duel.alreadyPending", {
+        t("commands.fun.duel.alreadyPending", {
           challenger: toTag(duelState.current.challengerName),
           target: toTag(duelState.current.targetName),
           seconds,
@@ -181,9 +172,9 @@ const duel = {
     duelState.current = pending;
     duelState.timeoutId = setTimeout(() => {
       if (duelState.current !== pending) return;
-      const line = pickRandom(bot.tArray("commands.duel.cowardLines")) ?? "";
+      const line = pickRandom(bot.tArray("commands.fun.duel.cowardLines")) ?? "";
       const msg = [
-        bot.t("commands.duel.timeout", {
+        bot.t("commands.fun.duel.timeout", {
           target: toTag(pending.targetName),
         }),
         line,
@@ -195,7 +186,7 @@ const duel = {
     }, DUEL_TIMEOUT_MS);
 
     await reply(
-      t("commands.duel.challenge", {
+      t("commands.fun.duel.challenge", {
         challenger: toTag(challengerName),
         target: toTag(targetName),
         accept: "!accept",
@@ -207,38 +198,39 @@ const duel = {
 
 const accept = {
   name: "accept",
-  descriptionKey: "commands.accept.description",
-  usageKey: "commands.accept.usage",
+  descriptionKey: "commands.fun.accept.description",
+  usageKey: "commands.fun.accept.usage",
   cooldown: 3000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, api, sender, reply, t } = ctx;
     const pending = duelState.current;
 
     if (!pending) {
-      await reply(t("commands.duel.noPending"));
+      await reply(t("commands.fun.duel.noPending"));
       return;
     }
 
     if (pending.status !== "pending") {
-      await reply(t("commands.duel.alreadyAccepted"));
+      await reply(t("commands.fun.duel.alreadyAccepted"));
       return;
     }
 
     if (String(sender.userId ?? "") !== String(pending.targetId)) {
-      await reply(t("commands.duel.notTarget"));
+      await reply(t("commands.fun.duel.notTarget"));
       return;
     }
 
     if (pending.expiresAt && Date.now() > pending.expiresAt) {
       clearDuelState();
-      await reply(t("commands.duel.expired"));
+      await reply(t("commands.fun.duel.expired"));
       return;
     }
 
     if (bot.getBotRoleLevel() < getRoleLevel("bouncer")) {
       clearDuelState();
-      await reply(t("commands.duel.noPermission"));
+      await reply(t("commands.fun.duel.noPermission"));
       return;
     }
 
@@ -247,13 +239,13 @@ const accept = {
     duelState.timeoutId = null;
 
     await reply(
-      t("commands.duel.accepted", {
+      t("commands.fun.duel.accepted", {
         target: toTag(pending.targetName),
       }),
     );
 
     const suspense =
-      pickRandom(bot.tArray("commands.duel.suspenseLines")) ?? "";
+      pickRandom(bot.tArray("commands.fun.duel.suspenseLines")) ?? "";
     if (suspense) await reply(suspense);
 
     duelState.resolveId = setTimeout(() => {
@@ -265,34 +257,35 @@ const accept = {
 const recuse = {
   name: "recuse",
   aliases: ["recusar"],
-  descriptionKey: "commands.recuse.description",
-  usageKey: "commands.recuse.usage",
+  descriptionKey: "commands.fun.recuse.description",
+  usageKey: "commands.fun.recuse.usage",
   cooldown: 3000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, sender, reply, t } = ctx;
     const pending = duelState.current;
 
     if (!pending) {
-      await reply(t("commands.duel.noPending"));
+      await reply(t("commands.fun.duel.noPending"));
       return;
     }
 
     if (pending.status !== "pending") {
-      await reply(t("commands.duel.alreadyAccepted"));
+      await reply(t("commands.fun.duel.alreadyAccepted"));
       return;
     }
 
     if (String(sender.userId ?? "") !== String(pending.targetId)) {
-      await reply(t("commands.duel.notTarget"));
+      await reply(t("commands.fun.duel.notTarget"));
       return;
     }
 
     clearDuelState();
 
-    const line = pickRandom(bot.tArray("commands.duel.cowardLines")) ?? "";
+    const line = pickRandom(bot.tArray("commands.fun.duel.cowardLines")) ?? "";
     const msg = [
-      t("commands.duel.refused", {
+      t("commands.fun.duel.refused", {
         target: toTag(pending.targetName),
       }),
       line,
@@ -306,23 +299,24 @@ const recuse = {
 const duelmute = {
   name: "duelmute",
   aliases: ["duelm"],
-  descriptionKey: "commands.duelmute.description",
-  usageKey: "commands.duelmute.usage",
+  descriptionKey: "commands.mod.duelmute.description",
+  usageKey: "commands.mod.duelmute.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
   minRole: "bouncer",
 
   async execute(ctx) {
     const { bot, args, reply, t } = ctx;
     const minutes = Number(args[0]);
     if (!Number.isFinite(minutes) || minutes < 1) {
-      await reply(t("commands.duelmute.usageMessage"));
+      await reply(t("commands.mod.duelmute.usageMessage"));
       return;
     }
 
     const value = Math.floor(minutes);
     bot.updateConfig("duelMuteMin", value);
     await setSetting("duelMuteMin", value);
-    await reply(t("commands.duelmute.updated", { minutes: value }));
+    await reply(t("commands.mod.duelmute.updated", { minutes: value }));
   },
 };
 

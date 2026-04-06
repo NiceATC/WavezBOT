@@ -31,9 +31,6 @@
         "invalidRoom": "[config] config.json: 'room' deve ser definido com um slug de sala válido."
     },
     "commands": {
-        "mod": {
-            "cannotTargetBot": "Não posso usar esse comando no próprio bot."
-        },
         "registry": {
             "invalidCommand": "Comando inválido: deve ter \"name\" e \"execute\".",
             "overwrite": "[CommandRegistry] Sobrescrevendo comando existente: {command}",
@@ -42,961 +39,980 @@
             "userMissingRoleReply": "{user}, você precisa do cargo {role} para usar {command}.",
             "cooldownReply": "{user}, aguarde {seconds}s para usar {command} novamente."
         },
-        "help": {
-            "description": "Lista comandos ou mostra detalhes de um comando.",
-            "usage": "!help [comando]",
-            "notFound": "Comando não encontrado: {name}",
-            "usageLine": "Uso: {usage}",
-            "aliasesLine": "Aliases: {aliases}",
-            "requirementLine": "Cargo exigido: {role}",
-            "list": "Comandos: {list}",
-            "dashboard": "Veja os comandos no dashboard: {url}"
-        },
-        "ping": {
-            "description": "Verifica se o bot está online.",
-            "usage": "!ping",
-            "reply": "Pong, {user}! {ms}ms"
-        },
-        "cmddelete": {
-            "description": "Ativa ou desativa a limpeza de comandos.",
-            "usage": "!cmddelete [on|off]",
-            "enabled": "Limpeza de comandos ativada.",
-            "disabled": "Limpeza de comandos desativada."
-        },
-        "start": {
-            "description": "Retoma o bot.",
-            "usage": "!start",
-            "reply": {
-                "resumed": "Bot retomado.",
-                "alreadyActive": "O bot já está ativo."
+        "core": {
+            "help": {
+                "description": "Lista comandos ou mostra detalhes de um comando.",
+                "usage": "!help [comando]",
+                "notFound": "Comando não encontrado: {name}",
+                "usageLine": "Uso: {usage}",
+                "aliasesLine": "Aliases: {aliases}",
+                "requirementLine": "Cargo exigido: {role}",
+                "list": "Comandos: {list}",
+                "dashboard": "Veja os comandos no dashboard: {url}"
+            },
+            "ping": {
+                "description": "Verifica se o bot está online.",
+                "usage": "!ping",
+                "reply": "Pong, {user}! {ms}ms"
+            },
+            "start": {
+                "description": "Retoma o bot.",
+                "usage": "!start",
+                "reply": {
+                    "resumed": "Bot retomado.",
+                    "alreadyActive": "O bot já está ativo."
+                }
+            },
+            "stop": {
+                "description": "Pausa o bot.",
+                "usage": "!stop",
+                "reply": {
+                    "paused": "Bot pausado.",
+                    "alreadyPaused": "O bot já está pausado."
+                }
+            },
+            "reload": {
+                "description": "Reconecta o bot.",
+                "usage": "!reload",
+                "reply": {
+                    "loading": "Reconectando...",
+                    "error": "Falha ao reconectar: {error}"
+                }
+            },
+            "reloadcmd": {
+                "description": "Recarrega comandos.",
+                "usage": "!reloadcmd",
+                "reply": {
+                    "successWithFailures": "Comandos recarregados: {loaded}. Falharam: {failed}.",
+                    "success": "Comandos recarregados: {loaded}.",
+                    "error": "Falha ao recarregar comandos: {error}"
+                }
             }
         },
-        "stop": {
-            "description": "Pausa o bot.",
-            "usage": "!stop",
-            "reply": {
-                "paused": "Bot pausado.",
-                "alreadyPaused": "O bot já está pausado."
+        "mod": {
+            "cannotTargetBot": "Não posso usar esse comando no próprio bot.",
+            "cmddelete": {
+                "description": "Ativa ou desativa a limpeza de comandos.",
+                "usage": "!cmddelete [on|off]",
+                "enabled": "Limpeza de comandos ativada.",
+                "disabled": "Limpeza de comandos desativada."
+            },
+            "skip": {
+                "description": "Pula a faixa atual.",
+                "usage": "!skip [motivo]",
+                "successWithReason": "Faixa pulada. Motivo: {reason}",
+                "success": "Faixa pulada.",
+                "error": "Falha ao pular: {error}"
+            },
+            "lock": {
+                "description": "Trava a fila.",
+                "usage": "!lock",
+                "success": "Fila travada.",
+                "error": "Falha ao travar a fila: {error}"
+            },
+            "unlock": {
+                "description": "Destrava a fila.",
+                "usage": "!unlock",
+                "success": "Fila destravada.",
+                "error": "Falha ao destravar a fila: {error}"
+            },
+            "remove": {
+                "description": "Remove usuário da fila.",
+                "usage": "!remove <usuario>",
+                "usageMessage": "Uso: !remove <usuario>",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "notInQueue": "{user} não está na fila.",
+                "removed": "Removido {user} da fila.",
+                "error": "Falha ao remover: {error}"
+            },
+            "move": {
+                "description": "Move usuário na fila.",
+                "usage": "!move <usuario> <posicao>",
+                "usageMessage": "Uso: !move <usuario> <posicao>",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "moved": "{user} movido para a posição {position}.",
+                "error": "Falha ao mover: {error}"
+            },
+            "swap": {
+                "description": "Troca dois usuários na fila.",
+                "usage": "!swap <usuarioA> <usuarioB>",
+                "usageMessage": "Uso: !swap <usuarioA> <usuarioB>",
+                "userNotFound": "Usuário(s) não encontrado(s).",
+                "notInQueue": "Ambos precisam estar na fila.",
+                "samePosition": "Os usuários já estão na mesma posição.",
+                "success": "Trocados {userA} e {userB}.",
+                "error": "Falha ao trocar: {error}"
+            },
+            "timeguard": {
+                "description": "Ativa/desativa o time guard.",
+                "usage": "!timeguard [on|off]",
+                "enabled": "Time guard ativado.",
+                "disabled": "Time guard desativado."
+            },
+            "maxlength": {
+                "description": "Define o limite de duração da música.",
+                "usage": "!maxlength <minutos>",
+                "usageMessage": "Uso: !maxlength <minutos>",
+                "updated": "Limite de duração definido para {minutes} min."
+            },
+            "kick": {
+                "description": "Expulsa um usuário.",
+                "usage": "!kick <usuario>",
+                "usageMessage": "Uso: !kick <usuario>",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "roleTooHigh": "Não posso expulsar {user}; cargo alto demais.",
+                "removed": "{user} expulso.",
+                "error": "Falha ao expulsar: {error}"
+            },
+            "mute": {
+                "description": "Silencia um usuário.",
+                "usage": "!mute <usuario> [duracao] [motivo]",
+                "usageMessage": "Uso: !mute <usuario> [duracao] [motivo]",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "roleTooHigh": "Não posso silenciar {user}; cargo alto demais.",
+                "muted": "{user} silenciado",
+                "duration": "por {duration}",
+                "reason": "motivo: {reason}",
+                "error": "Falha ao silenciar: {error}"
+            },
+            "unmute": {
+                "description": "Remove o silêncio.",
+                "usage": "!unmute <usuario>",
+                "usageMessage": "Uso: !unmute <usuario>",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "unmuted": "{user} dessilenciado",
+                "error": "Falha ao dessilenciar: {error}"
+            },
+            "ban": {
+                "description": "Bane um usuário.",
+                "usage": "!ban <usuario> [duracao] [motivo]",
+                "usageMessage": "Uso: !ban <usuario> [duracao] [motivo]",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "roleTooHigh": "Não posso banir {user}; cargo alto demais.",
+                "banned": "{user} banido",
+                "duration": "por {duration}",
+                "reason": "motivo: {reason}",
+                "error": "Falha ao banir: {error}"
+            },
+            "unban": {
+                "description": "Remove o banimento.",
+                "usage": "!unban <usuario>",
+                "usageMessage": "Uso: !unban <usuario>",
+                "notFound": "Banimento não encontrado para {user}.",
+                "removed": "Banimento removido de {user}.",
+                "error": "Falha ao desbanir: {error}"
+            },
+            "nuke": {
+                "description": "Apaga todas as mensagens em cache da sala.",
+                "usage": "!nuke",
+                "done": "{count} mensagem(ns) apagada(s)."
+            },
+            "delmsg": {
+                "description": "Apaga todas as mensagens em cache de um usuário.",
+                "usage": "!delmsg <usuario>",
+                "usageMessage": "Uso: !delmsg <usuario>",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "done": "{count} mensagem(ns) de {user} apagada(s)."
+            },
+            "lockchat": {
+                "description": "Trava o chat para que só a equipe possa falar.",
+                "usage": "!lockchat [on|off]",
+                "enabled": "Chat travado. Apenas {role}+ podem enviar mensagens.",
+                "disabled": "Chat desbloqueado."
+            },
+            "autoskip": {
+                "description": "Ativa/desativa o auto-skip de músicas travadas.",
+                "usage": "!autoskip [on|off]",
+                "enabled": "Auto-skip ativado.",
+                "disabled": "Auto-skip desativado."
+            },
+            "afkremoval": {
+                "description": "Ativa/desativa remoção de AFK da fila.",
+                "usage": "!afkremoval [on|off]",
+                "enabled": "Remoção de AFK ativada.",
+                "disabled": "Remoção de AFK desativada."
+            },
+            "afklimit": {
+                "description": "Define o tempo máximo de AFK em minutos.",
+                "usage": "!afklimit <minutos>",
+                "usageMessage": "Uso: !afklimit <minutos>",
+                "updated": "Limite de AFK definido para {minutes} min."
+            },
+            "afkreset": {
+                "description": "Reinicia o timer de AFK de um usuário.",
+                "usage": "!afkreset [usuario]",
+                "usageMessage": "Uso: !afkreset [usuario]",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "reset": "AFK de {user} resetado."
+            },
+            "afktime": {
+                "description": "Mostra há quanto tempo um usuário está AFK.",
+                "usage": "!afktime [usuario]",
+                "usageMessage": "Uso: !afktime [usuario]",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "noRecord": "Sem registro de AFK para {user}.",
+                "reply": "{user} está AFK há {duration}."
+            },
+            "duelmute": {
+                "description": "Define o mute do perdedor do duelo.",
+                "usage": "!duelmute <minutos>",
+                "usageMessage": "Uso: !duelmute <minutos>",
+                "updated": "Mute do duelo definido para {minutes} min."
             }
         },
-        "reload": {
-            "description": "Reconecta o bot.",
-            "usage": "!reload",
-            "reply": {
-                "loading": "Reconectando...",
-                "error": "Falha ao reconectar: {error}"
+        "music": {
+            "woot": {
+                "description": "Dá woot na música atual.",
+                "usage": "!woot",
+                "noTrack": "Nenhuma música tocando.",
+                "voted": "{user} deu woot em: {title}",
+                "error": "Falha ao votar: {error}"
+            },
+            "blacklist": {
+                "description": "Gerencia a blacklist de músicas.",
+                "usage": "!blacklist <add|remove|list|info> ...",
+                "usageMessage": "Uso: !blacklist <add|remove|list|info> ...",
+                "noTrackInfo": "Sem música atual para info.",
+                "currentInfo": "Atual: {label} ({id})",
+                "noTrackAdd": "Nenhuma música para adicionar.",
+                "already": "Essa faixa já está na blacklist.",
+                "addedSkip": "Adicionada à blacklist; pulando...",
+                "addedSkipError": "Adicionada à blacklist, mas falhou ao pular: {error}",
+                "added": "Adicionada à blacklist.",
+                "removeUsage": "Uso: !blacklist remove <current|source:id>",
+                "removed": "Removida da blacklist.",
+                "empty": "A blacklist está vazia.",
+                "list": "Blacklist ({limit}): {items}",
+                "invalidAction": "Ação inválida. Use add/remove/list/info."
+            },
+            "togglebl": {
+                "description": "Ativa/desativa a blacklist.",
+                "usage": "!togglebl [on|off]",
+                "enabled": "Blacklist ativada.",
+                "disabled": "Blacklist desativada."
+            },
+            "motd": {
+                "description": "Configura a mensagem do dia.",
+                "usage": "!motd [mensagem|on|off|interval <n>]",
+                "stateOn": "ligado",
+                "stateOff": "desligado",
+                "status": "MOTD {state} | intervalo {interval} | mensagem: {message}",
+                "intervalUsage": "Uso: !motd interval <n>",
+                "intervalUpdated": "Intervalo do MOTD definido para {interval}.",
+                "messageUsage": "Uso: !motd <mensagem>",
+                "updated": "MOTD atualizado.",
+                "enabled": "MOTD ativado.",
+                "disabled": "MOTD desativado."
+            },
+            "togglemotd": {
+                "description": "Ativa/desativa o MOTD.",
+                "usage": "!togglemotd [on|off]",
+                "enabled": "MOTD ativado.",
+                "disabled": "MOTD desativado."
+            },
+            "voteskip": {
+                "description": "Inicia uma votacao para pular a musica.",
+                "usage": "!voteskip",
+                "disabled": "Votekip desativado.",
+                "noUser": "Nao consegui identificar voce.",
+                "noTrack": "Nenhuma musica tocando.",
+                "expired": "Votacao encerrada sem votos suficientes.",
+                "alreadyVoted": "Voce ja votou.",
+                "started": "Votacao iniciada ({votes}/{needed}, ativos {active}). {seconds}s restantes.",
+                "voted": "Voto registrado ({votes}/{needed}, ativos {active}).",
+                "passed": "Votos suficientes! Pulando a musica...",
+                "failed": "Nao consegui pular a musica.",
+                "noPermission": "Preciso de cargo bouncer para pular a musica."
             }
         },
-        "reloadcmd": {
-            "description": "Recarrega comandos.",
-            "usage": "!reloadcmd",
-            "reply": {
-                "successWithFailures": "Comandos recarregados: {loaded}. Falharam: {failed}.",
-                "success": "Comandos recarregados: {loaded}.",
-                "error": "Falha ao recarregar comandos: {error}"
+        "info": {
+            "nowplaying": {
+                "description": "Mostra a música atual e reações.",
+                "usage": "!np",
+                "none": "Nenhuma música tocando agora.",
+                "trackLine": "Tocando: {title}{artist}",
+                "djLine": "DJ: {dj}",
+                "reactions": "Reações: 👍 {woots} / 👎 {mehs} / 🔁 {grabs}"
+            },
+            "stats": {
+                "description": "Mostra estatísticas do bot.",
+                "usage": "!stats",
+                "notReady": "Estatísticas ainda não estão prontas.",
+                "uptime": "Tempo online: {uptime}",
+                "woots": "Woots: {count}",
+                "queue": "Fila: {position}/{total}"
+            },
+            "queue": {
+                "description": "Mostra a posição do bot na fila.",
+                "usage": "!queue",
+                "notInQueue": "Não estou na fila.",
+                "next": " — Próximo: {next}",
+                "status": "Posição: {position}/{total}{next}"
+            },
+            "active": {
+                "description": "Mostra quantos usuários falaram recentemente.",
+                "usage": "!active <minutos>",
+                "usageMessage": "Uso: !active <minutos>",
+                "reply": "Ativos nos últimos {window}: {count}."
+            },
+            "lastseen": {
+                "description": "Mostra a última interação de um usuário no chat.",
+                "usage": "!lastseen [usuario]",
+                "usageMessage": "Uso: !lastseen [usuario]",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "noRecord": "Sem registro de atividade para {user}.",
+                "reply": "{user} foi visto(a) há {duration}."
+            },
+            "jointime": {
+                "description": "Mostra há quanto tempo o usuário está na sala.",
+                "usage": "!jointime [usuario]",
+                "usageMessage": "Uso: !jointime [usuario]",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "noRecord": "Sem registro de entrada para {user}.",
+                "reply": "{user} está na sala há {duration}."
+            },
+            "link": {
+                "description": "Mostra o link da música atual.",
+                "usage": "!link",
+                "noTrack": "Nenhuma música tocando.",
+                "unavailable": "Link indisponível para esta fonte.",
+                "reply": "Link: {url}"
+            },
+            "mediaid": {
+                "description": "Mostra o ID da música atual.",
+                "usage": "!mediaid",
+                "noTrack": "Nenhuma música tocando.",
+                "noId": "Não consegui obter o ID da música.",
+                "reply": "ID da música: {id}"
+            },
+            "ba": {
+                "description": "Responde com BA.",
+                "usage": "!ba",
+                "reply": "BA!"
+            },
+            "lastplayed": {
+                "description": "Mostra a ultima musica tocada.",
+                "usage": "!lastplayed",
+                "reply": "Ultima: {label} (DJ: {dj})",
+                "empty": "Sem historico ainda."
+            },
+            "history": {
+                "description": "Mostra as ultimas musicas tocadas.",
+                "usage": "!history",
+                "reply": "Historico: {lines}",
+                "empty": "Sem historico ainda.",
+                "line": "#{pos} {label} (DJ: {dj})"
+            },
+            "topwoot": {
+                "description": "Ranking de woots dados.",
+                "usage": "!topwoot [limite]",
+                "reply": "Top woots: {lines}",
+                "empty": "Sem dados de woot.",
+                "line": "#{pos} {user}: {count} woots"
+            },
+            "topdj": {
+                "description": "Ranking de DJs por musicas tocadas.",
+                "usage": "!topdj [limite]",
+                "reply": "Top DJs: {lines}",
+                "empty": "Sem dados de DJ.",
+                "line": "#{pos} {user}: {count} musicas"
+            },
+            "topsongs": {
+                "description": "Ranking de musicas mais wootadas.",
+                "usage": "!topsongs [limite]",
+                "reply": "Top musicas: {lines}",
+                "empty": "Sem dados de musicas.",
+                "line": "#{pos} {label}: {woots} woots / {plays} tocadas"
+            },
+            "rank": {
+                "description": "Mostra seu rank de woots e DJ.",
+                "usage": "!rank [usuario]",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "noUser": "Nao consegui identificar voce.",
+                "empty": "Sem dados de rank para {user}.",
+                "reply": "{user}: {stats}",
+                "wootLine": "Woots: #{rank} ({count})",
+                "djLine": "DJ: #{rank} ({count})"
+            },
+            "autowoot-link": {
+                "description": "Envia o link para a extensão auto-woot.",
+                "usage": "!autowoot-link",
+                "reply": "Melhor extensão auto-woot aqui: https://woot.niceatc.api.br"
             }
-        },
-        "nowplaying": {
-            "description": "Mostra a música atual e reações.",
-            "usage": "!np",
-            "none": "Nenhuma música tocando agora.",
-            "trackLine": "Tocando: {title}{artist}",
-            "djLine": "DJ: {dj}",
-            "reactions": "Reações: 👍 {woots} / 👎 {mehs} / 🔁 {grabs}"
-        },
-        "stats": {
-            "description": "Mostra estatísticas do bot.",
-            "usage": "!stats",
-            "notReady": "Estatísticas ainda não estão prontas.",
-            "uptime": "Tempo online: {uptime}",
-            "woots": "Woots: {count}",
-            "queue": "Fila: {position}/{total}"
         },
         "queue": {
-            "description": "Mostra a posição do bot na fila.",
-            "usage": "!queue",
-            "notInQueue": "Não estou na fila.",
-            "next": " — Próximo: {next}",
-            "status": "Posição: {position}/{total}{next}"
-        },
-        "woot": {
-            "description": "Dá woot na música atual.",
-            "usage": "!woot",
-            "noTrack": "Nenhuma música tocando.",
-            "voted": "{user} deu woot em: {title}",
-            "error": "Falha ao votar: {error}"
-        },
-        "blacklist": {
-            "description": "Gerencia a blacklist de músicas.",
-            "usage": "!blacklist <add|remove|list|info> ...",
-            "usageMessage": "Uso: !blacklist <add|remove|list|info> ...",
-            "noTrackInfo": "Sem música atual para info.",
-            "currentInfo": "Atual: {label} ({id})",
-            "noTrackAdd": "Nenhuma música para adicionar.",
-            "already": "Essa faixa já está na blacklist.",
-            "addedSkip": "Adicionada à blacklist; pulando...",
-            "addedSkipError": "Adicionada à blacklist, mas falhou ao pular: {error}",
-            "added": "Adicionada à blacklist.",
-            "removeUsage": "Uso: !blacklist remove <current|source:id>",
-            "removed": "Removida da blacklist.",
-            "empty": "A blacklist está vazia.",
-            "list": "Blacklist ({limit}): {items}",
-            "invalidAction": "Ação inválida. Use add/remove/list/info."
-        },
-        "togglebl": {
-            "description": "Ativa/desativa a blacklist.",
-            "usage": "!togglebl [on|off]",
-            "enabled": "Blacklist ativada.",
-            "disabled": "Blacklist desativada."
-        },
-        "motd": {
-            "description": "Configura a mensagem do dia.",
-            "usage": "!motd [mensagem|on|off|interval <n>]",
-            "stateOn": "ligado",
-            "stateOff": "desligado",
-            "status": "MOTD {state} | intervalo {interval} | mensagem: {message}",
-            "intervalUsage": "Uso: !motd interval <n>",
-            "intervalUpdated": "Intervalo do MOTD definido para {interval}.",
-            "messageUsage": "Uso: !motd <mensagem>",
-            "updated": "MOTD atualizado.",
-            "enabled": "MOTD ativado.",
-            "disabled": "MOTD desativado."
-        },
-        "togglemotd": {
-            "description": "Ativa/desativa o MOTD.",
-            "usage": "!togglemotd [on|off]",
-            "enabled": "MOTD ativado.",
-            "disabled": "MOTD desativado."
-        },
-        "skip": {
-            "description": "Pula a faixa atual.",
-            "usage": "!skip [motivo]",
-            "successWithReason": "Faixa pulada. Motivo: {reason}",
-            "success": "Faixa pulada.",
-            "error": "Falha ao pular: {error}"
-        },
-        "lock": {
-            "description": "Trava a fila.",
-            "usage": "!lock",
-            "success": "Fila travada.",
-            "error": "Falha ao travar a fila: {error}"
-        },
-        "unlock": {
-            "description": "Destrava a fila.",
-            "usage": "!unlock",
-            "success": "Fila destravada.",
-            "error": "Falha ao destravar a fila: {error}"
-        },
-        "remove": {
-            "description": "Remove usuário da fila.",
-            "usage": "!remove <usuario>",
-            "usageMessage": "Uso: !remove <usuario>",
-            "userNotFound": "Usuário não encontrado: {user}",
-            "notInQueue": "{user} não está na fila.",
-            "removed": "Removido {user} da fila.",
-            "error": "Falha ao remover: {error}"
-        },
-        "move": {
-            "description": "Move usuário na fila.",
-            "usage": "!move <usuario> <posicao>",
-            "usageMessage": "Uso: !move <usuario> <posicao>",
-            "userNotFound": "Usuário não encontrado: {user}",
-            "moved": "{user} movido para a posição {position}.",
-            "error": "Falha ao mover: {error}"
-        },
-        "swap": {
-            "description": "Troca dois usuários na fila.",
-            "usage": "!swap <usuarioA> <usuarioB>",
-            "usageMessage": "Uso: !swap <usuarioA> <usuarioB>",
-            "userNotFound": "Usuário(s) não encontrado(s).",
-            "notInQueue": "Ambos precisam estar na fila.",
-            "samePosition": "Os usuários já estão na mesma posição.",
-            "success": "Trocados {userA} e {userB}.",
-            "error": "Falha ao trocar: {error}"
-        },
-        "timeguard": {
-            "description": "Ativa/desativa o time guard.",
-            "usage": "!timeguard [on|off]",
-            "enabled": "Time guard ativado.",
-            "disabled": "Time guard desativado."
-        },
-        "maxlength": {
-            "description": "Define o limite de duração da música.",
-            "usage": "!maxlength <minutos>",
-            "usageMessage": "Uso: !maxlength <minutos>",
-            "updated": "Limite de duração definido para {minutes} min."
-        },
-        "kick": {
-            "description": "Expulsa um usuário.",
-            "usage": "!kick <usuario>",
-            "usageMessage": "Uso: !kick <usuario>",
-            "userNotFound": "Usuário não encontrado: {user}",
-            "roleTooHigh": "Não posso expulsar {user}; cargo alto demais.",
-            "removed": "{user} expulso.",
-            "error": "Falha ao expulsar: {error}"
-        },
-        "mute": {
-            "description": "Silencia um usuário.",
-            "usage": "!mute <usuario> [duracao] [motivo]",
-            "usageMessage": "Uso: !mute <usuario> [duracao] [motivo]",
-            "userNotFound": "Usuário não encontrado: {user}",
-            "roleTooHigh": "Não posso silenciar {user}; cargo alto demais.",
-            "muted": "{user} silenciado",
-            "duration": "por {duration}",
-            "reason": "motivo: {reason}",
-            "error": "Falha ao silenciar: {error}"
-        },
-        "unmute": {
-            "description": "Remove o silêncio.",
-            "usage": "!unmute <usuario>",
-            "usageMessage": "Uso: !unmute <usuario>",
-            "userNotFound": "Usuário não encontrado: {user}",
-            "unmuted": "{user} dessilenciado",
-            "error": "Falha ao dessilenciar: {error}"
-        },
-        "ban": {
-            "description": "Bane um usuário.",
-            "usage": "!ban <usuario> [duracao] [motivo]",
-            "usageMessage": "Uso: !ban <usuario> [duracao] [motivo]",
-            "userNotFound": "Usuário não encontrado: {user}",
-            "roleTooHigh": "Não posso banir {user}; cargo alto demais.",
-            "banned": "{user} banido",
-            "duration": "por {duration}",
-            "reason": "motivo: {reason}",
-            "error": "Falha ao banir: {error}"
-        },
-        "nuke": {
-            "description": "Apaga todas as mensagens em cache da sala.",
-            "usage": "!nuke",
-            "done": "{count} mensagem(ns) apagada(s)."
-        },
-        "delmsg": {
-            "description": "Apaga todas as mensagens em cache de um usuário.",
-            "usage": "!delmsg <usuario>",
-            "usageMessage": "Uso: !delmsg <usuario>",
-            "userNotFound": "Usuário não encontrado: {user}",
-            "done": "{count} mensagem(ns) de {user} apagada(s)."
-        },
-        "lockchat": {
-            "description": "Trava o chat para que só a equipe possa falar.",
-            "usage": "!lockchat [on|off]",
-            "enabled": "Chat travado. Apenas {role}+ podem enviar mensagens.",
-            "disabled": "Chat desbloqueado."
-        },
-        "unban": {
-            "description": "Remove o banimento.",
-            "usage": "!unban <usuario>",
-            "usageMessage": "Uso: !unban <usuario>",
-            "notFound": "Banimento não encontrado para {user}.",
-            "removed": "Banimento removido de {user}.",
-            "error": "Falha ao desbanir: {error}"
-        },
-        "dc": {
-            "description": "Restaura a posição do usuário na fila (DC recente).",
-            "usage": "!dc [usuario]",
-            "usageMessage": "Uso: !dc [usuario]",
-            "userNotFound": "Usuário não encontrado: {user}",
-            "noPermission": "Você não tem permissão para mover outro usuário.",
-            "noSnapshot": "Sem snapshot recente para esse usuário.",
-            "expired": "Snapshot expirou.",
-            "invalidPosition": "Posição salva inválida.",
-            "mustJoin": "O usuário precisa estar na fila.",
-            "moved": "Movido {user} para a posição {position}.",
-            "error": "Falha ao restaurar posição: {error}"
-        },
-        "savequeue": {
-            "description": "Salva a fila atual.",
-            "usage": "!savequeue",
-            "empty": "A fila está vazia.",
-            "saved": "Fila salva com {count} entradas.",
-            "error": "Falha ao salvar fila: {error}"
-        },
-        "autowoot": {
-            "description": "Ativa/desativa auto-woot.",
-            "usage": "!autowoot [on|off]",
-            "enabled": "Auto-woot ativado.",
-            "disabled": "Auto-woot desativado."
-        },
-        "settings": {
-            "description": "Consulta ou altera configurações.",
-            "usage": "!settings <chave> [valor]",
-            "usageMessage": "Uso: !settings <chave> [valor]",
-            "list": "Chaves disponíveis: {keys}",
-            "invalidKey": "Chave inválida.",
-            "noPermission": "Você precisa do cargo manager para usar a chave {key}.",
-            "value": "{key} = {value}",
-            "notFound": "Sem valor para {key}.",
-            "updated": "{key} atualizado para {value}."
+            "dc": {
+                "description": "Restaura a posição do usuário na fila (DC recente).",
+                "usage": "!dc [usuario]",
+                "usageMessage": "Uso: !dc [usuario]",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "noPermission": "Você não tem permissão para mover outro usuário.",
+                "noSnapshot": "Sem snapshot recente para esse usuário.",
+                "expired": "Snapshot expirou.",
+                "invalidPosition": "Posição salva inválida.",
+                "mustJoin": "O usuário precisa estar na fila.",
+                "moved": "Movido {user} para a posição {position}.",
+                "error": "Falha ao restaurar posição: {error}"
+            },
+            "savequeue": {
+                "description": "Salva a fila atual.",
+                "usage": "!savequeue",
+                "empty": "A fila está vazia.",
+                "saved": "Fila salva com {count} entradas.",
+                "error": "Falha ao salvar fila: {error}"
+            }
         },
         "economy": {
-            "description": "Comandos de economia.",
-            "usage": "!economy <balance|transfer|top> ...",
-            "usageMessage": "Uso: !economy <balance|transfer|top> ..."
-        },
-        "balance": {
-            "description": "Mostra seu saldo de pontos.",
-            "usage": "!balance",
-            "reply": "Saldo: {balance} pontos.",
-            "disabled": "Economia está desativada.",
-            "noUser": "Não consegui identificar você.",
-            "cardTitle": "Saldo",
-            "cardBalance": "Saldo",
-            "cardPoints": "pontos"
-        },
-        "transfer": {
-            "description": "Transfere pontos para outro usuário.",
-            "usage": "!transfer <usuario> <pontos>",
-            "usageMessage": "Uso: !transfer <usuario> <pontos>",
-            "invalidAmount": "Valor inválido.",
-            "minAmount": "Valor mínimo: {min} pontos.",
-            "noUser": "Não consegui identificar você.",
-            "userNotFound": "Usuário não encontrado: {user}",
-            "self": "Você não pode transferir para si mesmo.",
-            "cannotTargetBot": "Não posso transferir para o bot.",
-            "insufficient": "Saldo insuficiente. Você tem {balance} pontos.",
-            "success": "Transferido {amount} pontos para {user}. Saldo: {balance}.",
-            "disabled": "Economia está desativada.",
-            "failed": "Falha ao transferir pontos."
-        },
-        "top": {
-            "description": "Mostra o ranking de pontos.",
-            "usage": "!top [limite]",
-            "empty": "Sem dados de economia.",
-            "line": "#{pos} {user}: {balance} pontos",
-            "disabled": "Economia está desativada."
-        },
-        "perfil": {
-            "description": "Mostra seu nível e XP.",
-            "usage": "!perfil [usuario]",
-            "usageMessage": "Uso: !perfil [usuario]",
-            "userNotFound": "Usuário não encontrado: {user}",
-            "noRecord": "Sem registro de XP para {user}.",
-            "reply": "Nível {level} | XP {xp}/{next} (faltam {remaining}) | Recompensa próx: {reward} pontos | Saldo: {balance}.",
-            "disabled": "XP está desativado.",
-            "nextBadge": "Badge próx: {badge}",
-            "nextAchievement": "Conquista próx: {achievement}",
-            "cardTitle": "Perfil",
-            "cardLevel": "Nível",
-            "cardXp": "XP",
-            "cardReward": "Recompensa próx nível",
-            "cardBalance": "Saldo",
-            "cardPoints": "pontos"
-        },
-        "xptop": {
-            "description": "Ranking de XP.",
-            "usage": "!xptop [limite]",
-            "empty": "Sem dados de XP.",
-            "line": "#{pos} {user}: nível {level} ({xp} XP)",
-            "disabled": "XP está desativado."
-        },
-        "welcome": {
-            "description": "Ativa/desativa a saudação de entrada.",
-            "usage": "!welcome [on|off]",
-            "enabled": "Saudação ativada.",
-            "disabled": "Saudação desativada."
-        },
-        "autowoot-link": {
-            "description": "Envia o link para a extensão auto-woot.",
-            "usage": "!autowoot-link",
-            "reply": "Melhor extensão auto-woot aqui: https://woot.niceatc.api.br"
-        },
-        "ba": {
-            "description": "Responde com BA.",
-            "usage": "!ba",
-            "reply": "BA!"
-        },
-        "eightball": {
-            "description": "Bola 8 mágica.",
-            "usage": "!8ball <pergunta>",
-            "usageMessage": "Faça uma pergunta.",
-            "reply": "{question} — {answer}",
-            "responses": [
-                "Sim.",
-                "Não.",
-                "Talvez.",
-                "Pergunte novamente mais tarde.",
-                "Com certeza.",
-                "De jeito nenhum.",
-                "Muito provável.",
-                "Pouco provável.",
-                "Sem dúvidas.",
-                "Não conte com isso.",
-                "Sinais apontam que sim.",
-                "Não posso prever agora."
-            ]
-        },
-        "cookie": {
-            "description": "Dá um biscoito.",
-            "usage": "!cookie [usuario]",
-            "userNotFound": "Usuário não encontrado: {user}",
-            "selfLines": [
-                "{sender} pegou um biscoito para si 🍪",
-                "{sender}, aqui está seu biscoito 🍪",
-                "{sender} se presenteou com um biscoito 🍪"
-            ],
-            "giftLines": [
-                "{sender} deu um biscoito para {target} 🍪",
-                "{sender} entregou um biscoito a {target} 🍪",
-                "{sender} compartilhou um biscoito com {target} 🍪"
-            ]
-        },
-        "ghostbuster": {
-            "description": "Verifica se alguém está na sala.",
-            "usage": "!ghostbuster <usuario>",
-            "present": "{name} está na sala.",
-            "absent": "{name} não está na sala."
-        },
-        "gif": {
-            "description": "Busca um GIF.",
-            "usage": "!gif <termo>",
-            "notFound": "Nenhum GIF encontrado.",
-            "result": "Aqui vai: {url}",
-            "error": "Erro ao buscar GIF: {error}"
-        },
-        "roulette": {
-            "description": "Abre a roleta.",
-            "usage": "!roulette",
-            "alreadyOpen": "A roleta já está aberta.",
-            "opened": "Roleta aberta por {seconds}s. Use !join."
-        },
-        "join": {
-            "description": "Entra na roleta.",
-            "usage": "!join",
-            "closed": "A roleta está fechada.",
-            "noUser": "Não consegui identificar você.",
-            "mustBeInQueue": "Você precisa estar na fila para entrar.",
-            "waitlistError": "Falha ao verificar a fila: {error}",
-            "alreadyIn": "Você já está na roleta.",
-            "joined": "{name} entrou na roleta."
-        },
-        "leave": {
-            "description": "Sai da roleta.",
-            "usage": "!leave",
-            "closed": "A roleta está fechada.",
-            "noUser": "Não consegui identificar você.",
-            "notIn": "Você não está na roleta.",
-            "left": "{name} saiu da roleta."
-        },
-        "thor": {
-            "description": "Roda o martelo do Thor na fila.",
-            "usage": "!thor",
-            "noUser": "Não consegui identificar você.",
-            "apiUnavailable": "API da fila indisponível.",
-            "noPermission": "Eu preciso de cargo bouncer para isso.",
-            "waitlistError": "Falha ao buscar a fila: {error}",
-            "mustBeInQueue": "Você precisa estar na fila.",
-            "moveError": "Falha ao mover {user}: {error}",
-            "removeError": "Falha ao remover {user}: {error}",
-            "goodLines": [
-                "{name} foi abençoado e vai para o topo! ⚡",
-                "{name} subiu para o topo da fila!",
-                "{name} ganhou o topo da fila!"
-            ],
-            "neutralLines": [
-                "{name} escapou dessa vez.",
-                "{name} ficou no mesmo lugar.",
-                "{name} foi poupado."
-            ],
-            "badLines": [
-                "{name} levou um raio e saiu da fila! ⚡",
-                "{name} foi removido da fila!",
-                "{name} perdeu a vez e saiu da fila!"
-            ]
-        },
-        "active": {
-            "description": "Mostra quantos usuários falaram recentemente.",
-            "usage": "!active <minutos>",
-            "usageMessage": "Uso: !active <minutos>",
-            "reply": "Ativos nos últimos {window}: {count}."
-        },
-        "lastseen": {
-            "description": "Mostra a última interação de um usuário no chat.",
-            "usage": "!lastseen [usuario]",
-            "usageMessage": "Uso: !lastseen [usuario]",
-            "userNotFound": "Usuário não encontrado: {user}",
-            "noRecord": "Sem registro de atividade para {user}.",
-            "reply": "{user} foi visto(a) há {duration}."
-        },
-        "jointime": {
-            "description": "Mostra há quanto tempo o usuário está na sala.",
-            "usage": "!jointime [usuario]",
-            "usageMessage": "Uso: !jointime [usuario]",
-            "userNotFound": "Usuário não encontrado: {user}",
-            "noRecord": "Sem registro de entrada para {user}.",
-            "reply": "{user} está na sala há {duration}."
-        },
-        "link": {
-            "description": "Mostra o link da música atual.",
-            "usage": "!link",
-            "noTrack": "Nenhuma música tocando.",
-            "unavailable": "Link indisponível para esta fonte.",
-            "reply": "Link: {url}"
-        },
-        "mediaid": {
-            "description": "Mostra o ID da música atual.",
-            "usage": "!mediaid",
-            "noTrack": "Nenhuma música tocando.",
-            "noId": "Não consegui obter o ID da música.",
-            "reply": "ID da música: {id}"
-        },
-        "autoskip": {
-            "description": "Ativa/desativa o auto-skip de músicas travadas.",
-            "usage": "!autoskip [on|off]",
-            "enabled": "Auto-skip ativado.",
-            "disabled": "Auto-skip desativado."
-        },
-        "afkremoval": {
-            "description": "Ativa/desativa remoção de AFK da fila.",
-            "usage": "!afkremoval [on|off]",
-            "enabled": "Remoção de AFK ativada.",
-            "disabled": "Remoção de AFK desativada."
-        },
-        "afklimit": {
-            "description": "Define o tempo máximo de AFK em minutos.",
-            "usage": "!afklimit <minutos>",
-            "usageMessage": "Uso: !afklimit <minutos>",
-            "updated": "Limite de AFK definido para {minutes} min."
-        },
-        "afkreset": {
-            "description": "Reinicia o timer de AFK de um usuário.",
-            "usage": "!afkreset [usuario]",
-            "usageMessage": "Uso: !afkreset [usuario]",
-            "userNotFound": "Usuário não encontrado: {user}",
-            "reset": "AFK de {user} resetado."
-        },
-        "afktime": {
-            "description": "Mostra há quanto tempo um usuário está AFK.",
-            "usage": "!afktime [usuario]",
-            "usageMessage": "Uso: !afktime [usuario]",
-            "userNotFound": "Usuário não encontrado: {user}",
-            "noRecord": "Sem registro de AFK para {user}.",
-            "reply": "{user} está AFK há {duration}."
-        },
-        "duelmute": {
-            "description": "Define o mute do perdedor do duelo.",
-            "usage": "!duelmute <minutos>",
-            "usageMessage": "Uso: !duelmute <minutos>",
-            "updated": "Mute do duelo definido para {minutes} min."
-        },
-        "fortune": {
-            "description": "Mostra uma fortuna.",
-            "usage": "!fortune",
-            "reply": "Fortuna: {fortune}",
-            "lines": [
-                "Um novo caminho se abre.",
-                "Algo inesperado vai te favorecer.",
-                "Confie no seu ritmo.",
-                "Uma boa noticia chega em breve.",
-                "A paciencia vai te recompensar.",
-                "Um pequeno gesto trara grande retorno.",
-                "Mudancas positivas estao a caminho.",
-                "Voce esta mais perto do que pensa."
-            ]
-        },
-        "duel": {
-            "description": "Desafia um usuário para um duelo.",
-            "usage": "!duel <usuário>",
-            "usageMessage": "Uso: !duel <usuário>",
-            "userNotFound": "Usuário não encontrado: {user}",
-            "self": "Você não pode duelar consigo mesmo.",
-            "cannotTargetBot": "Não posso duelar contra o bot.",
-            "alreadyPending": "Já existe um duelo pendente entre {challenger} e {target} (expira em {seconds}s).",
-            "challenge": "{challenger} desafiou {target}! {target}, use {accept} ou {recuse}.",
-            "accepted": "{target} aceitou o duelo!",
-            "suspenseLines": [
-                "O silencio toma conta da arena...",
-                "A poeira sobe e o destino decide...",
-                "Preparando o veredito do duelo..."
-            ],
-            "result": "Vencedor: {winner} | Perdedor: {loser}.",
-            "muted": "{user} foi mutado(a) por {minutes} min.",
-            "muteReason": "Derrota em duelo",
-            "muteFailed": "Falha ao mutar {user}: {error}",
-            "muteUnavailable": "Mute indisponível no momento.",
-            "muteRoleTooHigh": "Não posso mutar {user} (cargo alto).",
-            "noPermission": "Preciso do cargo bouncer para aplicar o mute do duelo.",
-            "deleteMessagesFallback": "As mensagens de {user} serão apagadas por {minutes} min.",
-            "noPending": "Não há duelo pendente.",
-            "notTarget": "Este duelo não é para você.",
-            "alreadyAccepted": "Este duelo já foi aceito.",
-            "expired": "O duelo expirou.",
-            "refused": "{target} recusou o duelo.",
-            "timeout": "{target} não aceitou a tempo.",
-            "cowardLines": [
-                "Fugiu da arena!",
-                "Correu do duelo!",
-                "O medo venceu desta vez.",
-                "Sumiu no nevoeiro do combate."
-            ]
-        },
-        "accept": {
-            "description": "Aceita um duelo pendente.",
-            "usage": "!accept"
-        },
-        "recuse": {
-            "description": "Recusa um duelo pendente.",
-            "usage": "!recuse"
-        },
-        "hug": {
-            "description": "Abraça um usuário.",
-            "usage": "!hug [usuario]",
-            "userNotFound": "Usuário não encontrado: {user}",
-            "selfLines": [
-                "{sender} se deu um abraco.",
-                "{sender} recebeu um abraco quentinho.",
-                "{sender} se abraçou para recarregar as energias."
-            ],
-            "targetLines": [
-                "{sender} deu um abraco em {target}.",
-                "Abraco enviado de {sender} para {target}.",
-                "{sender} abraçou {target}."
-            ]
-        },
-        "slap": {
-            "description": "Da um tapinha brincalhao.",
-            "usage": "!slap [usuario]",
-            "userNotFound": "Usuário não encontrado: {user}",
-            "selfLines": [
-                "{sender} se deu um tapinha de leve.",
-                "{sender} tomou um bonk amistoso.",
-                "{sender} fez um tapinha para acordar."
-            ],
-            "targetLines": [
-                "{sender} deu um tapinha de leve em {target}.",
-                "{sender} aplicou um bonk amistoso em {target}.",
-                "{sender} deu um tapa brincalhao em {target}."
-            ]
-        },
-        "ship": {
-            "description": "Faz um ship entre duas pessoas.",
-            "usage": "!ship [usuario1] [usuario2]",
-            "reply": "{left} + {right} = {percent}%"
-        },
-        "coin": {
-            "description": "Joga uma moeda.",
-            "usage": "!coin",
-            "reply": "Resultado: {result}",
-            "results": [
-                "cara",
-                "coroa"
-            ]
-        },
-        "dice": {
-            "description": "Rola um dado.",
-            "usage": "!dice [lados]",
-            "reply": "Dado d{sides}: {roll}",
-            "invalidSides": "Numero de lados invalido (use entre 2 e 100)."
-        },
-        "roll": {
-            "description": "Gera um numero aleatorio.",
-            "usage": "!roll [min] [max]",
-            "usageMessage": "Uso: !roll [min] [max]",
-            "reply": "Resultado: {roll} (entre {min} e {max})"
-        },
-        "rps": {
-            "description": "Pedra, papel ou tesoura.",
-            "usage": "!rps <pedra|papel|tesoura>",
-            "usageMessage": "Uso: !rps <pedra|papel|tesoura>",
-            "reply": "Voce: {user} | Bot: {bot} | {result}",
-            "choice": {
-                "rock": "pedra",
-                "paper": "papel",
-                "scissors": "tesoura"
+            "economy": {
+                "description": "Comandos de economia.",
+                "usage": "!economy <balance|transfer|top> ...",
+                "usageMessage": "Uso: !economy <balance|transfer|top> ..."
             },
-            "result": {
-                "win": "voce ganhou",
-                "lose": "voce perdeu",
-                "draw": "empate"
+            "balance": {
+                "description": "Mostra seu saldo de pontos.",
+                "usage": "!balance",
+                "reply": "Saldo: {balance} pontos.",
+                "disabled": "Economia está desativada.",
+                "noUser": "Não consegui identificar você.",
+                "cardTitle": "Saldo",
+                "cardBalance": "Saldo",
+                "cardPoints": "pontos"
+            },
+            "transfer": {
+                "description": "Transfere pontos para outro usuário.",
+                "usage": "!transfer <usuario> <pontos>",
+                "usageMessage": "Uso: !transfer <usuario> <pontos>",
+                "invalidAmount": "Valor inválido.",
+                "minAmount": "Valor mínimo: {min} pontos.",
+                "noUser": "Não consegui identificar você.",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "self": "Você não pode transferir para si mesmo.",
+                "cannotTargetBot": "Não posso transferir para o bot.",
+                "insufficient": "Saldo insuficiente. Você tem {balance} pontos.",
+                "success": "Transferido {amount} pontos para {user}. Saldo: {balance}.",
+                "disabled": "Economia está desativada.",
+                "failed": "Falha ao transferir pontos."
+            },
+            "top": {
+                "description": "Mostra o ranking de pontos.",
+                "usage": "!top [limite]",
+                "empty": "Sem dados de economia.",
+                "line": "#{pos} {user}: {balance} pontos",
+                "disabled": "Economia está desativada."
+            },
+            "daily": {
+                "description": "Resgata a recompensa diaria.",
+                "usage": "!daily",
+                "disabled": "Economia desativada.",
+                "noUser": "Nao consegui identificar voce.",
+                "unavailable": "Recompensa diaria indisponivel.",
+                "cooldown": "Volte em {remaining}.",
+                "claimed": "Voce recebeu {amount} pontos. Sequencia: {streak}."
+            },
+            "shop": {
+                "description": "Mostra a loja de pontos.",
+                "usage": "!shop",
+                "disabled": "Economia desativada.",
+                "empty": "A loja esta vazia.",
+                "list": "Loja: {items}",
+                "line": "[{key}] {name} — {price} pontos{description}"
+            },
+            "buy": {
+                "description": "Compra um item da loja.",
+                "usage": "!buy <item>",
+                "usageMessage": "Uso: !buy <item>",
+                "disabled": "Economia desativada.",
+                "noUser": "Nao consegui identificar voce.",
+                "notFound": "Item nao encontrado: {item}",
+                "alreadyOwned": "Voce ja comprou: {item}",
+                "invalidItem": "Item invalido.",
+                "insufficient": "Saldo insuficiente. Voce tem {balance} pontos.",
+                "noPermission": "Nao tenho permissao para mover na fila.",
+                "notInQueue": "Voce nao esta na fila.",
+                "noMove": "Nao ha como mover sua posicao agora.",
+                "success": "Compra feita: {item}{extra}.",
+                "failed": "Falha ao aplicar a compra: {error}"
+            },
+            "work": {
+                "description": "Sistema de trabalho diario.",
+                "usage": "!work <list|choose|claim|status>",
+                "usageMessage": "Uso: !work <list|choose|claim|status>",
+                "disabled": "Economia desativada.",
+                "noUser": "Nao consegui identificar voce.",
+                "empty": "Nenhum trabalho configurado.",
+                "noJob": "Voce ainda nao escolheu um trabalho.",
+                "ready": "pronto",
+                "status": "Trabalho: {job} | Pagamento: {pay} pontos | Proximo: {remaining}",
+                "available": "disponivel",
+                "locked": "bloqueado",
+                "list": "Trabalhos: {items}",
+                "listLine": "[{key}] {name} (XP {xp}) — {pay} pontos [{status}]",
+                "chooseUsage": "Uso: !work choose <trabalho>",
+                "jobNotFound": "Trabalho nao encontrado: {job}",
+                "jobLocked": "{job} requer XP {xp}.",
+                "alreadySelected": "Voce ja esta nesse trabalho.",
+                "upgradeOnly": "Voce so pode trocar para um trabalho de nivel maior.",
+                "selected": "Trabalho escolhido: {job}.",
+                "cooldown": "Volte em {remaining}.",
+                "claimed": "Pagamento recebido ({job}): {pay} pontos."
+            },
+            "steal": {
+                "description": "Tenta roubar pontos de alguem.",
+                "usage": "!steal <usuario>",
+                "usageMessage": "Uso: !steal <usuario>",
+                "disabled": "Roubo desativado.",
+                "noUser": "Nao consegui identificar voce.",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "cannotTargetBot": "Nao posso roubar o bot.",
+                "self": "Voce nao pode roubar a si mesmo.",
+                "targetPoor": "{user} nao tem pontos suficientes para roubar.",
+                "success": "Voce roubou {amount} pontos de {user}.",
+                "failed": "O roubo falhou.",
+                "bailPaid": "Voce foi pego e pagou fianca de {amount} pontos.",
+                "noPermission": "Sem saldo para fianca e sem permissao para mute.",
+                "muted": "Voce foi preso e mutado por {minutes} min.",
+                "muteReason": "Falha em roubo",
+                "muteFailed": "Falha ao mutar: {error}"
+            },
+            "casino": {
+                "description": "Jogos de cassino com apostas.",
+                "usage": "!casino <slots|roleta|dados> <aposta> [opcao]",
+                "usageMessage": "Uso: !casino <slots|roleta|dados> <aposta> [opcao]",
+                "disabled": "Cassino desativado.",
+                "noUser": "Nao consegui identificar voce.",
+                "invalidBet": "Aposta invalida.",
+                "minBet": "Aposta minima: {min} pontos.",
+                "maxBet": "Aposta maxima: {max} pontos.",
+                "insufficient": "Saldo insuficiente. Voce tem {balance} pontos.",
+                "cooldown": "Aguarde {seconds}s para apostar novamente.",
+                "slots": {
+                    "win": "🎰 {reels} | Voce ganhou {win} pontos ({net}).",
+                    "lose": "🎰 {reels} | Nao foi dessa vez.",
+                    "jackpot": "🎰 {reels} | JACKPOT! {jackpot} pontos no bolo. Ganhou {win} ({net}).",
+                    "cardTitle": "Slots",
+                    "cardBet": "Aposta",
+                    "cardWin": "Ganho",
+                    "cardNet": "Saldo",
+                    "cardJackpot": "Jackpot"
+                },
+                "roulette": {
+                    "usageMessage": "Uso: !casino roleta <aposta> <vermelho|preto|verde>",
+                    "win": "🎡 {choice} vs {result} ({number}) — ganhou {win} ({net}).",
+                    "lose": "🎡 {choice} vs {result} ({number}) — perdeu.",
+                    "color": {
+                        "red": "vermelho",
+                        "black": "preto",
+                        "green": "verde"
+                    },
+                    "cardTitle": "Roleta",
+                    "cardBet": "Aposta",
+                    "cardWin": "Ganho",
+                    "cardNet": "Saldo",
+                    "cardPick": "Palpite",
+                    "cardResult": "Resultado"
+                },
+                "dice": {
+                    "usageMessage": "Uso: !casino dados <aposta> <numero> (1-{sides})",
+                    "win": "🎲 Saiu {roll}, voce escolheu {guess} — ganhou {win} ({net}).",
+                    "lose": "🎲 Saiu {roll}, voce escolheu {guess} — perdeu."
+                }
             }
         },
-        "trivia": {
-            "description": "Pergunta de trivia.",
-            "usage": "!trivia [answer]",
-            "question": "Trivia: {question}",
-            "options": "Opcoes: {options}",
-            "answer": "Resposta: {answer}",
-            "noActive": "Nenhuma trivia ativa.",
-            "noQuestion": "Nao consegui carregar uma pergunta agora.",
-            "error": "Erro ao buscar trivia: {error}"
+        "xp": {
+            "perfil": {
+                "description": "Mostra seu nível e XP.",
+                "usage": "!perfil [usuario]",
+                "usageMessage": "Uso: !perfil [usuario]",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "noRecord": "Sem registro de XP para {user}.",
+                "reply": "Nível {level} | XP {xp}/{next} (faltam {remaining}) | Recompensa próx: {reward} pontos | Saldo: {balance}.",
+                "disabled": "XP está desativado.",
+                "nextBadge": "Badge próx: {badge}",
+                "nextAchievement": "Conquista próx: {achievement}",
+                "cardTitle": "Perfil",
+                "cardLevel": "Nível",
+                "cardXp": "XP",
+                "cardReward": "Recompensa próx nível",
+                "cardBalance": "Saldo",
+                "cardPoints": "pontos"
+            },
+            "xptop": {
+                "description": "Ranking de XP.",
+                "usage": "!xptop [limite]",
+                "empty": "Sem dados de XP.",
+                "line": "#{pos} {user}: nível {level} ({xp} XP)",
+                "disabled": "XP está desativado."
+            }
         },
-        "roast": {
-            "description": "Solta uma zoeira leve.",
-            "usage": "!roast [usuario]",
-            "lines": [
-                "{target}, seu despertador tocou e pediu folga.",
-                "{target}, voce e a prova de que cafe faz milagres.",
-                "{target}, ate o bot carregou mais rapido.",
-                "{target}, sua energia de segunda-feira e forte.",
-                "{target}, seu modo economia de bateria e permanente."
-            ]
+        "system": {
+            "autowoot": {
+                "description": "Ativa/desativa auto-woot.",
+                "usage": "!autowoot [on|off]",
+                "enabled": "Auto-woot ativado.",
+                "disabled": "Auto-woot desativado."
+            },
+            "settings": {
+                "description": "Consulta ou altera configurações.",
+                "usage": "!settings <chave> [valor]",
+                "usageMessage": "Uso: !settings <chave> [valor]",
+                "list": "Chaves disponíveis: {keys}",
+                "invalidKey": "Chave inválida.",
+                "noPermission": "Você precisa do cargo manager para usar a chave {key}.",
+                "value": "{key} = {value}",
+                "notFound": "Sem valor para {key}.",
+                "updated": "{key} atualizado para {value}."
+            },
+            "welcome": {
+                "description": "Ativa/desativa a saudação de entrada.",
+                "usage": "!welcome [on|off]",
+                "enabled": "Saudação ativada.",
+                "disabled": "Saudação desativada."
+            }
         },
-        "compliment": {
-            "description": "Elogia alguem.",
-            "usage": "!compliment [usuario]",
-            "lines": [
-                "{target}, voce mandou bem hoje.",
-                "{target}, sua vibe e contagiante.",
-                "{target}, voce brilha sem esforço.",
-                "{target}, voce tem otimo gosto musical.",
-                "{target}, sua presenca deixa tudo melhor."
-            ]
-        },
-        "fact": {
-            "description": "Mostra um fato curioso.",
-            "usage": "!fact",
-            "reply": "Fato: {fact}",
-            "lines": [
-                "Os polvos tem tres coracoes.",
-                "Mel tem validade praticamente infinita.",
-                "Um dia em Venus e mais longo que um ano em Venus.",
-                "Algumas tartarugas conseguem respirar pelo bumbum.",
-                "Bananas sao tecnicamente frutas vermelhas.",
-                "O som viaja mais rapido na agua do que no ar."
-            ]
-        },
-        "joke": {
-            "description": "Conta uma piada.",
-            "usage": "!joke",
-            "reply": "Piada: {joke}",
-            "lines": [
-                "Por que o computador foi ao medico? Porque estava com virus.",
-                "Qual e o cafe mais perigoso do mundo? O ex-presso.",
-                "O que o zero disse para o oito? Belo cinto!",
-                "Por que o livro foi ao psicologo? Porque tinha muitos problemas.",
-                "Qual e o animal mais antigo? A zebra, porque e em preto e branco.",
-                "Por que a musica foi presa? Porque estava no volume maximo."
-            ]
-        },
-        "meme": {
-            "description": "Busca um meme no Reddit.",
-            "usage": "!meme",
-            "reply": "{title} — {url} (r/{subreddit})",
-            "notFound": "Nenhum meme encontrado agora.",
-            "error": "Erro ao buscar meme: {error}"
-        },
-        "lastplayed": {
-            "description": "Mostra a ultima musica tocada.",
-            "usage": "!lastplayed",
-            "reply": "Ultima: {label} (DJ: {dj})",
-            "empty": "Sem historico ainda."
-        },
-        "history": {
-            "description": "Mostra as ultimas musicas tocadas.",
-            "usage": "!history",
-            "reply": "Historico: {lines}",
-            "empty": "Sem historico ainda.",
-            "line": "#{pos} {label} (DJ: {dj})"
-        },
-        "topwoot": {
-            "description": "Ranking de woots dados.",
-            "usage": "!topwoot [limite]",
-            "reply": "Top woots: {lines}",
-            "empty": "Sem dados de woot.",
-            "line": "#{pos} {user}: {count} woots"
-        },
-        "topdj": {
-            "description": "Ranking de DJs por musicas tocadas.",
-            "usage": "!topdj [limite]",
-            "reply": "Top DJs: {lines}",
-            "empty": "Sem dados de DJ.",
-            "line": "#{pos} {user}: {count} musicas"
-        },
-        "topsongs": {
-            "description": "Ranking de musicas mais wootadas.",
-            "usage": "!topsongs [limite]",
-            "reply": "Top musicas: {lines}",
-            "empty": "Sem dados de musicas.",
-            "line": "#{pos} {label}: {woots} woots / {plays} tocadas"
-        },
-        "rank": {
-            "description": "Mostra seu rank de woots e DJ.",
-            "usage": "!rank [usuario]",
-            "userNotFound": "Usuário não encontrado: {user}",
-            "noUser": "Nao consegui identificar voce.",
-            "empty": "Sem dados de rank para {user}.",
-            "reply": "{user}: {stats}",
-            "wootLine": "Woots: #{rank} ({count})",
-            "djLine": "DJ: #{rank} ({count})"
-        },
-        "casino": {
-            "description": "Jogos de cassino com apostas.",
-            "usage": "!casino <slots|roleta|dados> <aposta> [opcao]",
-            "usageMessage": "Uso: !casino <slots|roleta|dados> <aposta> [opcao]",
-            "disabled": "Cassino desativado.",
-            "noUser": "Nao consegui identificar voce.",
-            "invalidBet": "Aposta invalida.",
-            "minBet": "Aposta minima: {min} pontos.",
-            "maxBet": "Aposta maxima: {max} pontos.",
-            "insufficient": "Saldo insuficiente. Voce tem {balance} pontos.",
-            "cooldown": "Aguarde {seconds}s para apostar novamente.",
-            "slots": {
-                "win": "🎰 {reels} | Voce ganhou {win} pontos ({net}).",
-                "lose": "🎰 {reels} | Nao foi dessa vez.",
-                "jackpot": "🎰 {reels} | JACKPOT! {jackpot} pontos no bolo. Ganhou {win} ({net}).",
-                "cardTitle": "Slots",
-                "cardBet": "Aposta",
-                "cardWin": "Ganho",
-                "cardNet": "Saldo",
-                "cardJackpot": "Jackpot"
+        "fun": {
+            "eightball": {
+                "description": "Bola 8 mágica.",
+                "usage": "!8ball <pergunta>",
+                "usageMessage": "Faça uma pergunta.",
+                "reply": "{question} — {answer}",
+                "responses": [
+                    "Sim.",
+                    "Não.",
+                    "Talvez.",
+                    "Pergunte novamente mais tarde.",
+                    "Com certeza.",
+                    "De jeito nenhum.",
+                    "Muito provável.",
+                    "Pouco provável.",
+                    "Sem dúvidas.",
+                    "Não conte com isso.",
+                    "Sinais apontam que sim.",
+                    "Não posso prever agora."
+                ]
+            },
+            "cookie": {
+                "description": "Dá um biscoito.",
+                "usage": "!cookie [usuario]",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "selfLines": [
+                    "{sender} pegou um biscoito para si 🍪",
+                    "{sender}, aqui está seu biscoito 🍪",
+                    "{sender} se presenteou com um biscoito 🍪"
+                ],
+                "giftLines": [
+                    "{sender} deu um biscoito para {target} 🍪",
+                    "{sender} entregou um biscoito a {target} 🍪",
+                    "{sender} compartilhou um biscoito com {target} 🍪"
+                ]
+            },
+            "ghostbuster": {
+                "description": "Verifica se alguém está na sala.",
+                "usage": "!ghostbuster <usuario>",
+                "present": "{name} está na sala.",
+                "absent": "{name} não está na sala."
+            },
+            "gif": {
+                "description": "Busca um GIF.",
+                "usage": "!gif <termo>",
+                "notFound": "Nenhum GIF encontrado.",
+                "result": "Aqui vai: {url}",
+                "error": "Erro ao buscar GIF: {error}"
             },
             "roulette": {
-                "usageMessage": "Uso: !casino roleta <aposta> <vermelho|preto|verde>",
-                "win": "🎡 {choice} vs {result} ({number}) — ganhou {win} ({net}).",
-                "lose": "🎡 {choice} vs {result} ({number}) — perdeu.",
-                "color": {
-                    "red": "vermelho",
-                    "black": "preto",
-                    "green": "verde"
-                },
-                "cardTitle": "Roleta",
-                "cardBet": "Aposta",
-                "cardWin": "Ganho",
-                "cardNet": "Saldo",
-                "cardPick": "Palpite",
-                "cardResult": "Resultado"
+                "description": "Abre a roleta.",
+                "usage": "!roulette",
+                "alreadyOpen": "A roleta já está aberta.",
+                "opened": "Roleta aberta por {seconds}s. Use !join."
+            },
+            "join": {
+                "description": "Entra na roleta.",
+                "usage": "!join",
+                "closed": "A roleta está fechada.",
+                "noUser": "Não consegui identificar você.",
+                "mustBeInQueue": "Você precisa estar na fila para entrar.",
+                "waitlistError": "Falha ao verificar a fila: {error}",
+                "alreadyIn": "Você já está na roleta.",
+                "joined": "{name} entrou na roleta."
+            },
+            "leave": {
+                "description": "Sai da roleta.",
+                "usage": "!leave",
+                "closed": "A roleta está fechada.",
+                "noUser": "Não consegui identificar você.",
+                "notIn": "Você não está na roleta.",
+                "left": "{name} saiu da roleta."
+            },
+            "thor": {
+                "description": "Roda o martelo do Thor na fila.",
+                "usage": "!thor",
+                "noUser": "Não consegui identificar você.",
+                "apiUnavailable": "API da fila indisponível.",
+                "noPermission": "Eu preciso de cargo bouncer para isso.",
+                "waitlistError": "Falha ao buscar a fila: {error}",
+                "mustBeInQueue": "Você precisa estar na fila.",
+                "moveError": "Falha ao mover {user}: {error}",
+                "removeError": "Falha ao remover {user}: {error}",
+                "goodLines": [
+                    "{name} foi abençoado e vai para o topo! ⚡",
+                    "{name} subiu para o topo da fila!",
+                    "{name} ganhou o topo da fila!"
+                ],
+                "neutralLines": [
+                    "{name} escapou dessa vez.",
+                    "{name} ficou no mesmo lugar.",
+                    "{name} foi poupado."
+                ],
+                "badLines": [
+                    "{name} levou um raio e saiu da fila! ⚡",
+                    "{name} foi removido da fila!",
+                    "{name} perdeu a vez e saiu da fila!"
+                ]
+            },
+            "duel": {
+                "description": "Desafia um usuário para um duelo.",
+                "usage": "!duel <usuário>",
+                "usageMessage": "Uso: !duel <usuário>",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "self": "Você não pode duelar consigo mesmo.",
+                "cannotTargetBot": "Não posso duelar contra o bot.",
+                "alreadyPending": "Já existe um duelo pendente entre {challenger} e {target} (expira em {seconds}s).",
+                "challenge": "{challenger} desafiou {target}! {target}, use {accept} ou {recuse}.",
+                "accepted": "{target} aceitou o duelo!",
+                "suspenseLines": [
+                    "O silencio toma conta da arena...",
+                    "A poeira sobe e o destino decide...",
+                    "Preparando o veredito do duelo..."
+                ],
+                "result": "Vencedor: {winner} | Perdedor: {loser}.",
+                "muted": "{user} foi mutado(a) por {minutes} min.",
+                "muteReason": "Derrota em duelo",
+                "muteFailed": "Falha ao mutar {user}: {error}",
+                "muteUnavailable": "Mute indisponível no momento.",
+                "muteRoleTooHigh": "Não posso mutar {user} (cargo alto).",
+                "noPermission": "Preciso do cargo bouncer para aplicar o mute do duelo.",
+                "deleteMessagesFallback": "As mensagens de {user} serão apagadas por {minutes} min.",
+                "noPending": "Não há duelo pendente.",
+                "notTarget": "Este duelo não é para você.",
+                "alreadyAccepted": "Este duelo já foi aceito.",
+                "expired": "O duelo expirou.",
+                "refused": "{target} recusou o duelo.",
+                "timeout": "{target} não aceitou a tempo.",
+                "cowardLines": [
+                    "Fugiu da arena!",
+                    "Correu do duelo!",
+                    "O medo venceu desta vez.",
+                    "Sumiu no nevoeiro do combate."
+                ]
+            },
+            "accept": {
+                "description": "Aceita um duelo pendente.",
+                "usage": "!accept"
+            },
+            "recuse": {
+                "description": "Recusa um duelo pendente.",
+                "usage": "!recuse"
+            },
+            "hug": {
+                "description": "Abraça um usuário.",
+                "usage": "!hug [usuario]",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "selfLines": [
+                    "{sender} se deu um abraco.",
+                    "{sender} recebeu um abraco quentinho.",
+                    "{sender} se abraçou para recarregar as energias."
+                ],
+                "targetLines": [
+                    "{sender} deu um abraco em {target}.",
+                    "Abraco enviado de {sender} para {target}.",
+                    "{sender} abraçou {target}."
+                ]
+            },
+            "slap": {
+                "description": "Da um tapinha brincalhao.",
+                "usage": "!slap [usuario]",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "selfLines": [
+                    "{sender} se deu um tapinha de leve.",
+                    "{sender} tomou um bonk amistoso.",
+                    "{sender} fez um tapinha para acordar."
+                ],
+                "targetLines": [
+                    "{sender} deu um tapinha de leve em {target}.",
+                    "{sender} aplicou um bonk amistoso em {target}.",
+                    "{sender} deu um tapa brincalhao em {target}."
+                ]
+            },
+            "ship": {
+                "description": "Faz um ship entre duas pessoas.",
+                "usage": "!ship [usuario1] [usuario2]",
+                "reply": "{left} + {right} = {percent}%"
+            },
+            "coin": {
+                "description": "Joga uma moeda.",
+                "usage": "!coin",
+                "reply": "Resultado: {result}",
+                "results": [
+                    "cara",
+                    "coroa"
+                ]
             },
             "dice": {
-                "usageMessage": "Uso: !casino dados <aposta> <numero> (1-{sides})",
-                "win": "🎲 Saiu {roll}, voce escolheu {guess} — ganhou {win} ({net}).",
-                "lose": "🎲 Saiu {roll}, voce escolheu {guess} — perdeu."
+                "description": "Rola um dado.",
+                "usage": "!dice [lados]",
+                "reply": "Dado d{sides}: {roll}",
+                "invalidSides": "Numero de lados invalido (use entre 2 e 100)."
+            },
+            "roll": {
+                "description": "Gera um numero aleatorio.",
+                "usage": "!roll [min] [max]",
+                "usageMessage": "Uso: !roll [min] [max]",
+                "reply": "Resultado: {roll} (entre {min} e {max})"
+            },
+            "rps": {
+                "description": "Pedra, papel ou tesoura.",
+                "usage": "!rps <pedra|papel|tesoura>",
+                "usageMessage": "Uso: !rps <pedra|papel|tesoura>",
+                "reply": "Voce: {user} | Bot: {bot} | {result}",
+                "choice": {
+                    "rock": "pedra",
+                    "paper": "papel",
+                    "scissors": "tesoura"
+                },
+                "result": {
+                    "win": "voce ganhou",
+                    "lose": "voce perdeu",
+                    "draw": "empate"
+                }
+            },
+            "trivia": {
+                "description": "Pergunta de trivia.",
+                "usage": "!trivia [answer]",
+                "question": "Trivia: {question}",
+                "options": "Opcoes: {options}",
+                "answer": "Resposta: {answer}",
+                "noActive": "Nenhuma trivia ativa.",
+                "noQuestion": "Nao consegui carregar uma pergunta agora.",
+                "error": "Erro ao buscar trivia: {error}"
+            },
+            "roast": {
+                "description": "Solta uma zoeira leve.",
+                "usage": "!roast [usuario]",
+                "lines": [
+                    "{target}, seu despertador tocou e pediu folga.",
+                    "{target}, voce e a prova de que cafe faz milagres.",
+                    "{target}, ate o bot carregou mais rapido.",
+                    "{target}, sua energia de segunda-feira e forte.",
+                    "{target}, seu modo economia de bateria e permanente."
+                ]
+            },
+            "compliment": {
+                "description": "Elogia alguem.",
+                "usage": "!compliment [usuario]",
+                "lines": [
+                    "{target}, voce mandou bem hoje.",
+                    "{target}, sua vibe e contagiante.",
+                    "{target}, voce brilha sem esforço.",
+                    "{target}, voce tem otimo gosto musical.",
+                    "{target}, sua presenca deixa tudo melhor."
+                ]
+            },
+            "fact": {
+                "description": "Mostra um fato curioso.",
+                "usage": "!fact",
+                "reply": "Fato: {fact}",
+                "lines": [
+                    "Os polvos tem tres coracoes.",
+                    "Mel tem validade praticamente infinita.",
+                    "Um dia em Venus e mais longo que um ano em Venus.",
+                    "Algumas tartarugas conseguem respirar pelo bumbum.",
+                    "Bananas sao tecnicamente frutas vermelhas.",
+                    "O som viaja mais rapido na agua do que no ar."
+                ]
+            },
+            "joke": {
+                "description": "Conta uma piada.",
+                "usage": "!joke",
+                "reply": "Piada: {joke}",
+                "lines": [
+                    "Por que o computador foi ao medico? Porque estava com virus.",
+                    "Qual e o cafe mais perigoso do mundo? O ex-presso.",
+                    "O que o zero disse para o oito? Belo cinto!",
+                    "Por que o livro foi ao psicologo? Porque tinha muitos problemas.",
+                    "Qual e o animal mais antigo? A zebra, porque e em preto e branco.",
+                    "Por que a musica foi presa? Porque estava no volume maximo."
+                ]
+            },
+            "meme": {
+                "description": "Busca um meme no Reddit.",
+                "usage": "!meme",
+                "reply": "{title} — {url} (r/{subreddit})",
+                "notFound": "Nenhum meme encontrado agora.",
+                "error": "Erro ao buscar meme: {error}"
+            },
+            "hack": {
+                "description": "Hackeia um usuario (brincadeira).",
+                "usage": "!hack <usuario>",
+                "usageMessage": "Uso: !hack <usuario>",
+                "lines": [
+                    "🔓 Hackeando {target}...",
+                    "📂 Encontrando arquivos...",
+                    "💳 Cartao encontrado...",
+                    "❌ Brincadeira 😂"
+                ]
+            },
+            "virus": {
+                "description": "Dispara um virus fake.",
+                "usage": "!virus",
+                "lines": [
+                    "🦠 Preparando virus...",
+                    "📡 Enviando para a rede...",
+                    "⚠️ Sistema instavel...",
+                    "✅ Era so zoeira!"
+                ]
+            },
+            "summon": {
+                "description": "Invoca algo misterioso.",
+                "usage": "!summon",
+                "lines": [
+                    "✨ Abrindo o portal...",
+                    "🔮 Energias se acumulando...",
+                    "⚡ Algo foi invocado!"
+                ]
+            },
+            "explode": {
+                "description": "Efeito de explosao fake.",
+                "usage": "!explode",
+                "lines": [
+                    "💥 Carregando explosivos...",
+                    "💣 Contagem regressiva...",
+                    "💥 BOOM!"
+                ]
+            },
+            "fakeban": {
+                "description": "Banimento fake de um usuario.",
+                "usage": "!fakeban <usuario>",
+                "usageMessage": "Uso: !fakeban <usuario>",
+                "lines": [
+                    "🚨 {target} foi denunciado(a)...",
+                    "⛔ Banindo {target}...",
+                    "✅ Brincadeira, {target} esta seguro(a)!"
+                ]
+            },
+            "fortune": {
+                "description": "Mostra uma fortuna.",
+                "usage": "!fortune",
+                "reply": "Fortuna: {fortune}",
+                "lines": [
+                    "Um novo caminho se abre.",
+                    "Algo inesperado vai te favorecer.",
+                    "Confie no seu ritmo.",
+                    "Uma boa noticia chega em breve.",
+                    "A paciencia vai te recompensar.",
+                    "Um pequeno gesto trara grande retorno.",
+                    "Mudancas positivas estao a caminho.",
+                    "Voce esta mais perto do que pensa."
+                ]
             }
-        },
-        "daily": {
-            "description": "Resgata a recompensa diaria.",
-            "usage": "!daily",
-            "disabled": "Economia desativada.",
-            "noUser": "Nao consegui identificar voce.",
-            "unavailable": "Recompensa diaria indisponivel.",
-            "cooldown": "Volte em {remaining}.",
-            "claimed": "Voce recebeu {amount} pontos. Sequencia: {streak}."
-        },
-        "shop": {
-            "description": "Mostra a loja de pontos.",
-            "usage": "!shop",
-            "disabled": "Economia desativada.",
-            "empty": "A loja esta vazia.",
-            "list": "Loja: {items}",
-            "line": "[{key}] {name} — {price} pontos{description}"
-        },
-        "buy": {
-            "description": "Compra um item da loja.",
-            "usage": "!buy <item>",
-            "usageMessage": "Uso: !buy <item>",
-            "disabled": "Economia desativada.",
-            "noUser": "Nao consegui identificar voce.",
-            "notFound": "Item nao encontrado: {item}",
-            "alreadyOwned": "Voce ja comprou: {item}",
-            "invalidItem": "Item invalido.",
-            "insufficient": "Saldo insuficiente. Voce tem {balance} pontos.",
-            "noPermission": "Nao tenho permissao para mover na fila.",
-            "notInQueue": "Voce nao esta na fila.",
-            "noMove": "Nao ha como mover sua posicao agora.",
-            "success": "Compra feita: {item}{extra}.",
-            "failed": "Falha ao aplicar a compra: {error}"
-        },
-        "work": {
-            "description": "Sistema de trabalho diario.",
-            "usage": "!work <list|choose|claim|status>",
-            "usageMessage": "Uso: !work <list|choose|claim|status>",
-            "disabled": "Economia desativada.",
-            "noUser": "Nao consegui identificar voce.",
-            "empty": "Nenhum trabalho configurado.",
-            "noJob": "Voce ainda nao escolheu um trabalho.",
-            "ready": "pronto",
-            "status": "Trabalho: {job} | Pagamento: {pay} pontos | Proximo: {remaining}",
-            "available": "disponivel",
-            "locked": "bloqueado",
-            "list": "Trabalhos: {items}",
-            "listLine": "[{key}] {name} (XP {xp}) — {pay} pontos [{status}]",
-            "chooseUsage": "Uso: !work choose <trabalho>",
-            "jobNotFound": "Trabalho nao encontrado: {job}",
-            "jobLocked": "{job} requer XP {xp}.",
-            "alreadySelected": "Voce ja esta nesse trabalho.",
-            "upgradeOnly": "Voce so pode trocar para um trabalho de nivel maior.",
-            "selected": "Trabalho escolhido: {job}.",
-            "cooldown": "Volte em {remaining}.",
-            "claimed": "Pagamento recebido ({job}): {pay} pontos."
-        },
-        "steal": {
-            "description": "Tenta roubar pontos de alguem.",
-            "usage": "!steal <usuario>",
-            "usageMessage": "Uso: !steal <usuario>",
-            "disabled": "Roubo desativado.",
-            "noUser": "Nao consegui identificar voce.",
-            "userNotFound": "Usuário não encontrado: {user}",
-            "cannotTargetBot": "Nao posso roubar o bot.",
-            "self": "Voce nao pode roubar a si mesmo.",
-            "targetPoor": "{user} nao tem pontos suficientes para roubar.",
-            "success": "Voce roubou {amount} pontos de {user}.",
-            "failed": "O roubo falhou.",
-            "bailPaid": "Voce foi pego e pagou fianca de {amount} pontos.",
-            "noPermission": "Sem saldo para fianca e sem permissao para mute.",
-            "muted": "Voce foi preso e mutado por {minutes} min.",
-            "muteReason": "Falha em roubo",
-            "muteFailed": "Falha ao mutar: {error}"
-        },
-        "voteskip": {
-            "description": "Inicia uma votacao para pular a musica.",
-            "usage": "!voteskip",
-            "disabled": "Votekip desativado.",
-            "noUser": "Nao consegui identificar voce.",
-            "noTrack": "Nenhuma musica tocando.",
-            "expired": "Votacao encerrada sem votos suficientes.",
-            "alreadyVoted": "Voce ja votou.",
-            "started": "Votacao iniciada ({votes}/{needed}, ativos {active}). {seconds}s restantes.",
-            "voted": "Voto registrado ({votes}/{needed}, ativos {active}).",
-            "passed": "Votos suficientes! Pulando a musica...",
-            "failed": "Nao consegui pular a musica.",
-            "noPermission": "Preciso de cargo bouncer para pular a musica."
-        },
-        "hack": {
-            "description": "Hackeia um usuario (brincadeira).",
-            "usage": "!hack <usuario>",
-            "usageMessage": "Uso: !hack <usuario>",
-            "lines": [
-                "🔓 Hackeando {target}...",
-                "📂 Encontrando arquivos...",
-                "💳 Cartao encontrado...",
-                "❌ Brincadeira 😂"
-            ]
-        },
-        "virus": {
-            "description": "Dispara um virus fake.",
-            "usage": "!virus",
-            "lines": [
-                "🦠 Preparando virus...",
-                "📡 Enviando para a rede...",
-                "⚠️ Sistema instavel...",
-                "✅ Era so zoeira!"
-            ]
-        },
-        "summon": {
-            "description": "Invoca algo misterioso.",
-            "usage": "!summon",
-            "lines": [
-                "✨ Abrindo o portal...",
-                "🔮 Energias se acumulando...",
-                "⚡ Algo foi invocado!"
-            ]
-        },
-        "explode": {
-            "description": "Efeito de explosao fake.",
-            "usage": "!explode",
-            "lines": [
-                "💥 Carregando explosivos...",
-                "💣 Contagem regressiva...",
-                "💥 BOOM!"
-            ]
-        },
-        "fakeban": {
-            "description": "Banimento fake de um usuario.",
-            "usage": "!fakeban <usuario>",
-            "usageMessage": "Uso: !fakeban <usuario>",
-            "lines": [
-                "🚨 {target} foi denunciado(a)...",
-                "⛔ Banindo {target}...",
-                "✅ Brincadeira, {target} esta seguro(a)!"
-            ]
         }
     },
     "events": {

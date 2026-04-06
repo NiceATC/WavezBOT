@@ -3,9 +3,10 @@ import { setSetting } from "../../lib/storage.js";
 export default {
   name: "autoskip",
   aliases: ["askip"],
-  descriptionKey: "commands.autoskip.description",
-  usageKey: "commands.autoskip.usage",
+  descriptionKey: "commands.mod.autoskip.description",
+  usageKey: "commands.mod.autoskip.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
   minRole: "bouncer",
 
   async execute(ctx) {
@@ -24,7 +25,7 @@ export default {
     bot.updateConfig("autoSkipEnabled", enabled);
     await setSetting("autoSkipEnabled", enabled);
     await reply(
-      t(enabled ? "commands.autoskip.enabled" : "commands.autoskip.disabled"),
+      t(enabled ? "commands.mod.autoskip.enabled" : "commands.mod.autoskip.disabled"),
     );
   },
 };

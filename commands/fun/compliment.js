@@ -9,9 +9,10 @@ function formatLine(line, senderName, targetName) {
 export default {
   name: "compliment",
   aliases: ["elogio"],
-  descriptionKey: "commands.compliment.description",
-  usageKey: "commands.compliment.usage",
+  descriptionKey: "commands.fun.compliment.description",
+  usageKey: "commands.fun.compliment.usage",
   cooldown: 5000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, sender, t, tArray, reply } = ctx;
@@ -27,7 +28,7 @@ export default {
       targetName = user?.displayName ?? user?.username ?? targetInput;
     }
 
-    const line = pickRandom(tArray("commands.compliment.lines"));
+    const line = pickRandom(tArray("commands.fun.compliment.lines"));
     await reply(formatLine(line, senderName, targetName));
   },
 };

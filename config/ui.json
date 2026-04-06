@@ -1,0 +1,22 @@
+{
+    "_comment": "Interface e dashboard: tema visual, renderização e memes.",
+    "dashboardTheme": {
+        "bg": "#f4f1ea",
+        "surface": "#ffffff",
+        "surfaceStrong": "#ffffff",
+        "ink": "#66686b",
+        "muted": "#6b7280",
+        "accent": "#ff5d3a",
+        "accent2": "#0ea5a3",
+        "accent3": "#f59e0b",
+        "accent4": "#2563eb",
+        "stroke": "rgba(28, 32, 40, 0.12)"
+    },
+    "imageRenderingEnabled": true,
+    "mediaCheckDebug": true,
+    "memeSubreddits": [
+        "memes",
+        "wholesomememes",
+        "funny"
+    ]
+}

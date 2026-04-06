@@ -39,6 +39,7 @@ export default {
         minutes: mins,
         label,
       }),
+      deleteMs: bot.cfg.deleteCommandMessagesDelayMs || 60_000,
     });
   },
 };

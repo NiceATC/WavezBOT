@@ -26,9 +26,10 @@ function isMemeCandidate(post) {
 
 export default {
   name: "meme",
-  descriptionKey: "commands.meme.description",
-  usageKey: "commands.meme.usage",
+  descriptionKey: "commands.fun.meme.description",
+  usageKey: "commands.fun.meme.usage",
   cooldown: 8000,
+  deleteOn: 60_000,
 
   async execute(ctx) {
     const { bot, t, reply } = ctx;
@@ -52,21 +53,21 @@ export default {
           isMemeCandidate(post),
       );
       if (!candidates.length) {
-        await reply(t("commands.meme.notFound"));
+        await reply(t("commands.fun.meme.notFound"));
         return;
       }
 
       const pick = pickRandom(candidates);
       const url = getPostUrl(pick);
       await reply(
-        t("commands.meme.reply", {
+        t("commands.fun.meme.reply", {
           title: pick.title,
           url,
           subreddit,
         }),
       );
     } catch (err) {
-      await reply(t("commands.meme.error", { error: err.message }));
+      await reply(t("commands.fun.meme.error", { error: err.message }));
     }
   },
 };
