@@ -1,0 +1,27 @@
+{
+    "name": "wavez-chatbot",
+    "version": "1.0.0",
+    "description": "Wavez standalone chatbot with modular command system",
+    "type": "module",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "dev": "concurrently -n web,bot -c green,cyan \"npm run dev --prefix dashboard\" \"node index.js\"",
+        "dev:bot": "node --watch index.js",
+        "dev:web": "npm run dev --prefix dashboard"
+    },
+    "dependencies": {
+        "@wavezfm/api": "^0.1.2",
+        "@distube/ytdl-core": "^4.16.12",
+        "@napi-rs/canvas": "^0.1.60",
+        "axios": "^1.13.6",
+        "dotenv": "^16.5.0",
+        "jsonwebtoken": "^9.0.2",
+        "sqlite": "^5.1.1",
+        "sqlite3": "^6.0.1",
+        "systeminformation": "^5.23.10"
+    },
+    "devDependencies": {
+        "concurrently": "^8.2.2"
+    }
+}

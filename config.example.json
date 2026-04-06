@@ -1,0 +1,222 @@
+{
+    "_comment": "Copy this file to config.json and adjust the values. Keep secrets (bot token) in .env",
+    "room": "niceatc",
+    "roomUrl": "https://wavez.vps-kinghost.net/room/{room}",
+    "autowootUrl": "",
+    "dashboardTheme": {},
+    "locale": "en-US",
+    "apiUrl": "https://wavez.vps-kinghost.net/api",
+    "cmdPrefix": "!",
+    "deleteCommandMessagesEnabled": false,
+    "deleteCommandMessagesDelayMs": 0,
+    "autoWoot": true,
+    "botMessage": "Hi! I'm a bot and cannot chat. Use !help to see what I can do!",
+    "botMentionCooldownMs": 30000,
+    "chatKeywordReplyEnabled": false,
+    "chatKeywordReplyCooldownMs": 3000,
+    "chatKeywordReplySameReplyCooldownMs": 86400000,
+    "chatKeywordReplyRules": [
+        {
+            "keyword": [
+                "oi",
+                "oie",
+                "ola",
+                "olá"
+            ],
+            "mode": 1,
+            "reply": [
+                "Oi, tudo bem?",
+                "Opa! Seja bem-vindo(a)."
+            ]
+        },
+        {
+            "keyword": "boa noite",
+            "mode": 0,
+            "reply": "Boa noite, pessoal!"
+        }
+    ],
+    "greetEnabled": true,
+    "greetMessage": "Welcome to the room, @{name}!",
+    "greetBackMessage": "Welcome back, @{name}!",
+    "greetMessages": [],
+    "greetBackMessages": [],
+    "greetDeleteMs": 0,
+    "greetCooldownMs": 3600000,
+    "lockChatEnabled": false,
+    "lockChatMinRole": "resident_dj",
+    "motdEnabled": false,
+    "motdInterval": 5,
+    "motd": "Message of the day",
+    "intervalMessages": [],
+    "messageInterval": 5,
+    "dcWindowMin": 10,
+    "blacklistEnabled": true,
+    "timeGuardEnabled": false,
+    "maxSongLengthMin": 10,
+    "autoSkipEnabled": false,
+    "afkRemovalEnabled": false,
+    "afkLimitMin": 60,
+    "duelMuteMin": 5,
+    "economyEnabled": true,
+    "economyChatPoints": 0.2,
+    "economyChatCooldownMs": 90000,
+    "economyDjPoints": 2,
+    "economyWootPoints": 0.1,
+    "economyGrabPoints": 0.2,
+    "economyOnlinePointsPerHour": 0.25,
+    "economyTransferMin": 5,
+    "xpEnabled": true,
+    "xpChatPoints": 0.2,
+    "xpChatCooldownMs": 90000,
+    "xpDjPoints": 2,
+    "xpWootPoints": 0.1,
+    "xpGrabPoints": 0.2,
+    "xpOnlinePointsPerHour": 0.25,
+    "xpBase": 80,
+    "xpExponent": 1.5,
+    "xpRewardBasePoints": 1,
+    "xpRewardStepPoints": 0.5,
+    "xpBadgeRewards": {
+        "5": "bronze",
+        "10": "silver",
+        "20": "gold",
+        "35": "platinum"
+    },
+    "xpAchievementRewards": {
+        "15": "regular",
+        "25": "veteran",
+        "40": "legend"
+    },
+    "leaderboardReset": "weekly",
+    "memeSubreddits": [
+        "memes",
+        "wholesomememes",
+        "funny"
+    ],
+    "casinoEnabled": true,
+    "casinoMinBet": 1,
+    "casinoMaxBet": 100,
+    "casinoCooldownMs": 5000,
+    "casinoBetMultiplierFactor": 0.01,
+    "casinoMultiplierMax": 6,
+    "casinoSlotsSymbols": [
+        {
+            "emoji": "🍒",
+            "weight": 30,
+            "multiplier": 2
+        },
+        {
+            "emoji": "🍋",
+            "weight": 25,
+            "multiplier": 2.5
+        },
+        {
+            "emoji": "🍉",
+            "weight": 20,
+            "multiplier": 3
+        },
+        {
+            "emoji": "🔔",
+            "weight": 15,
+            "multiplier": 4
+        },
+        {
+            "emoji": "💎",
+            "weight": 10,
+            "multiplier": 6
+        }
+    ],
+    "casinoSlotsPairMultiplier": 1.2,
+    "casinoJackpotEnabled": true,
+    "casinoJackpotLossShare": 0.1,
+    "casinoJackpotSymbol": "💎",
+    "casinoRouletteBetMultiplierFactor": 0,
+    "casinoRouletteRedMultiplier": 2,
+    "casinoRouletteBlackMultiplier": 2,
+    "casinoRouletteGreenMultiplier": 14,
+    "casinoDiceSides": 6,
+    "casinoDiceWinMultiplier": 6,
+    "dailyRewardAmount": 5,
+    "dailyRewardCooldownMs": 86400000,
+    "shopItems": [
+        {
+            "key": "queue_jump_2",
+            "name": {
+                "pt-BR": "Pular 2 posicoes",
+                "en-US": "Jump 2 spots"
+            },
+            "description": {
+                "pt-BR": "Move voce 2 posicoes para cima na fila",
+                "en-US": "Move you up 2 spots in the waitlist"
+            },
+            "price": 2,
+            "type": "moveUp",
+            "positions": 2
+        },
+        {
+            "key": "queue_top",
+            "name": {
+                "pt-BR": "Ir para o topo",
+                "en-US": "Go to the top"
+            },
+            "description": {
+                "pt-BR": "Move voce para a primeira posicao da fila",
+                "en-US": "Move you to the first position"
+            },
+            "price": 5,
+            "type": "moveTo",
+            "position": 1
+        }
+    ],
+    "workJobs": [
+        {
+            "key": "estagiario",
+            "name": {
+                "pt-BR": "Estagiario",
+                "en-US": "Intern"
+            },
+            "xpMin": 1,
+            "pay": 1.5
+        },
+        {
+            "key": "assistente",
+            "name": {
+                "pt-BR": "Assistente",
+                "en-US": "Assistant"
+            },
+            "xpMin": 5,
+            "pay": 2.5
+        },
+        {
+            "key": "analista",
+            "name": {
+                "pt-BR": "Analista",
+                "en-US": "Analyst"
+            },
+            "xpMin": 10,
+            "pay": 4
+        },
+        {
+            "key": "gerente",
+            "name": {
+                "pt-BR": "Gerente",
+                "en-US": "Manager"
+            },
+            "xpMin": 20,
+            "pay": 6
+        }
+    ],
+    "workCooldownMs": 86400000,
+    "stealEnabled": true,
+    "stealMinAmount": 0.5,
+    "stealMaxAmount": 2,
+    "stealFailChance": 0.3,
+    "stealBailAmount": 3,
+    "stealMuteMinutes": 10,
+    "voteSkipEnabled": true,
+    "voteSkipThreshold": 0.3,
+    "voteSkipDurationMs": 60000,
+    "voteSkipActiveWindowMs": 1800000,
+    "imageRenderingEnabled": true,
+    "mediaCheckDebug": false
+}

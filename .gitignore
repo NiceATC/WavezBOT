@@ -1,0 +1,42 @@
+# Dependências
+node_modules/
+package-lock.json
+yarn.lock
+basicBot.js
+
+# Build & Distribution
+dist/
+build/
+.next/
+*.crx
+*.zip
+*.tar.gz
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Runtime
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ambiente
+.env
+.env.local
+.env.*.local
+wavezbot.sqlite
+.bot-token.json
+
+# Cache
+.cache/
+.eslintcache
+
+# OS
+Thumbs.db
+.DS_Store
