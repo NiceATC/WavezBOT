@@ -15,10 +15,10 @@
         "@napi-rs/canvas": "^0.1.60",
         "@wavezfm/api": "^0.1.4",
         "axios": "^1.13.6",
+        "better-sqlite3": "^12.8.0",
         "dotenv": "^16.5.0",
         "jsonwebtoken": "^9.0.2",
         "sqlite": "^5.1.1",
-        "sqlite3": "^6.0.1",
         "systeminformation": "^5.23.10",
         "ws": "^8.20.0"
     },
