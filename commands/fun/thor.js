@@ -1,5 +1,4 @@
 import { pickRandom } from "../../helpers/random.js";
-import { getWaitlist } from "../../helpers/waitlist.js";
 import { getRoleLevel } from "../../lib/permissions.js";
 
 const GOOD_CHANCE = 3;
@@ -27,7 +26,7 @@ export default {
       return;
     }
 
-    if (!api?.room?.getWaitlist) {
+    if (!api?.room?.getQueueStatus) {
       await reply(t("commands.fun.thor.apiUnavailable"));
       return;
     }
@@ -37,17 +36,16 @@ export default {
       return;
     }
 
-    let waitlist = [];
+    let queueIds = [];
     try {
-      waitlist = await getWaitlist(api, bot.cfg.room);
+      const qRes = await api.room.getQueueStatus(bot.cfg.room);
+      queueIds = qRes?.data?.queueUserIds ?? [];
     } catch (err) {
       await reply(t("commands.fun.thor.waitlistError", { error: err.message }));
       return;
     }
 
-    const inList = waitlist.some(
-      (u) => String(u.id ?? u.userId ?? u.user_id ?? "") === userId,
-    );
+    const inList = queueIds.includes(userId);
     if (!inList) {
       await reply(t("commands.fun.thor.mustBeInQueue"));
       return;
