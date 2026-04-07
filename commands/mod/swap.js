@@ -2,8 +2,6 @@
  * commands/mod/swap.js
  */
 
-import { getWaitlist } from "../../helpers/waitlist.js";
-
 export default {
   name: "swap",
   aliases: ["trocar"],
@@ -36,13 +34,10 @@ export default {
     }
 
     try {
-      const wl = await getWaitlist(api, bot.cfg.room);
-      const idxA = wl.findIndex(
-        (u) => String(u.id ?? u.userId) === String(userA.userId),
-      );
-      const idxB = wl.findIndex(
-        (u) => String(u.id ?? u.userId) === String(userB.userId),
-      );
+      const qRes = await api.room.getQueueStatus(bot.cfg.room);
+      const queueIds = qRes?.data?.queueUserIds ?? [];
+      const idxA = queueIds.indexOf(String(userA.userId));
+      const idxB = queueIds.indexOf(String(userB.userId));
 
       if (idxA < 0 || idxB < 0) {
         await reply(t("commands.mod.swap.notInQueue"));

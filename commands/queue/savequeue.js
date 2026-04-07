@@ -18,22 +18,25 @@ export default {
   async execute(ctx) {
     const { api, bot, reply, t } = ctx;
     try {
-      const res = await api.room.getWaitlist(bot.cfg.room);
-      const waitlist = res?.data?.data?.waitlist ?? res?.data?.waitlist ?? [];
-      if (!Array.isArray(waitlist) || waitlist.length === 0) {
+      const qRes = await api.room.getQueueStatus(bot.cfg.room);
+      const entries = qRes?.data?.entries ?? [];
+      if (entries.length === 0) {
         await reply(t("commands.queue.savequeue.empty"));
         return;
       }
-      const entries = waitlist.map((u, idx) => ({
-        userId: u.id ?? u.userId ?? u.user_id,
-        username: u.username ?? null,
-        displayName: u.displayName ?? u.display_name ?? null,
-        position: idx + 1,
-      }));
-      await upsertWaitlistSnapshot(entries);
+      const rows = entries
+        .filter((e) => !e.isCurrentDj)
+        .map((e) => ({
+          userId: e.publicId ?? e.internalId ?? null,
+          username: e.username ?? null,
+          displayName: e.displayName ?? e.username ?? null,
+          position: e.position ?? e.index + 1,
+        }))
+        .filter((e) => e.userId != null);
+      await upsertWaitlistSnapshot(rows);
       await reply(
         t("commands.queue.savequeue.saved", {
-          count: entries.length,
+          count: rows.length,
         }),
       );
     } catch (err) {

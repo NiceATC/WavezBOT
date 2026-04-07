@@ -1,6 +1,5 @@
 import { formatPoints, toPointsInt } from "../../helpers/points.js";
 import { sendChatChunks } from "../../helpers/chat.js";
-import { getWaitlist } from "../../helpers/waitlist.js";
 import { addShopPurchase, getShopPurchase } from "../../lib/storage.js";
 import { getRoleLevel } from "../../lib/permissions.js";
 
@@ -146,10 +145,11 @@ const buy = {
         await reply(t("commands.economy.buy.noPermission"));
         return;
       }
-      const waitlist = await getWaitlist(api, bot.cfg.room).catch(() => []);
-      const index = waitlist.findIndex(
-        (u) => String(u.id ?? u.userId ?? u.user_id ?? "") === String(userId),
-      );
+      const qRes = await api.room
+        .getQueueStatus(bot.cfg.room)
+        .catch(() => null);
+      const queueIds = qRes?.data?.queueUserIds ?? [];
+      const index = queueIds.indexOf(String(userId));
       if (index < 0) {
         await reply(t("commands.economy.buy.notInQueue"));
         return;

@@ -3,7 +3,6 @@ import {
   ROULETTE_DURATION_MS,
   rouletteState,
 } from "../../helpers/roulette.js";
-import { getWaitlist } from "../../helpers/waitlist.js";
 
 const roulette = {
   name: "roulette",
@@ -56,11 +55,9 @@ const join = {
     }
 
     try {
-      const waitlist = await getWaitlist(api, bot.cfg.room);
-      const inList = waitlist.some(
-        (u) => String(u.id ?? u.userId ?? u.user_id ?? "") === key,
-      );
-      if (!inList) {
+      const qRes = await api.room.getQueueStatus(bot.cfg.room);
+      const queueIds = qRes?.data?.queueUserIds ?? [];
+      if (!queueIds.includes(key)) {
         await reply(t("commands.fun.join.mustBeInQueue"));
         return;
       }

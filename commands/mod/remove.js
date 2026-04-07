@@ -2,8 +2,6 @@
  * commands/mod/remove.js
  */
 
-import { getWaitlist } from "../../helpers/waitlist.js";
-
 export default {
   name: "remove",
   aliases: ["remover", "rm"],
@@ -33,10 +31,9 @@ export default {
     }
 
     try {
-      const wl = await getWaitlist(api, bot.cfg.room);
-      const inList = wl.some(
-        (u) => String(u.id ?? u.userId) === String(user.userId),
-      );
+      const qRes = await api.room.getQueueStatus(bot.cfg.room);
+      const queueIds = qRes?.data?.queueUserIds ?? [];
+      const inList = queueIds.includes(String(user.userId));
 
       if (!inList) {
         await reply(t("commands.mod.remove.notInQueue", { user: target }));
