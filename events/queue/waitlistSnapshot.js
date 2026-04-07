@@ -10,33 +10,35 @@ import { upsertWaitlistSnapshot } from "../../lib/storage.js";
 export default {
   name: "waitlistSnapshot",
   descriptionKey: "events.waitlistSnapshot.description",
-  events: [
-    Events.ROOM_WAITLIST_UPDATE,
-    Events.ROOM_WAITLIST_JOIN,
-    Events.ROOM_WAITLIST_LEAVE,
-    Events.ROOM_DJ_ADVANCE,
-  ],
+  // room_state_snapshot is sent on every track advance (and user join/leave).
+  // queue_reordered fires when the queue order changes.
+  events: [Events.ROOM_STATE_SNAPSHOT, Events.ROOM_QUEUE_REORDERED],
   cooldown: 2000,
 
-  async handle(ctx, data) {
+  async handle(ctx) {
     try {
-      let waitlist = data?.waitlist ?? data?.queue ?? null;
-      if (!Array.isArray(waitlist)) {
-        const res = await ctx.api.room.getWaitlist(ctx.room);
-        waitlist = res?.data?.data?.waitlist ?? res?.data?.waitlist ?? [];
+      const res = await ctx.api.room.getQueueStatus(ctx.room);
+      const queue = res?.data ?? {};
+      const entries = queue.entries ?? [];
+
+      if (entries.length === 0) {
+        await upsertWaitlistSnapshot([]);
+        return;
       }
-      if (!Array.isArray(waitlist) || waitlist.length === 0) return;
 
-      const entries = waitlist.map((u, idx) => ({
-        userId: u.id ?? u.userId ?? u.user_id,
-        username: u.username ?? null,
-        displayName: u.displayName ?? u.display_name ?? null,
-        position: idx + 1,
-      }));
+      const rows = entries
+        .filter((e) => !e.isCurrentDj)
+        .map((e) => ({
+          userId: e.publicId ?? e.internalId ?? null,
+          username: e.username ?? null,
+          displayName: e.displayName ?? e.username ?? null,
+          position: e.position ?? e.index + 1,
+        }))
+        .filter((e) => e.userId != null);
 
-      await upsertWaitlistSnapshot(entries);
-    } catch {
-      // best-effort
+      await upsertWaitlistSnapshot(rows);
+    } catch (err) {
+      ctx.bot._log("warn", `[waitlistSnapshot] ${err.message}`);
     }
   },
 };

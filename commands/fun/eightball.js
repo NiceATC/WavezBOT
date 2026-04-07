@@ -18,7 +18,6 @@ export default {
     const answer = pickRandom(options) ?? "";
     await ctx.reply(
       ctx.t("commands.fun.eightball.reply", {
-        question,
         answer,
       }),
     );

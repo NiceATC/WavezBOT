@@ -61,22 +61,20 @@ export default {
     }
 
     try {
-      const wlRes = await api.room.getWaitlist(bot.cfg.room);
-      const wl = wlRes?.data?.data?.waitlist ?? wlRes?.data?.waitlist ?? [];
-      const inList = Array.isArray(wl)
-        ? wl.some((u) => String(u.id ?? u.userId) === String(user.userId))
-        : false;
+      const qRes = await api.room.getQueueStatus(bot.cfg.room);
+      const queue = qRes?.data ?? {};
+      const queueIds = queue.queueUserIds ?? [];
 
+      const inList = queueIds.includes(String(user.userId));
       if (!inList) {
         await reply(t("commands.queue.dc.mustJoin"));
         return;
       }
 
-      if (Array.isArray(wl)) {
-        const maxPos = wl.length;
-        if (position > maxPos) position = maxPos;
-      }
+      const maxPos = queue.entries?.length ?? queueIds.length;
+      if (position > maxPos) position = maxPos;
 
+      // reorder_queue expects a 0-based index
       const apiPos = position - 1;
       bot.wsReorderQueue(user.userId, apiPos);
       await reply(
