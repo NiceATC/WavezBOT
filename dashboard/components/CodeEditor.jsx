@@ -1,6 +1,15 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { loader } from "@monaco-editor/react";
+
+// Serve Monaco assets from the local bundle (public/) instead of CDN.
+// Run `npm run copy-monaco` (or `npm run build`) to populate public/monaco-editor/.
+loader.config({
+  paths: {
+    vs: "/monaco-editor/min/vs",
+  },
+});
 
 const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
   ssr: false,

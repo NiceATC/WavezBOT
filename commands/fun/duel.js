@@ -35,7 +35,7 @@ function getMuteMinutes(bot) {
   return Math.floor(raw);
 }
 
-async function resolveDuel(bot, api, pending) {
+async function resolveDuel(bot, pending) {
   clearDuelState();
 
   const challenger = {
@@ -63,50 +63,19 @@ async function resolveDuel(bot, api, pending) {
 
   const minutes = getMuteMinutes(bot);
 
-  if (!api?.room?.mute) {
-    await bot.sendChat(bot.t("commands.fun.duel.muteUnavailable"));
-    bot.startAutoDeletingUser(loser.id, minutes * 60_000);
-    await bot.sendChat(
-      bot.t("commands.fun.duel.deleteMessagesFallback", {
-        user: loserTag,
-        minutes,
-      }),
-    );
-    return;
-  }
+  bot.startAutoDeletingUser(loser.id, minutes * 60_000);
+  await bot.sendChat(
+    bot.t("commands.fun.duel.deleteMessagesFallback", {
+      user: loserTag,
+      minutes,
+    }),
+  );
 
-  if (bot.getUserRoleLevel(loser.id) >= bot.getBotRoleLevel()) {
-    await bot.sendChat(
-      bot.t("commands.fun.duel.muteRoleTooHigh", {
-        user: loserTag,
-      }),
-    );
-    bot.startAutoDeletingUser(loser.id, minutes * 60_000);
-    await bot.sendChat(
-      bot.t("commands.fun.duel.deleteMessagesFallback", {
-        user: loserTag,
-        minutes,
-      }),
-    );
-    return;
-  }
-
-  try {
-    bot.wsMuteUser(loser.id, minutes * 60_000);
-    await bot.sendChat(
-      bot.t("commands.fun.duel.muted", {
-        user: loserTag,
-        minutes,
-      }),
-    );
-  } catch (err) {
-    await bot.sendChat(
-      bot.t("commands.fun.duel.muteFailed", {
-        user: loserTag,
-        error: err.message,
-      }),
-    );
-  }
+  setTimeout(() => {
+    bot
+      .sendChat(bot.t("commands.fun.duel.silenceExpired", { user: loserTag }))
+      .catch(() => {});
+  }, minutes * 60_000);
 }
 
 const duel = {
@@ -172,7 +141,8 @@ const duel = {
     duelState.current = pending;
     duelState.timeoutId = setTimeout(() => {
       if (duelState.current !== pending) return;
-      const line = pickRandom(bot.tArray("commands.fun.duel.cowardLines")) ?? "";
+      const line =
+        pickRandom(bot.tArray("commands.fun.duel.cowardLines")) ?? "";
       const msg = [
         bot.t("commands.fun.duel.timeout", {
           target: toTag(pending.targetName),
@@ -204,7 +174,7 @@ const accept = {
   deleteOn: 60_000,
 
   async execute(ctx) {
-    const { bot, api, sender, reply, t } = ctx;
+    const { bot, sender, reply, t } = ctx;
     const pending = duelState.current;
 
     if (!pending) {
@@ -249,7 +219,7 @@ const accept = {
     if (suspense) await reply(suspense);
 
     duelState.resolveId = setTimeout(() => {
-      resolveDuel(bot, api, pending).catch(() => {});
+      resolveDuel(bot, pending).catch(() => {});
     }, DUEL_SUSPENSE_MS);
   },
 };

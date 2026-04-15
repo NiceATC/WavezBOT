@@ -5,8 +5,9 @@
     "type": "module",
     "scripts": {
         "dev": "next dev",
-        "build": "next build",
-        "start": "next start"
+        "build": "npm run copy-monaco && next build",
+        "start": "next start",
+        "copy-monaco": "node scripts/copy-monaco.mjs"
     },
     "dependencies": {
         "@monaco-editor/react": "^4.6.2",
