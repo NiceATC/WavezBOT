@@ -8,7 +8,7 @@ export default {
   async execute(ctx) {
     const { bot, sender, t } = ctx;
     const targetInput = String(ctx.rawArgs ?? "")
-      .replace(/^@/, "")
+      
       .trim();
     const name =
       targetInput ||

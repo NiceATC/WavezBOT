@@ -103,9 +103,9 @@ export default function RankingPage() {
               </thead>
               <tbody>
                 {economy.map((row, idx) => (
-                  <tr key={row.user_id || idx}>
+                  <tr key={row.userId || idx}>
                     <td>{idx + 1}</td>
-                    <td>{row.display_name || row.username || row.user_id}</td>
+                    <td>{row.displayName || row.username || row.userId}</td>
                     <td>{formatPoints(row.balance, locale)}</td>
                   </tr>
                 ))}
@@ -126,9 +126,9 @@ export default function RankingPage() {
               </thead>
               <tbody>
                 {xp.map((row, idx) => (
-                  <tr key={row.user_id || idx}>
+                  <tr key={row.userId || idx}>
                     <td>{idx + 1}</td>
-                    <td>{row.display_name || row.username || row.user_id}</td>
+                    <td>{row.displayName || row.username || row.userId}</td>
                     <td>{row.level}</td>
                   </tr>
                 ))}
@@ -149,10 +149,10 @@ export default function RankingPage() {
               </thead>
               <tbody>
                 {dj.map((row, idx) => (
-                  <tr key={row.user_id || idx}>
+                  <tr key={row.userId || idx}>
                     <td>{idx + 1}</td>
-                    <td>{row.display_name || row.username || row.user_id}</td>
-                    <td>{formatNumber(row.plays, locale)}</td>
+                    <td>{row.displayName || row.username || row.userId}</td>
+                    <td>{formatNumber(row.djPlays, locale)}</td>
                   </tr>
                 ))}
               </tbody>

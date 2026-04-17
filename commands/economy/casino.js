@@ -105,7 +105,7 @@ export default {
   deleteOn: 60_000,
 
   async execute(ctx) {
-    const { bot, sender, args, reply, t } = ctx;
+    const { bot, sender, args, reply, send, t } = ctx;
     if (!bot.cfg.economyEnabled || !bot.cfg.casinoEnabled) {
       await reply(t("commands.economy.casino.disabled"));
       return;
@@ -147,13 +147,17 @@ export default {
     const maxBet = Number(bot.cfg.casinoMaxBet ?? 100) || 100;
     if (bet < minBet) {
       await reply(
-        t("commands.economy.casino.minBet", { min: formatPoints(toPointsInt(minBet)) }),
+        t("commands.economy.casino.minBet", {
+          min: formatPoints(toPointsInt(minBet)),
+        }),
       );
       return;
     }
     if (bet > maxBet) {
       await reply(
-        t("commands.economy.casino.maxBet", { max: formatPoints(toPointsInt(maxBet)) }),
+        t("commands.economy.casino.maxBet", {
+          max: formatPoints(toPointsInt(maxBet)),
+        }),
       );
       return;
     }
@@ -163,7 +167,9 @@ export default {
     const betInt = toPointsInt(bet);
     if (balance < betInt) {
       await reply(
-        t("commands.economy.casino.insufficient", { balance: formatPoints(balance) }),
+        t("commands.economy.casino.insufficient", {
+          balance: formatPoints(balance),
+        }),
       );
       return;
     }
@@ -179,7 +185,9 @@ export default {
       const spent = await bot.spendEconomyPoints(userId, bet, identity);
       if (spent == null) {
         await reply(
-          t("commands.economy.casino.insufficient", { balance: formatPoints(balance) }),
+          t("commands.economy.casino.insufficient", {
+            balance: formatPoints(balance),
+          }),
         );
         return;
       }
@@ -263,7 +271,7 @@ export default {
             labels,
           });
           const url = await uploadToImgbb(buffer, `slots-${userId}`);
-          await reply(url);
+          await send(url);
           return;
         } catch {
           // fall back to text
@@ -288,7 +296,9 @@ export default {
           }),
         );
       } else {
-        await reply(t("commands.economy.casino.slots.lose", { reels: reelsText }));
+        await reply(
+          t("commands.economy.casino.slots.lose", { reels: reelsText }),
+        );
       }
       return;
     }
@@ -314,7 +324,9 @@ export default {
       const spent = await bot.spendEconomyPoints(userId, bet, identity);
       if (spent == null) {
         await reply(
-          t("commands.economy.casino.insufficient", { balance: formatPoints(balance) }),
+          t("commands.economy.casino.insufficient", {
+            balance: formatPoints(balance),
+          }),
         );
         return;
       }
@@ -368,7 +380,7 @@ export default {
             labels,
           });
           const url = await uploadToImgbb(buffer, `roulette-${userId}`);
-          await reply(url);
+          await send(url);
           return;
         } catch {
           // fall back to text
@@ -411,7 +423,9 @@ export default {
       const spent = await bot.spendEconomyPoints(userId, bet, identity);
       if (spent == null) {
         await reply(
-          t("commands.economy.casino.insufficient", { balance: formatPoints(balance) }),
+          t("commands.economy.casino.insufficient", {
+            balance: formatPoints(balance),
+          }),
         );
         return;
       }

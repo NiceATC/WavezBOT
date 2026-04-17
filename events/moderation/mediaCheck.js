@@ -9,12 +9,14 @@ import { Events } from "../../lib/wavez-events.js";
 import ytdl from "@distube/ytdl-core";
 import { getRoleLevel } from "../../lib/permissions.js";
 import dns from "dns";
+import fs from "fs";
+import path from "path";
 dns.setDefaultResultOrder("ipv4first");
 
 const YOUTUBE_SOURCES = new Set(["youtube", "yt", "ytmusic", "youtubemusic"]);
-const CHECK_API_BASE = "https://yt.niceatc.api.br/check?id=";
-const CHECK_API_TIMEOUT_MS = 10_000;
 const YOUTUBE_ID_RE = /^[A-Za-z0-9_-]{11}$/;
+const LOGIN_BOT_CHECK_RE =
+  /confirm\s+you(?:'|’)?re\s+not\s+a\s+bot|sign\s*in\s*to\s*confirm\s*you(?:'|’)?re\s*not\s*a\s*bot/i;
 
 function getMediaId(media) {
   const primary =
@@ -117,42 +119,62 @@ function getPlayability(info) {
   };
 }
 
-async function checkWithApi(videoId, debug, t) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), CHECK_API_TIMEOUT_MS);
-  const url = `${CHECK_API_BASE}${encodeURIComponent(videoId)}`;
+function shouldRetryWithCookie(message, reason) {
+  const text = `${message ?? ""} ${reason ?? ""}`.trim();
+  if (!text) return false;
+  return LOGIN_BOT_CHECK_RE.test(text);
+}
 
+function toCookieHeaderFromNetscape(raw) {
+  const lines = String(raw ?? "").split(/\r?\n/);
+  const pairs = [];
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+
+    // Netscape cookie file format (tab-separated, name at index 5, value at 6).
+    const cols = trimmed.split("\t");
+    if (cols.length >= 7) {
+      const name = cols[5]?.trim();
+      const value = cols[6]?.trim();
+      if (name && value != null) pairs.push(`${name}=${value}`);
+      continue;
+    }
+
+    // Allow already-header-like single lines as fallback.
+    if (trimmed.includes("=") && !trimmed.includes("\t")) {
+      pairs.push(trimmed.replace(/;\s*$/, ""));
+    }
+  }
+
+  return pairs.length ? pairs.join("; ") : null;
+}
+
+function loadCookieHeader(bot, debug) {
   try {
-    const res = await fetch(url, { signal: controller.signal });
+    const configuredPath = String(bot?.cfg?.mediaCheckCookieFile ?? "").trim();
+    const filePath = configuredPath
+      ? path.resolve(process.cwd(), configuredPath)
+      : path.resolve(process.cwd(), "cookie.txt");
 
-    if (!res.ok) {
-      if (debug) {
-        console.log(t("events.mediaCheck.log.apiHttp", { status: res.status }));
-      }
-      return null;
+    if (!fs.existsSync(filePath)) return null;
+
+    const raw = fs.readFileSync(filePath, "utf8");
+    const header = toCookieHeaderFromNetscape(raw);
+    if (!header && debug) {
+      console.log(
+        `[mediaCheck] cookie file found but no valid cookies at ${filePath}`,
+      );
     }
-
-    const data = await res.json().catch(() => null);
-    if (!data || typeof data !== "object") {
-      if (debug) console.log(t("events.mediaCheck.log.apiInvalid"));
-      return null;
-    }
-
-    const blocked = Boolean(data.blocked);
-    const ageRestricted = Boolean(data.ageRestricted);
-    const ageLimit = Number(data.ageLimit ?? 0);
-    const availability = String(data.availability ?? "").toLowerCase();
-
-    return { blocked, ageRestricted, ageLimit, availability };
+    return header;
   } catch (err) {
     if (debug) {
-      const label =
-        err?.name === "AbortError" ? "timeout" : (err?.message ?? err);
-      console.log(t("events.mediaCheck.log.apiError", { error: label }));
+      console.log(
+        `[mediaCheck] failed to read cookie file: ${err?.message ?? err}`,
+      );
     }
     return null;
-  } finally {
-    clearTimeout(timeoutId);
   }
 }
 
@@ -208,14 +230,45 @@ export default {
 
     const url = `https://www.youtube.com/watch?v=${videoId}`;
     let info = null;
+    let fetchErrorMessage = "";
     try {
       info = await ytdl.getBasicInfo(url);
     } catch (err) {
       const msg = String(err?.message ?? "");
+      fetchErrorMessage = msg;
       if (debug) {
         console.log(t("events.mediaCheck.log.ytdlError", { error: msg }));
       }
     }
+
+    if (!info && shouldRetryWithCookie(fetchErrorMessage, "")) {
+      const cookieHeader = loadCookieHeader(bot, debug);
+      if (!cookieHeader) {
+        // No cookie configured: ignore silently as requested.
+        return;
+      }
+
+      try {
+        info = await ytdl.getBasicInfo(url, {
+          requestOptions: {
+            headers: {
+              Cookie: cookieHeader,
+            },
+          },
+        });
+      } catch (err) {
+        if (debug) {
+          console.log(
+            t("events.mediaCheck.log.ytdlError", {
+              error: err?.message ?? String(err),
+            }),
+          );
+        }
+        return;
+      }
+    }
+
+    if (!info) return;
 
     if (info) {
       const { status, reason, ageRestricted, playableInEmbed } =
@@ -240,9 +293,31 @@ export default {
       }
 
       if (isLoginRequired && !restricted) {
-        if (debug) {
-          console.log(t("events.mediaCheck.log.ytdlLoginRequired"));
+        if (shouldRetryWithCookie(fetchErrorMessage, reason)) {
+          const cookieHeader = loadCookieHeader(bot, debug);
+          if (!cookieHeader) return;
+
+          try {
+            const withCookie = await ytdl.getBasicInfo(url, {
+              requestOptions: {
+                headers: {
+                  Cookie: cookieHeader,
+                },
+              },
+            });
+            const parsed = getPlayability(withCookie);
+            if (parsed.status === "OK" && !parsed.ageRestricted) {
+              if (debug) console.log(t("events.mediaCheck.log.ytdlAllowed"));
+              return;
+            }
+          } catch {
+            return;
+          }
         }
+
+        // Login required sem sinal de bot-check: ignorar, sem fallback externo.
+        if (debug) console.log(t("events.mediaCheck.log.ytdlLoginRequired"));
+        return;
       } else if (
         restricted ||
         blockedByStatus ||
@@ -262,42 +337,5 @@ export default {
         console.log(t("events.mediaCheck.log.ytdlInconclusive"));
       }
     }
-
-    const apiResult = await checkWithApi(videoId, debug, t);
-    if (!apiResult) {
-      if (debug) console.log(t("events.mediaCheck.log.apiUnavailable"));
-      return;
-    }
-
-    const availability = apiResult.availability;
-    const ageLimit = apiResult.ageLimit;
-    const restricted =
-      apiResult.ageRestricted || (Number.isFinite(ageLimit) && ageLimit >= 18);
-    const blockedByAvailability = availability && availability !== "public";
-    const shouldSkip = apiResult.blocked || restricted || blockedByAvailability;
-
-    if (debug) {
-      const ageLog = Number.isFinite(ageLimit) ? ageLimit : "";
-      console.log(
-        t("events.mediaCheck.log.apiResult", {
-          blocked: apiResult.blocked,
-          ageRestricted: apiResult.ageRestricted,
-          ageLimit: ageLog,
-          availability,
-        }),
-      );
-    }
-
-    if (!shouldSkip) {
-      if (debug) console.log(t("events.mediaCheck.log.apiAllowed"));
-      return;
-    }
-
-    const reasonText = restricted
-      ? t("events.mediaCheck.reason.age")
-      : t("events.mediaCheck.reason.unavailable");
-    const detail =
-      blockedByAvailability && availability ? ` (${availability})` : "";
-    await skipTrack(reasonText, detail);
   },
 };

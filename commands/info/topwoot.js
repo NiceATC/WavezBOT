@@ -26,7 +26,7 @@ export default {
     const lines = rows.map((row, index) =>
       t("commands.info.topwoot.line", {
         pos: index + 1,
-        user: row.display_name ?? row.username ?? t("common.someone"),
+        user: row.displayName ?? row.username ?? t("common.someone"),
         count: row.woots ?? 0,
       }),
     );

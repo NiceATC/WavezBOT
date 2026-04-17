@@ -20,8 +20,8 @@ const delmsg = {
   minRole: "bouncer",
 
   async execute(ctx) {
-    const { bot, api, args, reply, t } = ctx;
-    const target = (args[0] ?? "").replace(/^@/, "").trim();
+    const { bot, api, args, reply, t, mention, mentionUser } = ctx;
+    const target = (args[0] ?? "").trim();
     if (!target) {
       await reply(t("commands.mod.delmsg.usageMessage"));
       return;
@@ -29,7 +29,9 @@ const delmsg = {
 
     const user = bot.findRoomUser(target);
     if (!user) {
-      await reply(t("commands.mod.delmsg.userNotFound", { user: target }));
+      await reply(
+        t("commands.mod.delmsg.userNotFound", { user: mention(target) }),
+      );
       return;
     }
 
@@ -90,7 +92,7 @@ const delmsg = {
 
     await reply(
       t("commands.mod.delmsg.done", {
-        user: user.displayName ?? user.username,
+        user: mentionUser(user, target),
         count,
       }),
     );

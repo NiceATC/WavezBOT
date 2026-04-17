@@ -51,6 +51,8 @@ export class CommandRegistry {
     this._commands = new Map();
     /** @type {Map<string, string>} alias → canonical name */
     this._aliases = new Map();
+    /** @type {Map<string, boolean>} name → enabled override */
+    this._enabled = new Map();
     /** @type {Map<string, number>} "userId:commandName" → lastUsedTs */
     this._cooldowns = new Map();
   }
@@ -58,6 +60,7 @@ export class CommandRegistry {
   reset() {
     this._commands.clear();
     this._aliases.clear();
+    this._enabled.clear();
     this._cooldowns.clear();
   }
 
@@ -147,6 +150,23 @@ export class CommandRegistry {
 
   // ── Lookup ─────────────────────────────────────────────────────────────────
 
+  /** Enable a command by name (overrides definition's `enabled` field). */
+  enable(name) {
+    this._enabled.set(String(name ?? "").toLowerCase(), true);
+  }
+
+  /** Disable a command by name (overrides definition's `enabled` field). */
+  disable(name) {
+    this._enabled.set(String(name ?? "").toLowerCase(), false);
+  }
+
+  /** Returns true if the named command is currently enabled. */
+  isEnabled(name) {
+    const key = String(name ?? "").toLowerCase();
+    if (this._enabled.has(key)) return this._enabled.get(key);
+    return this._commands.get(key)?.enabled !== false;
+  }
+
   /**
    * Resolve a command by name or alias. Returns undefined if not found.
    * @param {string} name
@@ -164,7 +184,9 @@ export class CommandRegistry {
    * @returns {object[]}
    */
   get all() {
-    return [...this._commands.values()];
+    return [...this._commands.values()].filter((cmd) =>
+      this.isEnabled(cmd.name),
+    );
   }
 
   // ── Dispatch ───────────────────────────────────────────────────────────────
@@ -177,6 +199,7 @@ export class CommandRegistry {
   async dispatch(ctx, name) {
     const cmd = this.resolve(name);
     if (!cmd) return; // silently ignore unknown commands
+    if (!this.isEnabled(cmd.name)) return;
 
     const deleteOnMs = Number(cmd.deleteOn ?? 0);
     if (Number.isFinite(deleteOnMs) && deleteOnMs > 0) {

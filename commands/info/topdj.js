@@ -26,8 +26,8 @@ export default {
     const lines = rows.map((row, index) =>
       t("commands.info.topdj.line", {
         pos: index + 1,
-        user: row.display_name ?? row.username ?? t("common.someone"),
-        count: row.plays ?? 0,
+        user: row.displayName ?? row.username ?? t("common.someone"),
+        count: row.djPlays ?? 0,
       }),
     );
 

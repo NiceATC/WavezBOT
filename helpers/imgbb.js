@@ -21,7 +21,12 @@ export async function uploadToImgbb(buffer, title) {
   });
 
   const payload = await res.json().catch(() => null);
-  const link = payload?.data?.display_url ?? payload?.data?.url ?? null;
+  // Prefer original asset URL. display_url is often a resized derivative.
+  const link =
+    payload?.data?.image?.url ??
+    payload?.data?.url ??
+    payload?.data?.display_url ??
+    null;
   if (!res.ok || !link) {
     const msg =
       payload?.error?.message ?? payload?.error ?? "ImgBB upload failed";

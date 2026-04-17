@@ -62,7 +62,7 @@ const work = {
       .trim()
       .toLowerCase();
     const state = await getWorkState(userId);
-    const currentJob = jobs.find((job) => job.key === state?.job_key) ?? null;
+    const currentJob = jobs.find((job) => job.key === state?.jobKey) ?? null;
     const level = await getUserLevel(bot, userId, identity);
 
     if (!action || action === "status") {
@@ -71,7 +71,7 @@ const work = {
         return;
       }
 
-      const lastClaim = Number(state?.last_claim_at ?? 0) || 0;
+      const lastClaim = Number(state?.lastClaimAt ?? 0) || 0;
       const cooldownMs = Math.max(0, Number(bot.cfg.workCooldownMs) || 0);
       const remaining = lastClaim
         ? Math.max(0, cooldownMs - (Date.now() - lastClaim))
@@ -147,7 +147,7 @@ const work = {
       await setWorkState({
         userId,
         jobKey: job.key,
-        lastClaimAt: state?.last_claim_at ?? null,
+        lastClaimAt: state?.lastClaimAt ?? 0,
       });
       await reply(
         t("commands.economy.work.selected", {
@@ -163,7 +163,7 @@ const work = {
         return;
       }
       const cooldownMs = Math.max(0, Number(bot.cfg.workCooldownMs) || 0);
-      const lastClaim = Number(state?.last_claim_at ?? 0) || 0;
+      const lastClaim = Number(state?.lastClaimAt ?? 0) || 0;
       if (lastClaim && Date.now() - lastClaim < cooldownMs) {
         const remaining = cooldownMs - (Date.now() - lastClaim);
         await reply(
@@ -174,7 +174,10 @@ const work = {
         return;
       }
 
-      await bot.awardEconomyPoints(userId, currentJob.pay, identity);
+      await bot.awardEconomyPoints(userId, currentJob.pay, identity, {
+        applyVipMultiplier: true,
+        source: "work",
+      });
       await setWorkState({
         userId,
         jobKey: currentJob.key,

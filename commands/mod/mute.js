@@ -18,8 +18,8 @@ const mute = {
   minRole: "bouncer",
 
   async execute(ctx) {
-    const { api, bot, args, reply, t } = ctx;
-    const target = (args[0] ?? "").replace(/^@/, "").trim();
+    const { api, bot, args, reply, t, mention, mentionUser } = ctx;
+    const target = (args[0] ?? "").trim();
     if (!target) {
       await reply(t("commands.mod.mute.usageMessage"));
       return;
@@ -27,7 +27,9 @@ const mute = {
 
     const user = bot.findRoomUser(target);
     if (!user) {
-      await reply(t("commands.mod.mute.userNotFound", { user: target }));
+      await reply(
+        t("commands.mod.mute.userNotFound", { user: mention(target) }),
+      );
       return;
     }
 
@@ -39,7 +41,7 @@ const mute = {
     if (bot.getUserRoleLevel(user.userId) >= bot.getBotRoleLevel()) {
       await reply(
         t("commands.mod.mute.roleTooHigh", {
-          user: user.displayName ?? user.username,
+          user: mentionUser(user, target),
         }),
       );
       return;
@@ -52,10 +54,11 @@ const mute = {
       bot.wsMuteUser(user.userId, durationMs);
       const parts = [
         t("commands.mod.mute.muted", {
-          user: user.displayName ?? user.username,
+          user: mentionUser(user, target),
         }),
       ];
-      if (label) parts.push(t("commands.mod.mute.duration", { duration: label }));
+      if (label)
+        parts.push(t("commands.mod.mute.duration", { duration: label }));
       if (reason) parts.push(t("commands.mod.mute.reason", { reason }));
       await reply(parts.join(" ") + ".");
     } catch (err) {
@@ -74,8 +77,8 @@ const unmute = {
   minRole: "bouncer",
 
   async execute(ctx) {
-    const { api, bot, args, reply, t } = ctx;
-    const target = (args[0] ?? "").replace(/^@/, "").trim();
+    const { api, bot, args, reply, t, mention, mentionUser } = ctx;
+    const target = (args[0] ?? "").trim();
     if (!target) {
       await reply(t("commands.mod.unmute.usageMessage"));
       return;
@@ -83,7 +86,9 @@ const unmute = {
 
     const user = bot.findRoomUser(target);
     if (!user) {
-      await reply(t("commands.mod.unmute.userNotFound", { user: target }));
+      await reply(
+        t("commands.mod.unmute.userNotFound", { user: mention(target) }),
+      );
       return;
     }
 
@@ -96,7 +101,7 @@ const unmute = {
       bot.wsUnmuteUser(user.userId);
       await reply(
         t("commands.mod.unmute.unmuted", {
-          user: user.displayName ?? user.username,
+          user: mentionUser(user, target),
         }),
       );
     } catch (err) {

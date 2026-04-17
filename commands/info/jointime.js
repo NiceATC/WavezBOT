@@ -9,10 +9,13 @@ export default {
   deleteOn: 60_000,
 
   async execute(ctx) {
-    const { bot, args, sender, reply, t } = ctx;
-    const targetInput = (args[0] ?? sender.username ?? sender.displayName ?? "")
-      .replace(/^@/, "")
-      .trim();
+    const { bot, args, sender, reply, t, mention, mentionUser } = ctx;
+    const targetInput = (
+      args[0] ??
+      sender.username ??
+      sender.displayName ??
+      ""
+    ).trim();
 
     if (!targetInput) {
       await reply(t("commands.info.jointime.usageMessage"));
@@ -21,12 +24,16 @@ export default {
 
     const user = bot.findRoomUser(targetInput);
     if (!user) {
-      await reply(t("commands.info.jointime.userNotFound", { user: targetInput }));
+      await reply(
+        t("commands.info.jointime.userNotFound", {
+          user: mention(targetInput),
+        }),
+      );
       return;
     }
 
     const joinedAt = bot.getUserJoinAt(user.userId);
-    const name = user.displayName ?? user.username ?? targetInput;
+    const name = mentionUser(user, targetInput);
     if (!joinedAt) {
       await reply(t("commands.info.jointime.noRecord", { user: name }));
       return;

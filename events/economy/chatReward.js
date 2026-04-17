@@ -31,7 +31,15 @@ export default {
 
     const identity = bot._getUserIdentity(userId, sender);
     if (bot.cfg.economyEnabled && Number(bot.cfg.economyChatPoints) > 0) {
-      await bot.awardEconomyPoints(userId, bot.cfg.economyChatPoints, identity);
+      await bot.awardEconomyPoints(
+        userId,
+        bot.cfg.economyChatPoints,
+        identity,
+        {
+          applyVipMultiplier: true,
+          source: "chat",
+        },
+      );
     }
     if (bot.cfg.xpEnabled && Number(bot.cfg.xpChatPoints) > 0) {
       await bot.awardXp(userId, bot.cfg.xpChatPoints, identity);

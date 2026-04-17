@@ -120,7 +120,6 @@ WavezBOT/
       queue.js           — !queue
       stats.js           — !stats
     music/
-      woot.js            — !woot
       blacklist.js       — !blacklist
       togglebl.js        — !togglebl
       motd.js            — !motd / !togglemotd
@@ -135,13 +134,11 @@ WavezBOT/
       remove.js          — !remove
       move.js            — !move
       swap.js            — !swap
-      timeguard.js       — !timeguard / !maxlength
       kick.js            — !kick
       mute.js            — !mute / !unmute
       ban.js             — !ban / !unban
     queue/
       dc.js              — !dc
-      savequeue.js       — !savequeue
     system/
       autowoot.js        — !autowoot
       settings.js        — !settings
@@ -175,7 +172,6 @@ WavezBOT/
     moderation/
       afkRemoval.js      — remove AFK users from waitlist
       mediaCheck.js       — skip age-restricted/blocked tracks
-      timeGuard.js       — skip long tracks
     queue/
       waitlistSnapshot.js — snapshot for !dc
 ```
@@ -188,9 +184,9 @@ Use `!help` in chat to see the full list with aliases and usage.
 
 - Core: `!help`, `!ping`, `!start`, `!stop`, `!reload`, `!reloadcmd`
 - Info: `!active`, `!lastseen`, `!jointime`, `!link`, `!mediaid`, `!autowoot-link`, `!np`/`!nowplaying`, `!stats`, `!queue`, `!lastplayed`, `!history`, `!topwoot`, `!topdj`, `!topsongs`, `!rank`
-- Music: `!woot`, `!blacklist` (add/remove/list/info), `!togglebl`, `!motd`, `!togglemotd`, `!voteskip`
-- Moderation: `!autoskip`, `!afkremoval`, `!afklimit`, `!afkreset`, `!afktime`, `!duelmute`, `!skip`, `!lock`, `!unlock`, `!remove`, `!move`, `!swap`, `!timeguard`, `!maxlength`, `!kick`, `!mute`, `!unmute`, `!ban`, `!unban`
-- Queue: `!dc`, `!savequeue`
+- Music: `!blacklist` (add/remove/list/info), `!togglebl`, `!motd`, `!togglemotd`, `!voteskip`
+- Moderation: `!autoskip`, `!afkremoval`, `!afklimit`, `!afkreset`, `!afktime`, `!duelmute`, `!skip`, `!lock`, `!unlock`, `!remove`, `!move`, `!swap`, `!kick`, `!mute`, `!unmute`, `!ban`, `!unban`
+- Queue: `!dc`
 - System: `!autowoot`, `!settings`, `!welcome`
 - Fun: `!ba`, `!fortune`, `!duel`, `!accept`, `!recuse`, `!8ball`/`!ask`, `!cookie`, `!ghostbuster`, `!gif`/`!giphy`, `!roulette`/`!join`/`!leave`, `!thor`, `!hug`, `!slap`, `!ship`, `!coin`, `!dice`, `!roll`, `!rps`, `!trivia`, `!roast`, `!compliment`, `!fact`, `!joke`, `!meme`, `!hack`, `!virus`, `!summon`, `!explode`, `!fakeban`
 - Economy: `!balance`, `!transfer`, `!economy`, `!top`, `!casino`, `!daily`, `!shop`, `!buy`, `!work`, `!steal`
@@ -321,8 +317,6 @@ Defaults below are from `config.example.json`.
 | `messageInterval`                   | `5`                                    | Songs between interval messages                        |
 | `dcWindowMin`                       | `10`                                   | Minutes allowed to restore DC position                 |
 | `blacklistEnabled`                  | `true`                                 | Enable track blacklist                                 |
-| `timeGuardEnabled`                  | `false`                                | Enable time guard                                      |
-| `maxSongLengthMin`                  | `10`                                   | Max song length in minutes                             |
 | `autoSkipEnabled`                   | `false`                                | Enable auto-skip for stalled tracks                    |
 | `afkRemovalEnabled`                 | `false`                                | Enable AFK removal from the waitlist                   |
 | `afkLimitMin`                       | `60`                                   | Minutes of inactivity before AFK removal               |

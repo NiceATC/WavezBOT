@@ -1,9 +1,18 @@
 {
     "_comment": "Configurações principais: sala, rede, prefixo e controle de mensagens.",
-    "room": "wavez-lounge",
-    "roomUrl": "https://wavez.vps-kinghost.net/~/{room}",
+    "room": "move-it-brasil",
+    "roomUrl": "https://wavez.fm/~/{room}",
     "locale": "pt-BR",
-    "apiUrl": "https://api.wavez.vps-kinghost.net",
+    "apiUrl": "https://api.wavez.fm",
+    "debug": true,
+    "debugLogDir": "logs/debug",
+    "maxDebugFileMB": 256,
+    "maxDebugEntryKB": 2048,
+    "debugRest": true,
+    "debugWs": true,
+    "debugCommandUserIds": [
+        "f23c7bd6-fdb2-4bb8-b13e-b299e1f0219c"
+    ],
     "cmdPrefix": "!",
     "deleteCommandMessagesEnabled": true,
     "deleteCommandMessagesDelayMs": 1000

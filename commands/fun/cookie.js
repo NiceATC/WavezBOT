@@ -14,10 +14,8 @@ export default {
   deleteOn: 60_000,
 
   async execute(ctx) {
-    const { bot, sender, t, tArray } = ctx;
-    const targetInput = String(ctx.rawArgs ?? "")
-      .replace(/^@/, "")
-      .trim();
+    const { bot, sender, t, tArray, mention, mentionUser } = ctx;
+    const targetInput = String(ctx.rawArgs ?? "").trim();
     const senderName =
       sender.username ?? sender.displayName ?? t("common.someone");
 
@@ -30,11 +28,13 @@ export default {
 
     const user = bot.findRoomUser(targetInput);
     if (!user) {
-      await ctx.reply(t("commands.fun.cookie.userNotFound", { user: targetInput }));
+      await ctx.reply(
+        t("commands.fun.cookie.userNotFound", { user: mention(targetInput) }),
+      );
       return;
     }
 
-    const name = user.username ?? user.displayName ?? targetInput;
+    const name = mentionUser(user, targetInput);
     const line = pickRandom(tArray("commands.fun.cookie.giftLines"));
     const msg = formatCookieLine(line, senderName, name);
     await ctx.reply(msg);

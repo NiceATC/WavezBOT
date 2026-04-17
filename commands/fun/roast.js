@@ -17,7 +17,7 @@ export default {
   async execute(ctx) {
     const { bot, sender, t, tArray, reply } = ctx;
     const targetInput = String(ctx.rawArgs ?? "")
-      .replace(/^@/, "")
+      
       .trim();
     const senderName =
       sender.displayName ?? sender.username ?? t("common.someone");

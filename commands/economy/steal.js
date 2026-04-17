@@ -20,7 +20,7 @@ export default {
   deleteOn: 60_000,
 
   async execute(ctx) {
-    const { bot, api, sender, args, reply, t } = ctx;
+    const { bot, api, sender, args, reply, t, mention, mentionUser } = ctx;
     if (!bot.cfg.economyEnabled || !bot.cfg.stealEnabled) {
       await reply(t("commands.economy.steal.disabled"));
       return;
@@ -32,9 +32,7 @@ export default {
       return;
     }
 
-    const targetInput = String(args[0] ?? "")
-      .replace(/^@/, "")
-      .trim();
+    const targetInput = String(args[0] ?? "").trim();
     if (!targetInput) {
       await reply(t("commands.economy.steal.usageMessage"));
       return;
@@ -42,7 +40,11 @@ export default {
 
     const target = bot.findRoomUser(targetInput);
     if (!target) {
-      await reply(t("commands.economy.steal.userNotFound", { user: targetInput }));
+      await reply(
+        t("commands.economy.steal.userNotFound", {
+          user: mention(targetInput),
+        }),
+      );
       return;
     }
 
@@ -66,22 +68,30 @@ export default {
 
     const minInt = toPointsInt(bot.cfg.stealMinAmount ?? 0.5);
     const maxInt = toPointsInt(bot.cfg.stealMaxAmount ?? 2);
+    const stealProtection = await bot.getVipStealProtection(
+      target.userId,
+      targetIdentity,
+    );
 
     if (targetBalance < minInt) {
       await reply(
         t("commands.economy.steal.targetPoor", {
-          user: target.displayName ?? target.username ?? targetInput,
+          user: mentionUser(target, targetInput),
         }),
       );
       return;
     }
 
-    const amountInt = Math.min(targetBalance, randomInt(minInt, maxInt));
+    const rawAmountInt = Math.min(targetBalance, randomInt(minInt, maxInt));
+    const amountInt = Math.max(
+      Math.min(targetBalance, minInt),
+      Math.round(rawAmountInt * (1 - stealProtection)),
+    );
     const amount = amountInt / POINT_SCALE;
 
     const failChance = Math.max(
       0,
-      Math.min(1, Number(bot.cfg.stealFailChance) || 0),
+      Math.min(0.95, (Number(bot.cfg.stealFailChance) || 0) + stealProtection),
     );
     const failed = Math.random() < failChance;
 
@@ -98,7 +108,7 @@ export default {
       await bot.awardEconomyPoints(userId, amount, identity);
       await reply(
         t("commands.economy.steal.success", {
-          user: target.displayName ?? target.username ?? targetInput,
+          user: mentionUser(target, targetInput),
           amount: formatPoints(amountInt),
         }),
       );
@@ -135,7 +145,9 @@ export default {
         }),
       );
     } catch (err) {
-      await reply(t("commands.economy.steal.muteFailed", { error: err.message }));
+      await reply(
+        t("commands.economy.steal.muteFailed", { error: err.message }),
+      );
     }
   },
 };

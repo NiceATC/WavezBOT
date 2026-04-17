@@ -40,7 +40,7 @@ export default {
 
     // Skip the bot itself
     const userId = String(data?.userId ?? data?.user_id ?? data?.id ?? "");
-    if (!userId || userId === String(bot._userId)) return;
+    if (!userId || bot.isBotUser(userId)) return;
 
     const display =
       data?.displayName ?? data?.display_name ?? data?.username ?? null;
@@ -63,6 +63,11 @@ export default {
     if (greetedAt && cooldownMs > 0 && Date.now() - greetedAt < cooldownMs) {
       return;
     }
+
+    const vipState = await bot.getVipState(userId, {
+      username,
+      displayName: display,
+    });
 
     const isReturning = greetedCount > 0;
 
@@ -88,7 +93,25 @@ export default {
       return template;
     }
 
-    let template = resolveGreetTemplate(bot, isReturning, display, username);
+    let template = null;
+
+    if (vipState.isActive) {
+      const custom = await bot.getVipGreetMessage(userId, {
+        username,
+        displayName: display,
+      });
+      const customTemplate = String(custom ?? "")
+        .replace(/{name}/g, display)
+        .replace(/{username}/g, username ?? display)
+        .trim();
+      if (customTemplate) {
+        template = customTemplate;
+      }
+    }
+
+    if (!template) {
+      template = resolveGreetTemplate(bot, isReturning, display, username);
+    }
 
     if (!template && isReturning) {
       template = resolveGreetTemplate(bot, false, display, username);

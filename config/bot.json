@@ -38,5 +38,9 @@
             "mode": 0,
             "reply": "Boa noite, pessoal!"
         }
-    ]
+    ],
+    "fun": {
+        "rouletteDurationMs": 60000,
+        "rouletteMinParticipants": 3
+    }
 }

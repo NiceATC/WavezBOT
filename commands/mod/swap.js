@@ -2,6 +2,11 @@
  * commands/mod/swap.js
  */
 
+import {
+  getQueueEntryUserId,
+  getWaitlistPositionForIndex,
+} from "../../lib/waitlist.js";
+
 export default {
   name: "swap",
   aliases: ["trocar"],
@@ -13,8 +18,8 @@ export default {
 
   async execute(ctx) {
     const { api, bot, args, reply, t } = ctx;
-    const targetA = (args[0] ?? "").replace(/^@/, "").trim();
-    const targetB = (args[1] ?? "").replace(/^@/, "").trim();
+    const targetA = (args[0] ?? "").trim();
+    const targetB = (args[1] ?? "").trim();
 
     if (!targetA || !targetB) {
       await reply(t("commands.mod.swap.usageMessage"));
@@ -35,26 +40,34 @@ export default {
 
     try {
       const qRes = await api.room.getQueueStatus(bot.cfg.room);
-      const queueIds = qRes?.data?.queueUserIds ?? [];
-      const idxA = queueIds.indexOf(String(userA.userId));
-      const idxB = queueIds.indexOf(String(userB.userId));
+      const entries = Array.isArray(qRes?.data?.entries)
+        ? qRes.data.entries
+        : [];
+      const idxA = entries.findIndex(
+        (entry) => getQueueEntryUserId(entry) === String(userA.userId),
+      );
+      const idxB = entries.findIndex(
+        (entry) => getQueueEntryUserId(entry) === String(userB.userId),
+      );
+      const posA = getWaitlistPositionForIndex(idxA, entries);
+      const posB = getWaitlistPositionForIndex(idxB, entries);
 
-      if (idxA < 0 || idxB < 0) {
+      if (posA == null || posB == null) {
         await reply(t("commands.mod.swap.notInQueue"));
         return;
       }
 
-      if (idxA === idxB) {
+      if (posA === posB) {
         await reply(t("commands.mod.swap.samePosition"));
         return;
       }
 
-      if (idxA < idxB) {
-        bot.wsReorderQueue(userB.userId, idxA);
-        bot.wsReorderQueue(userA.userId, idxB);
+      if (posA < posB) {
+        bot.wsReorderQueue(userB.userId, posA - 1);
+        bot.wsReorderQueue(userA.userId, posB - 1);
       } else {
-        bot.wsReorderQueue(userA.userId, idxB);
-        bot.wsReorderQueue(userB.userId, idxA);
+        bot.wsReorderQueue(userA.userId, posB - 1);
+        bot.wsReorderQueue(userB.userId, posA - 1);
       }
 
       await reply(

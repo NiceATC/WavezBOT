@@ -107,6 +107,8 @@ export function renderProfileCard({
   nextReq,
   rewardPoints,
   balance,
+  vipLabel = null,
+  vipAccent = COLOR_GOLD,
   labels = {},
 }) {
   const title = labels.title ?? "Profile";
@@ -114,6 +116,7 @@ export function renderProfileCard({
   const xpLabel = labels.xp ?? "XP";
   const rewardLabel = labels.reward ?? "Next reward";
   const balanceLabel = labels.balance ?? "Balance";
+  const vipStatusLabel = labels.vip ?? "VIP";
   const pointsLabel = labels.points ?? "points";
   const safeName = username || "User";
   const { canvas, ctx } = renderBase({ title, username: safeName });
@@ -175,7 +178,8 @@ export function renderProfileCard({
   const cardGap = 16;
   const cardY = barY + 36;
   const cardH = 92;
-  const cardW = Math.floor((barW - cardGap) / 2);
+  const statCount = vipLabel ? 3 : 2;
+  const cardW = Math.floor((barW - cardGap * (statCount - 1)) / statCount);
 
   function drawStatCard(x, label, value, accent) {
     ctx.fillStyle = "rgba(255, 255, 255, 0.05)";
@@ -206,12 +210,24 @@ export function renderProfileCard({
     );
   }
 
+  if (vipLabel) {
+    const vipX = innerX + (cardW + cardGap) * 2;
+    drawStatCard(vipX, vipStatusLabel, vipLabel, vipAccent);
+  }
+
   return canvas.toBuffer("image/png");
 }
 
-export function renderBalanceCard({ username, balance, labels = {} }) {
+export function renderBalanceCard({
+  username,
+  balance,
+  vipLabel = null,
+  vipAccent = COLOR_GOLD,
+  labels = {},
+}) {
   const title = labels.title ?? "Balance";
   const balanceLabel = labels.balance ?? "Balance";
+  const vipStatusLabel = labels.vip ?? "VIP";
   const pointsLabel = labels.points ?? "points";
   const safeName = username || "User";
   const { canvas, ctx } = renderBase({ title, username: safeName });
@@ -244,6 +260,17 @@ export function renderBalanceCard({ username, balance, labels = {} }) {
   ctx.fillStyle = COLOR_INK;
   ctx.font = `800 42px ${FONT_DISPLAY}`;
   ctx.fillText(`${formatPoints(balance)} ${pointsLabel}`, innerX, barY + 78);
+
+  if (vipLabel) {
+    ctx.fillStyle = vipAccent;
+    ctx.fillRect(innerX, barY + 108, 42, 4);
+    ctx.fillStyle = COLOR_MUTED;
+    ctx.font = `600 16px ${FONT_BODY}`;
+    ctx.fillText(vipStatusLabel, innerX, barY + 136);
+    ctx.fillStyle = COLOR_INK;
+    ctx.font = `700 24px ${FONT_DISPLAY}`;
+    ctx.fillText(vipLabel, innerX, barY + 166);
+  }
 
   return canvas.toBuffer("image/png");
 }

@@ -26,11 +26,10 @@ export default {
 
     const lines = rows.map((row, idx) => {
       const name =
-        row.display_name ??
         row.displayName ??
         row.username ??
-        bot.getRoomUserDisplayName(row.user_id) ??
-        row.user_id;
+        bot.getRoomUserDisplayName(row.userId) ??
+        row.userId;
       return t("commands.economy.top.line", {
         pos: idx + 1,
         user: name,

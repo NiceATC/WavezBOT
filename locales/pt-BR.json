@@ -143,18 +143,6 @@
                 "success": "Trocados {userA} e {userB}.",
                 "error": "Falha ao trocar: {error}"
             },
-            "timeguard": {
-                "description": "Ativa/desativa o time guard.",
-                "usage": "!timeguard [on|off]",
-                "enabled": "Time guard ativado.",
-                "disabled": "Time guard desativado."
-            },
-            "maxlength": {
-                "description": "Define o limite de duração da música.",
-                "usage": "!maxlength <minutos>",
-                "usageMessage": "Uso: !maxlength <minutos>",
-                "updated": "Limite de duração definido para {minutes} min."
-            },
             "kick": {
                 "description": "Expulsa um usuário.",
                 "usage": "!kick <usuario>",
@@ -258,16 +246,21 @@
                 "usage": "!duelmute <minutos>",
                 "usageMessage": "Uso: !duelmute <minutos>",
                 "updated": "Mute do duelo definido para {minutes} min."
+            },
+            "give": {
+                "description": "Dá pontos ou VIP para um usuário.",
+                "usage": "!give <points|vip> <usuario> <valor>",
+                "usageMessage": "Uso: !give <points|vip> <usuario> <valor>. Exemplos: !give points <usuario> 5000 | !give vip <usuario> 30d [bronze|silver|gold]",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "invalidAmount": "Valor de pontos inválido.",
+                "pointsGranted": "{user} recebeu {amount} pontos. Saldo atual: {balance}.",
+                "vipUsage": "Uso: !give vip <usuario> <duracao|daily|weekly|monthly|yearly> [bronze|silver|gold]",
+                "vipHigherLevel": "{user} já possui um VIP superior ativo.",
+                "vipFailed": "Não foi possível aplicar o VIP agora.",
+                "vipGranted": "{user} recebeu VIP {level} por {duration}."
             }
         },
         "music": {
-            "woot": {
-                "description": "Dá woot na música atual.",
-                "usage": "!woot",
-                "noTrack": "Nenhuma música tocando.",
-                "voted": "{user} deu woot em: {title}",
-                "error": "Falha ao votar: {error}"
-            },
             "blacklist": {
                 "description": "Gerencia a blacklist de músicas.",
                 "usage": "!blacklist <add|remove|list|info> ...",
@@ -445,21 +438,82 @@
                 "description": "Restaura a posição do usuário na fila (DC recente).",
                 "usage": "!dc [usuario]",
                 "usageMessage": "Uso: !dc [usuario]",
+                "usageLines": [
+                    "Bora lá: usa !dc [usuario] e eu tento salvar a vaga.",
+                    "Me chama assim: !dc [usuario]. Missão resgate iniciada.",
+                    "Formato turbo: !dc [usuario]. Partiu recuperar posição."
+                ],
                 "userNotFound": "Usuário não encontrado: {user}",
                 "noPermission": "Você não tem permissão para mover outro usuário.",
+                "noPermissionLines": [
+                    "Calma, comandante! Para mover outra pessoa você precisa ser bouncer+.",
+                    "Sem passe VIP pra mover terceiros agora. Chama um bouncer e a gente resolve.",
+                    "Essa alavanca é só pra bouncer ou acima. Segurança da pista, né?"
+                ],
                 "noSnapshot": "Sem snapshot recente para esse usuário.",
+                "noSnapshotLines": [
+                    "Não achei snapshot recente desse usuário. Sem replay dessa vez.",
+                    "Procurei o rastro do DC e não encontrei nada fresquinho.",
+                    "Nada salvo por aqui para esse usuário. Sem checkpoint no momento."
+                ],
                 "expired": "Snapshot expirou.",
+                "expiredLines": [
+                    "A janela de DC expirou. Dessa vez passou do tempo.",
+                    "Timeout! O snapshot já venceu e não dá mais pra restaurar.",
+                    "Passou da validade do DC. Próxima rodada a gente pega mais cedo."
+                ],
+                "expiredNearLines": [
+                    "Foi quase 👀. A janela expirou agora há pouco.",
+                    "Bateu na trave 👀. Expirou por muito pouco.",
+                    "Quase deu bom 👀, mas a janela fechou no apagar das luzes."
+                ],
                 "invalidPosition": "Posição salva inválida.",
+                "invalidPositionLines": [
+                    "A posição salva veio estranha e não é segura para mover.",
+                    "Snapshot com posição inválida. Melhor não bagunçar a fila.",
+                    "Deu ruim no checkpoint: posição inválida para restore."
+                ],
                 "mustJoin": "O usuário precisa estar na fila.",
+                "mustJoinLines": [
+                    "Primeiro entra na fila, depois eu faço o resgate da posição.",
+                    "Preciso que o usuário esteja na fila agora para eu mover certinho.",
+                    "Chama o usuário pra fila e eu resolvo o DC em seguida."
+                ],
+                "noDcDetected": "Não encontrei sinal recente de DC para esse usuário.",
+                "noDcDetectedLines": [
+                    "Sem sinal claro de DC recente para esse usuário, então não vou mexer na fila.",
+                    "Parece que não houve DC válido agora. Melhor manter a fila como está.",
+                    "Sem evidência recente de queda por DC. Restore cancelado por segurança."
+                ],
+                "alreadyRestored": "Esse DC já foi restaurado para {user}.",
+                "alreadyRestoredLines": [
+                    "Esse resgate já foi aplicado para {user}. Sem replay infinito por aqui 😄",
+                    "Já restaurei esse mesmo DC para {user}. Bora evitar spam de restore.",
+                    "Checkpoint já recuperado para {user}. Esse restore não precisa repetir."
+                ],
+                "alreadyBetterPosition": "{user} já está em posição melhor ou igual ({current}) do que a alvo ({target}).",
+                "alreadyBetterPositionLines": [
+                    "Não faz sentido piorar a posição: {user} já está em {current} e o alvo é {target}.",
+                    "Nada de andar pra trás: {user} já está melhor (posição {current}) que o restore ({target}).",
+                    "Restore cancelado: {user} já está em {current}, que é melhor/igual a {target}."
+                ],
                 "moved": "Movido {user} para a posição {position}.",
-                "error": "Falha ao restaurar posição: {error}"
-            },
-            "savequeue": {
-                "description": "Salva a fila atual.",
-                "usage": "!savequeue",
-                "empty": "A fila está vazia.",
-                "saved": "Fila salva com {count} entradas.",
-                "error": "Falha ao salvar fila: {error}"
+                "movedLines": [
+                    "Feito! {user} voltou para a posição {position}.",
+                    "Resgate concluído: {user} agora está na posição {position}.",
+                    "Boa! Coloquei {user} na posição {position}."
+                ],
+                "movedNearLines": [
+                    "Ufa 👀, foi por pouco! {user} voltou para a posição {position} (faltavam {remaining}).",
+                    "No limite 👀, mas foi! {user} está na posição {position}. Restavam {remaining}.",
+                    "Quase estourou o cronômetro 👀. {user} recuperou a posição {position} com {remaining} de janela."
+                ],
+                "error": "Falha ao restaurar posição: {error}",
+                "errorLines": [
+                    "Pane no resgate: {error}",
+                    "Deu um tropeço técnico aqui: {error}",
+                    "Tentei puxar o restore, mas falhou: {error}"
+                ]
             }
         },
         "economy": {
@@ -476,6 +530,7 @@
                 "noUser": "Não consegui identificar você.",
                 "cardTitle": "Saldo",
                 "cardBalance": "Saldo",
+                "cardVip": "VIP",
                 "cardPoints": "pontos"
             },
             "transfer": {
@@ -519,11 +574,13 @@
             },
             "buy": {
                 "description": "Compra um item da loja.",
-                "usage": "!buy <item>",
-                "usageMessage": "Uso: !buy <item>",
+                "usage": "!buy <item> ou !buy vip <nivel> <duracao>",
+                "usageMessage": "Uso: !buy <item> ou !buy vip <nivel> <duracao>",
+                "vipUsageMessage": "Uso VIP: !buy vip <bronze|silver|gold> <daily|weekly|monthly|yearly>. Exemplo: !buy vip bronze monthly",
                 "disabled": "Economia desativada.",
                 "noUser": "Nao consegui identificar voce.",
                 "notFound": "Item nao encontrado: {item}",
+                "vipNotFound": "Plano VIP nao encontrado para nivel {level} e duracao {duration}.",
                 "alreadyOwned": "Voce ja comprou: {item}",
                 "invalidItem": "Item invalido.",
                 "insufficient": "Saldo insuficiente. Voce tem {balance} pontos.",
@@ -531,7 +588,10 @@
                 "notInQueue": "Voce nao esta na fila.",
                 "noMove": "Nao ha como mover sua posicao agora.",
                 "success": "Compra feita: {item}{extra}.",
-                "failed": "Falha ao aplicar a compra: {error}"
+                "failed": "Falha ao aplicar a compra: {error}",
+                "vipHigherLevel": "Voce ja possui um VIP de nivel maior ativo. Compre um plano do mesmo nivel ou superior.",
+                "vipActivateFailed": "Nao foi possivel ativar o VIP agora. Tente novamente.",
+                "vipSuccess": "Compra feita: {item}. VIP ativo por {remaining}."
             },
             "work": {
                 "description": "Sistema de trabalho diario.",
@@ -634,6 +694,7 @@
                 "cardXp": "XP",
                 "cardReward": "Recompensa próx nível",
                 "cardBalance": "Saldo",
+                "cardVip": "VIP",
                 "cardPoints": "pontos"
             },
             "xptop": {
@@ -642,6 +703,63 @@
                 "empty": "Sem dados de XP.",
                 "line": "#{pos} {user}: nível {level} ({xp} XP)",
                 "disabled": "XP está desativado."
+            }
+        },
+        "vip": {
+            "vip": {
+                "description": "Mostra status VIP, planos, renovação e auto-renovação.",
+                "usage": "!vip [planos|renew|autorenew on|off|greet set|clear|show]",
+                "disabled": "Sistema VIP desativado.",
+                "noUser": "Não consegui identificar você.",
+                "plansEmpty": "Nenhum plano VIP configurado.",
+                "plansReply": "Planos VIP: {lines}",
+                "renewNoPlan": "Não existe plano salvo para renovação. Use !vip autorenew on <nível> <duração> ou compre um VIP primeiro.",
+                "renewInsufficient": "Saldo insuficiente para renovar {plan}. Custa {price} pontos e você tem {balance}.",
+                "renewFailed": "Não foi possível renovar o VIP agora.",
+                "renewSuccess": "Renovação concluída: {plan}. Novo vencimento em {remaining}.",
+                "autoUsage": "Uso: !vip autorenew <on|off> [bronze|silver|gold] [daily|weekly|monthly|yearly]",
+                "autoNoPlan": "Não existe plano base para auto-renovação. Informe nível e duração, por exemplo: !vip autorenew on bronze monthly",
+                "autoEnabled": "Auto-renovação ativada para {plan}. Quando expirar e houver saldo suficiente, a renovação será aplicada no join.",
+                "autoDisabled": "Auto-renovação desativada.",
+                "greetVipOnly": "A greet personalizada é exclusiva para quem tem VIP ativo.",
+                "greetUsage": "Uso: !vip greet <set|show|clear>. Limite: {max} caracteres. Placeholders: {name}, {username}.",
+                "greetEmpty": "Mensagem vazia.",
+                "greetTooLong": "A mensagem pode ter no máximo {max} caracteres.",
+                "greetNoMentionsLinks": "Não use @mentions ou links na greet personalizada.",
+                "greetNoAngleBrackets": "Caracteres < e > não são permitidos.",
+                "greetInvalidPlaceholder": "Use apenas os placeholders {name} e {username}.",
+                "greetShow": "Sua greet personalizada atual: {message}",
+                "greetShowEmpty": "Você não configurou greet personalizada.",
+                "greetCleared": "Greet personalizada removida.",
+                "greetSaved": "Greet personalizada salva: {message}",
+                "expiredWithPrevious": "Seu VIP anterior expirou há {elapsed}.",
+                "noActive": "Você não possui VIP ativo.",
+                "renewPlanSaved": "Plano salvo: {plan}.",
+                "statusHint": "Use !vip planos para ver opções, !buy vip <nivel> <duracao> para comprar ou !vip renew para renovar.",
+                "statusReply": "VIP {level} ativo | expira em {remaining} | XP x{xp} | Economia x{economy} | Daily x{daily} | Work x{work} | DC x{dc}.",
+                "cards": {
+                    "plansTitle": "Planos VIP Premium",
+                    "plansFooter": "Compra pela loja com !buy vip <nivel> <duracao>. Exemplo: !buy vip bronze monthly.",
+                    "statusTitle": "VIP Premium",
+                    "statusActive": "Ativo",
+                    "statusExpired": "Expirado",
+                    "statusLabel": "Nível",
+                    "expiresIn": "Expira em",
+                    "expiredAgo": "Expirou há",
+                    "balanceLabel": "Saldo",
+                    "renewLabel": "Renovação",
+                    "renewAuto": "Auto ({plan})",
+                    "renewAutoEnabled": "on",
+                    "renewManual": "Manual",
+                    "benefits": {
+                        "xp": "XP",
+                        "economy": "Economia",
+                        "daily": "Daily",
+                        "work": "Work",
+                        "dcWindow": "Janela DC",
+                        "shopAfk": "Loja/AFK"
+                    }
+                }
             }
         },
         "system": {
@@ -722,7 +840,17 @@
                 "description": "Abre a roleta.",
                 "usage": "!roulette",
                 "alreadyOpen": "A roleta já está aberta.",
-                "opened": "Roleta aberta por {seconds}s. Use !join."
+                "alreadyOpenLines": [
+                    "A roleta já tá rolando, mano.",
+                    "Calma, a roleta já foi aberta.",
+                    "Partiu! A roleta já está em ação."
+                ],
+                "opened": "Roleta aberta por {seconds}s. Use !join.",
+                "openedLines": [
+                    "Ó a roleta aí galera! {seconds}s pra entrar com !join.",
+                    "Roleta no ar: {seconds}s. Bora entrar com !join!",
+                    "Let's go! Roleta aberta por {seconds}s. !join pra participar."
+                ]
             },
             "join": {
                 "description": "Entra na roleta.",
@@ -732,7 +860,12 @@
                 "mustBeInQueue": "Você precisa estar na fila para entrar.",
                 "waitlistError": "Falha ao verificar a fila: {error}",
                 "alreadyIn": "Você já está na roleta.",
-                "joined": "{name} entrou na roleta."
+                "joined": "{name} entrou na roleta.",
+                "joinedLines": [
+                    "{name} entrou na roleta!",
+                    "{name} está na pista agora!",
+                    "{name} veio pra brincar."
+                ]
             },
             "leave": {
                 "description": "Sai da roleta.",
@@ -950,55 +1083,6 @@
                 "notFound": "Nenhum meme encontrado agora.",
                 "error": "Erro ao buscar meme: {error}"
             },
-            "hack": {
-                "description": "Hackeia um usuario (brincadeira).",
-                "usage": "!hack <usuario>",
-                "usageMessage": "Uso: !hack <usuario>",
-                "lines": [
-                    "🔓 Hackeando {target}...",
-                    "📂 Encontrando arquivos...",
-                    "💳 Cartao encontrado...",
-                    "❌ Brincadeira 😂"
-                ]
-            },
-            "virus": {
-                "description": "Dispara um virus fake.",
-                "usage": "!virus",
-                "lines": [
-                    "🦠 Preparando virus...",
-                    "📡 Enviando para a rede...",
-                    "⚠️ Sistema instavel...",
-                    "✅ Era so zoeira!"
-                ]
-            },
-            "summon": {
-                "description": "Invoca algo misterioso.",
-                "usage": "!summon",
-                "lines": [
-                    "✨ Abrindo o portal...",
-                    "🔮 Energias se acumulando...",
-                    "⚡ Algo foi invocado!"
-                ]
-            },
-            "explode": {
-                "description": "Efeito de explosao fake.",
-                "usage": "!explode",
-                "lines": [
-                    "💥 Carregando explosivos...",
-                    "💣 Contagem regressiva...",
-                    "💥 BOOM!"
-                ]
-            },
-            "fakeban": {
-                "description": "Banimento fake de um usuario.",
-                "usage": "!fakeban <usuario>",
-                "usageMessage": "Uso: !fakeban <usuario>",
-                "lines": [
-                    "🚨 {target} foi denunciado(a)...",
-                    "⛔ Banindo {target}...",
-                    "✅ Brincadeira, {target} esta seguro(a)!"
-                ]
-            },
             "fortune": {
                 "description": "Mostra uma fortuna.",
                 "usage": "!fortune",
@@ -1041,10 +1125,6 @@
         "economyGrab": {
             "description": "Recompensas por grabs."
         },
-        "timeGuard": {
-            "description": "Pula músicas acima do limite configurado.",
-            "skip": "Música longa ({minutes} min): {label}. Pulando..."
-        },
         "autoSkip": {
             "description": "Pula músicas travadas após o fim.",
             "skip": "Auto-skip: música travada. Pulando..."
@@ -1079,16 +1159,27 @@
         },
         "waitlistSnapshot": {
             "description": "Salva snapshots da fila para !dc."
+        },
+        "waitlistJoinSnapshot": {
+            "description": "Salva snapshot imediatamente quando usuário entra na fila."
+        },
+        "waitlistLeaveSnapshot": {
+            "description": "Salva snapshot imediatamente quando usuário sai da fila."
         }
     },
     "helpers": {
         "roulette": {
             "closed": {
-                "noParticipants": "Roleta encerrada: ninguém participou.",
+                "fewParticipants": "Roleta encerrada: precisa de mínimo {min} participantes (só {count} entrou).",
+                "fewParticipantsLines": [
+                    "Roleta morreu de tédio com só {count} participante(s). Bora trazer mais gente!",
+                    "Com {count} participante(s) não tem roleta. Precisa de pelo menos {min} pra girar.",
+                    "Só {count} galera? Não dá pra fazer roleta com poucos. Mínimo {min}."
+                ],
                 "apiUnavailable": "Roleta encerrada: API indisponível.",
                 "waitlistError": "Roleta encerrada: erro ao buscar fila: {error}",
                 "emptyQueue": "Roleta encerrada: fila vazia.",
-                "noEligible": "Roleta encerrada: nenhum participante elegível.",
+                "noEligible": "Roleta encerrada: nenhum participante elegível na fila.",
                 "noTarget": "Roleta encerrada: nenhum alvo encontrado.",
                 "noPermission": "Não tenho permissão para mover/remover {user}."
             },

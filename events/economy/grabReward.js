@@ -46,7 +46,15 @@ export default {
 
     const identity = bot._getUserIdentity(userId, data?.user ?? data?.sender);
     if (bot.cfg.economyEnabled && Number(bot.cfg.economyGrabPoints) > 0) {
-      await bot.awardEconomyPoints(userId, bot.cfg.economyGrabPoints, identity);
+      await bot.awardEconomyPoints(
+        userId,
+        bot.cfg.economyGrabPoints,
+        identity,
+        {
+          applyVipMultiplier: true,
+          source: "grab",
+        },
+      );
     }
     if (bot.cfg.xpEnabled && Number(bot.cfg.xpGrabPoints) > 0) {
       await bot.awardXp(userId, bot.cfg.xpGrabPoints, identity);

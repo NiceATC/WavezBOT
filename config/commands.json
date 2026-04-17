@@ -1,0 +1,141 @@
+{
+    "_comment": "Config granular: altere apenas commandToggles e eventToggles.",
+    "commandToggles": {
+        "core": {
+            "help": true,
+            "ping": true,
+            "reload": true,
+            "reloadcmd": true,
+            "start": true,
+            "stop": true
+        },
+        "system": {
+            "settings": true,
+            "stats": true,
+            "autowoot": true,
+            "autowoot-link": true,
+            "welcome": true,
+            "cmddelete": true,
+            "motd": true,
+            "togglemotd": true
+        },
+        "economy": {
+            "economy": true,
+            "balance": true,
+            "daily": true,
+            "work": true,
+            "shop": true,
+            "buy": true,
+            "casino": true,
+            "steal": true,
+            "transfer": true,
+            "top": true
+        },
+        "xp": {
+            "perfil": true,
+            "xptop": true,
+            "rank": true
+        },
+        "info": {
+            "active": true,
+            "ba": true,
+            "history": true,
+            "ids": true,
+            "jointime": true,
+            "lastplayed": true,
+            "lastseen": true,
+            "link": true,
+            "mediaid": true,
+            "np": true,
+            "queue": true,
+            "topdj": true,
+            "topsongs": true,
+            "topwoot": true
+        },
+        "fun": {
+            "8ball": true,
+            "accept": true,
+            "coin": true,
+            "compliment": true,
+            "cookie": true,
+            "dice": true,
+            "duel": true,
+            "duelmute": true,
+            "fact": true,
+            "fortune": true,
+            "ghostbuster": true,
+            "gif": true,
+            "hug": true,
+            "joke": true,
+            "join": true,
+            "leave": true,
+            "meme": true,
+            "recuse": true,
+            "roast": true,
+            "roll": true,
+            "roulette": true,
+            "rps": true,
+            "ship": true,
+            "slap": true,
+            "thor": true,
+            "trivia": true
+        },
+        "moderation": {
+            "afklimit": true,
+            "afkremoval": true,
+            "afkreset": true,
+            "afktime": true,
+            "autoskip": true,
+            "ban": true,
+            "unban": true,
+            "delmsg": true,
+            "give": true,
+            "kick": true,
+            "lock": true,
+            "lockchat": true,
+            "move": true,
+            "mute": true,
+            "unmute": true,
+            "nuke": true,
+            "remove": true,
+            "skip": true,
+            "swap": true,
+            "unlock": true,
+            "voteskip": true,
+            "dc": true
+        },
+        "music": {
+            "blacklist": true,
+            "togglebl": true
+        },
+        "vip": {
+            "vip": true
+        }
+    },
+    "eventToggles": {
+        "core": {
+            "greet": true,
+            "keywordReply": true,
+            "user-sync": true
+        },
+        "economy": {
+            "economyChatReward": true,
+            "economyDjReward": true,
+            "economyGrabReward": true,
+            "economyVoteReward": true
+        },
+        "moderation": {
+            "afkRemoval": true,
+            "mediaCheck": true
+        },
+        "queue": {
+            "djAdvanceSnapshot": true,
+            "waitlistJoinSnapshot": true,
+            "waitlistLeaveSnapshot": true,
+            "waitlistSnapshot": true
+        },
+        "vip": {
+            "vipJoinCheck": true
+        }
+    }
+}

@@ -87,8 +87,8 @@ const duel = {
   deleteOn: 60_000,
 
   async execute(ctx) {
-    const { bot, args, sender, reply, t } = ctx;
-    const targetInput = (args[0] ?? "").replace(/^@/, "").trim();
+    const { bot, args, sender, reply, t, mention } = ctx;
+    const targetInput = (args[0] ?? "").trim();
     if (!targetInput) {
       await reply(t("commands.fun.duel.usageMessage"));
       return;
@@ -96,7 +96,9 @@ const duel = {
 
     const target = bot.findRoomUser(targetInput);
     if (!target) {
-      await reply(t("commands.fun.duel.userNotFound", { user: targetInput }));
+      await reply(
+        t("commands.fun.duel.userNotFound", { user: mention(targetInput) }),
+      );
       return;
     }
 

@@ -1,6 +1,7 @@
 import { formatPoints } from "../../helpers/points.js";
 import { renderBalanceCard } from "../../helpers/profile-card.js";
 import { uploadToImgbb } from "../../helpers/imgbb.js";
+import { getVipLevelLabel } from "../../lib/vip.js";
 
 export default {
   name: "balance",
@@ -11,7 +12,7 @@ export default {
   deleteOn: 60_000,
 
   async execute(ctx) {
-    const { bot, sender, reply, t } = ctx;
+    const { bot, sender, reply, send, t } = ctx;
     if (!bot.cfg.economyEnabled) {
       await reply(t("commands.economy.balance.disabled"));
       return;
@@ -25,21 +26,27 @@ export default {
 
     const identity = bot._getUserIdentity(userId, sender);
     const balance = await bot.getEconomyBalance(userId, identity);
+    const vipState = await bot.getVipState(userId, identity);
+    const vipLabel = vipState.isActive
+      ? getVipLevelLabel(vipState.levelKey, ctx.locale)
+      : null;
 
     if (bot.cfg.imageRenderingEnabled && process.env.IMGBB_API_KEY) {
       try {
         const labels = {
           title: t("commands.economy.balance.cardTitle"),
           balance: t("commands.economy.balance.cardBalance"),
+          vip: t("commands.economy.balance.cardVip"),
           points: t("commands.economy.balance.cardPoints"),
         };
         const buffer = renderBalanceCard({
           username: identity.displayName ?? identity.username ?? "User",
           balance,
+          vipLabel,
           labels,
         });
         const url = await uploadToImgbb(buffer, `balance-${userId}`);
-        await reply(url);
+        await send(url);
         return;
       } catch {
         // fall back to text

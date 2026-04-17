@@ -17,7 +17,7 @@ export default {
   deleteOn: 60_000,
 
   async execute(ctx) {
-    const { bot, sender, args, reply, t } = ctx;
+    const { bot, sender, args, reply, t, mention, mentionUser } = ctx;
     if (!bot.cfg.economyEnabled) {
       await reply(t("commands.economy.transfer.disabled"));
       return;
@@ -28,9 +28,7 @@ export default {
       return;
     }
 
-    const targetInput = String(args[0] ?? "")
-      .replace(/^@/, "")
-      .trim();
+    const targetInput = String(args[0] ?? "").trim();
     const amountRaw = args[1];
     if (!targetInput || amountRaw == null) {
       await reply(t("commands.economy.transfer.usageMessage"));
@@ -56,7 +54,11 @@ export default {
 
     const target = bot.findRoomUser(targetInput);
     if (!target) {
-      await reply(t("commands.economy.transfer.userNotFound", { user: targetInput }));
+      await reply(
+        t("commands.economy.transfer.userNotFound", {
+          user: mention(targetInput),
+        }),
+      );
       return;
     }
 
@@ -104,7 +106,7 @@ export default {
 
     await reply(
       t("commands.economy.transfer.success", {
-        user: target.displayName ?? target.username ?? targetInput,
+        user: mentionUser(target, targetInput),
         amount: formatPoints(amountInt),
         balance: formatPoints(result.fromBalance),
       }),

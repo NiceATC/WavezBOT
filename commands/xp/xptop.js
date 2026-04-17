@@ -26,16 +26,15 @@ export default {
 
     const lines = rows.map((row, idx) => {
       const name =
-        row.display_name ??
         row.displayName ??
         row.username ??
-        bot.getRoomUserDisplayName(row.user_id) ??
-        row.user_id;
+        bot.getRoomUserDisplayName(row.userId) ??
+        row.userId;
       return t("commands.xp.xptop.line", {
         pos: idx + 1,
         user: name,
         level: row.level ?? 1,
-        xp: formatPoints(row.xp_total ?? row.xpTotal ?? 0),
+        xp: formatPoints(row.xpTotal ?? 0),
       });
     });
 

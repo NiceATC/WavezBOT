@@ -12,8 +12,8 @@ export default {
   minRole: "bouncer",
 
   async execute(ctx) {
-    const { api, bot, args, reply, t } = ctx;
-    const target = (args[0] ?? "").replace(/^@/, "").trim();
+    const { api, bot, args, reply, t, mention, mentionUser } = ctx;
+    const target = (args[0] ?? "").trim();
     if (!target) {
       await reply(t("commands.mod.kick.usageMessage"));
       return;
@@ -21,7 +21,9 @@ export default {
 
     const user = bot.findRoomUser(target);
     if (!user) {
-      await reply(t("commands.mod.kick.userNotFound", { user: target }));
+      await reply(
+        t("commands.mod.kick.userNotFound", { user: mention(target) }),
+      );
       return;
     }
 
@@ -33,7 +35,7 @@ export default {
     if (bot.getUserRoleLevel(user.userId) >= bot.getBotRoleLevel()) {
       await reply(
         t("commands.mod.kick.roleTooHigh", {
-          user: user.displayName ?? user.username,
+          user: mentionUser(user, target),
         }),
       );
       return;
@@ -43,7 +45,7 @@ export default {
       bot.wsKickUser(user.userId);
       await reply(
         t("commands.mod.kick.removed", {
-          user: user.displayName ?? user.username,
+          user: mentionUser(user, target),
         }),
       );
     } catch (err) {

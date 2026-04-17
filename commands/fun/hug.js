@@ -15,10 +15,8 @@ export default {
   deleteOn: 60_000,
 
   async execute(ctx) {
-    const { bot, sender, t, tArray, reply } = ctx;
-    const targetInput = String(ctx.rawArgs ?? "")
-      .replace(/^@/, "")
-      .trim();
+    const { bot, sender, t, tArray, reply, mention, mentionUser } = ctx;
+    const targetInput = String(ctx.rawArgs ?? "").trim();
     const senderName =
       sender.displayName ?? sender.username ?? t("common.someone");
 
@@ -30,11 +28,13 @@ export default {
 
     const user = bot.findRoomUser(targetInput);
     if (!user) {
-      await reply(t("commands.fun.hug.userNotFound", { user: targetInput }));
+      await reply(
+        t("commands.fun.hug.userNotFound", { user: mention(targetInput) }),
+      );
       return;
     }
 
-    const targetName = user.displayName ?? user.username ?? targetInput;
+    const targetName = mentionUser(user, targetInput);
     const line = pickRandom(tArray("commands.fun.hug.targetLines"));
     await reply(formatLine(line, senderName, targetName));
   },

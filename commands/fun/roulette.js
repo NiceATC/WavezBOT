@@ -1,8 +1,6 @@
-import {
-  closeRoulette,
-  ROULETTE_DURATION_MS,
-  rouletteState,
-} from "../../helpers/roulette.js";
+import { closeRoulette, rouletteState } from "../../helpers/roulette.js";
+
+const { pickRandom } = await import("../../helpers/random.js");
 
 const roulette = {
   name: "roulette",
@@ -13,23 +11,31 @@ const roulette = {
   minRole: "bouncer",
 
   async execute(ctx) {
-    const { bot, api, reply, t } = ctx;
+    const { bot, api, reply, t, tArray } = ctx;
     if (rouletteState.open) {
-      await reply(t("commands.fun.roulette.alreadyOpen"));
+      const lines = tArray("commands.fun.roulette.alreadyOpenLines") ?? [];
+      const msg =
+        lines.length > 0
+          ? pickRandom(lines)
+          : t("commands.fun.roulette.alreadyOpen");
+      await reply(msg);
       return;
     }
 
     rouletteState.open = true;
     rouletteState.participants.clear();
+    const durationMs = bot.cfg.rouletteDurationMs ?? 60_000;
     rouletteState.timeoutId = setTimeout(() => {
       closeRoulette(bot, api).catch(() => {});
-    }, ROULETTE_DURATION_MS);
+    }, durationMs);
 
-    await reply(
-      t("commands.fun.roulette.opened", {
-        seconds: Math.round(ROULETTE_DURATION_MS / 1000),
-      }),
-    );
+    const lines = tArray("commands.fun.roulette.openedLines") ?? [];
+    const seconds = Math.round(durationMs / 1000);
+    const msg =
+      lines.length > 0
+        ? pickRandom(lines).replace("{seconds}", String(seconds))
+        : t("commands.fun.roulette.opened", { seconds });
+    await reply(msg);
   },
 };
 
@@ -47,7 +53,7 @@ const join = {
       return;
     }
 
-    const key = sender.userId != null ? String(sender.userId) : "";
+    const key = sender.internalId ?? sender.userId ?? "";
     const name = sender.displayName ?? sender.username ?? t("common.someone");
     if (!key) {
       await reply(t("commands.fun.join.noUser"));
@@ -72,7 +78,12 @@ const join = {
     }
 
     rouletteState.participants.set(key, name);
-    await reply(t("commands.fun.join.joined", { name }));
+    const lines = tArray("commands.fun.join.joinedLines") ?? [];
+    const msg =
+      lines.length > 0
+        ? pickRandom(lines).replace("{name}", name)
+        : t("commands.fun.join.joined", { name });
+    await reply(msg);
   },
 };
 
@@ -90,7 +101,7 @@ const leave = {
       return;
     }
 
-    const key = sender.userId != null ? String(sender.userId) : "";
+    const key = sender.internalId ?? sender.userId ?? "";
     const name = sender.displayName ?? sender.username ?? t("common.someone");
     if (!key) {
       await reply(t("commands.fun.leave.noUser"));

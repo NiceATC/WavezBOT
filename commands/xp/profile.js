@@ -1,6 +1,7 @@
 import { formatPoints, toPointsInt } from "../../helpers/points.js";
 import { renderProfileCard } from "../../helpers/profile-card.js";
 import { uploadToImgbb } from "../../helpers/imgbb.js";
+import { getVipLevelLabel } from "../../lib/vip.js";
 
 export default {
   name: "perfil",
@@ -11,15 +12,18 @@ export default {
   deleteOn: 60_000,
 
   async execute(ctx) {
-    const { bot, args, sender, reply, t } = ctx;
+    const { bot, args, sender, reply, send, t, mention, mentionUser } = ctx;
     if (!bot.cfg.xpEnabled) {
       await reply(t("commands.xp.perfil.disabled"));
       return;
     }
 
-    const targetInput = (args[0] ?? sender.username ?? sender.displayName ?? "")
-      .replace(/^@/, "")
-      .trim();
+    const targetInput = (
+      args[0] ??
+      sender.username ??
+      sender.displayName ??
+      ""
+    ).trim();
 
     if (!targetInput) {
       await reply(t("commands.xp.perfil.usageMessage"));
@@ -28,7 +32,9 @@ export default {
 
     const user = bot.findRoomUser(targetInput);
     if (!user) {
-      await reply(t("commands.xp.perfil.userNotFound", { user: targetInput }));
+      await reply(
+        t("commands.xp.perfil.userNotFound", { user: mention(targetInput) }),
+      );
       return;
     }
 
@@ -40,13 +46,17 @@ export default {
     if (!profile) {
       await reply(
         t("commands.xp.perfil.noRecord", {
-          user: user.displayName ?? user.username ?? targetInput,
+          user: mentionUser(user, targetInput),
         }),
       );
       return;
     }
 
     const balance = await bot.getEconomyBalance(user.userId, identity);
+    const vipState = await bot.getVipState(user.userId, identity);
+    const vipLabel = vipState.isActive
+      ? getVipLevelLabel(vipState.levelKey, ctx.locale)
+      : null;
 
     if (bot.cfg.imageRenderingEnabled && process.env.IMGBB_API_KEY) {
       try {
@@ -56,6 +66,7 @@ export default {
           xp: t("commands.xp.perfil.cardXp"),
           reward: t("commands.xp.perfil.cardReward"),
           balance: t("commands.xp.perfil.cardBalance"),
+          vip: t("commands.xp.perfil.cardVip"),
           points: t("commands.xp.perfil.cardPoints"),
         };
         const buffer = renderProfileCard({
@@ -65,10 +76,11 @@ export default {
           nextReq: profile.nextReq,
           rewardPoints: toPointsInt(profile.rewardNext),
           balance,
+          vipLabel,
           labels,
         });
         const url = await uploadToImgbb(buffer, `perfil-${user.userId}`);
-        await reply(url);
+        await send(url);
         return;
       } catch {
         // fall back to text
@@ -76,7 +88,7 @@ export default {
     }
 
     const base = t("commands.xp.perfil.reply", {
-      user: user.displayName ?? user.username ?? targetInput,
+      user: mentionUser(user, targetInput),
       level: profile.level,
       xp: formatPoints(profile.xp),
       next: formatPoints(profile.nextReq),

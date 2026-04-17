@@ -24,8 +24,8 @@ const ban = {
   minRole: "manager",
 
   async execute(ctx) {
-    const { api, bot, args, reply, t } = ctx;
-    const target = (args[0] ?? "").replace(/^@/, "").trim();
+    const { api, bot, args, reply, t, mention, mentionUser } = ctx;
+    const target = (args[0] ?? "").trim();
     if (!target) {
       await reply(t("commands.mod.ban.usageMessage"));
       return;
@@ -33,7 +33,9 @@ const ban = {
 
     const user = bot.findRoomUser(target);
     if (!user) {
-      await reply(t("commands.mod.ban.userNotFound", { user: target }));
+      await reply(
+        t("commands.mod.ban.userNotFound", { user: mention(target) }),
+      );
       return;
     }
 
@@ -45,7 +47,7 @@ const ban = {
     if (bot.getUserRoleLevel(user.userId) >= bot.getBotRoleLevel()) {
       await reply(
         t("commands.mod.ban.roleTooHigh", {
-          user: user.displayName ?? user.username,
+          user: mentionUser(user, target),
         }),
       );
       return;
@@ -57,10 +59,11 @@ const ban = {
       bot.wsBanUser(user.userId, { duration, reason });
       const parts = [
         t("commands.mod.ban.banned", {
-          user: user.displayName ?? user.username,
+          user: mentionUser(user, target),
         }),
       ];
-      if (label) parts.push(t("commands.mod.ban.duration", { duration: label }));
+      if (label)
+        parts.push(t("commands.mod.ban.duration", { duration: label }));
       if (reason) parts.push(t("commands.mod.ban.reason", { reason }));
       await reply(parts.join(" ") + ".");
     } catch (err) {
@@ -79,8 +82,8 @@ const unban = {
   minRole: "manager",
 
   async execute(ctx) {
-    const { api, bot, args, reply, t } = ctx;
-    const target = (args[0] ?? "").replace(/^@/, "").trim();
+    const { api, bot, args, reply, t, mention } = ctx;
+    const target = (args[0] ?? "").trim();
     if (!target) {
       await reply(t("commands.mod.unban.usageMessage"));
       return;
@@ -119,13 +122,13 @@ const unban = {
     }
 
     if (!userId) {
-      await reply(t("commands.mod.unban.notFound", { user: target }));
+      await reply(t("commands.mod.unban.notFound", { user: mention(target) }));
       return;
     }
 
     try {
       await api.room.unban(bot.roomId, userId);
-      await reply(t("commands.mod.unban.removed", { user: target }));
+      await reply(t("commands.mod.unban.removed", { user: mention(target) }));
     } catch (err) {
       await reply(t("commands.mod.unban.error", { error: err.message }));
     }

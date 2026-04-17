@@ -1,5 +1,9 @@
 import { pickRandom } from "../../helpers/random.js";
 import { getRoleLevel } from "../../lib/permissions.js";
+import {
+  getQueueEntryUserId,
+  getWaitlistPositionForIndex,
+} from "../../lib/waitlist.js";
 
 const GOOD_CHANCE = 3;
 const NEUTRAL_CHANCE = 27;
@@ -36,16 +40,19 @@ export default {
       return;
     }
 
-    let queueIds = [];
+    let entries = [];
     try {
       const qRes = await api.room.getQueueStatus(bot.cfg.room);
-      queueIds = qRes?.data?.queueUserIds ?? [];
+      entries = Array.isArray(qRes?.data?.entries) ? qRes.data.entries : [];
     } catch (err) {
       await reply(t("commands.fun.thor.waitlistError", { error: err.message }));
       return;
     }
 
-    const inList = queueIds.includes(userId);
+    const queueIndex = entries.findIndex(
+      (entry) => getQueueEntryUserId(entry) === userId,
+    );
+    const inList = getWaitlistPositionForIndex(queueIndex, entries) != null;
     if (!inList) {
       await reply(t("commands.fun.thor.mustBeInQueue"));
       return;

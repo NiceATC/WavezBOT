@@ -32,8 +32,7 @@ export default {
 
     const state = await getDailyRewardState(userId);
     const now = Date.now();
-    const lastClaim =
-      Number(state?.last_claim_at ?? state?.lastClaimAt ?? 0) || 0;
+    const lastClaim = Number(state?.lastClaimAt ?? 0) || 0;
 
     if (lastClaim && now - lastClaim < cooldownMs) {
       const remaining = cooldownMs - (now - lastClaim);
@@ -46,7 +45,10 @@ export default {
     }
 
     const identity = bot._getUserIdentity(userId, sender);
-    await bot.awardEconomyPoints(userId, amount, identity);
+    await bot.awardEconomyPoints(userId, amount, identity, {
+      applyVipMultiplier: true,
+      source: "daily",
+    });
 
     const nextStreak =
       lastClaim && now - lastClaim <= cooldownMs * 2

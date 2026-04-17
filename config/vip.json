@@ -1,0 +1,59 @@
+{
+    "_comment": "Sistema VIP premium: niveis, renovacao, beneficios e cards.",
+    "vipEnabled": true,
+    "vipJoinCheckEnabled": true,
+    "vipRenewPromptCooldownMs": 21600000,
+    "vipLevels": {
+        "bronze": {
+            "monthlyPrice": 150,
+            "xpMultiplier": 1.1,
+            "economyMultiplier": 1.08,
+            "dailyMultiplier": 1.1,
+            "workMultiplier": 1.12,
+            "dcWindowMultiplier": 1.25,
+            "afkLimitMultiplier": 1.2,
+            "shopDiscountPct": 3,
+            "stealProtectionPct": 0.06
+        },
+        "silver": {
+            "monthlyPrice": 320,
+            "xpMultiplier": 1.25,
+            "economyMultiplier": 1.15,
+            "dailyMultiplier": 1.18,
+            "workMultiplier": 1.22,
+            "dcWindowMultiplier": 1.5,
+            "afkLimitMultiplier": 1.35,
+            "shopDiscountPct": 6,
+            "stealProtectionPct": 0.12
+        },
+        "gold": {
+            "monthlyPrice": 600,
+            "xpMultiplier": 1.45,
+            "economyMultiplier": 1.25,
+            "dailyMultiplier": 1.3,
+            "workMultiplier": 1.35,
+            "dcWindowMultiplier": 2,
+            "afkLimitMultiplier": 1.5,
+            "shopDiscountPct": 10,
+            "stealProtectionPct": 0.18
+        }
+    },
+    "vipDurations": {
+        "daily": {
+            "days": 1,
+            "discountPct": 0
+        },
+        "weekly": {
+            "days": 7,
+            "discountPct": 4
+        },
+        "monthly": {
+            "days": 30,
+            "discountPct": 10
+        },
+        "yearly": {
+            "days": 365,
+            "discountPct": 35
+        }
+    }
+}

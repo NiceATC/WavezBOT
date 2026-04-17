@@ -8,22 +8,24 @@ export default {
   deleteOn: 60_000,
 
   async execute(ctx) {
-    const { bot, sender, t, reply } = ctx;
-    const targetInput = String(ctx.rawArgs ?? "")
-      .replace(/^@/, "")
-      .trim();
+    const { bot, sender, t, reply, mention, mentionUser } = ctx;
+    const targetInput = String(ctx.rawArgs ?? "").trim();
 
     let userId = sender.userId;
-    let name = sender.displayName ?? sender.username ?? t("common.someone");
+    let name = mention(
+      sender.displayName ?? sender.username ?? t("common.someone"),
+    );
 
     if (targetInput) {
       const user = bot.findRoomUser(targetInput);
       if (!user) {
-        await reply(t("commands.info.rank.userNotFound", { user: targetInput }));
+        await reply(
+          t("commands.info.rank.userNotFound", { user: mention(targetInput) }),
+        );
         return;
       }
       userId = user.userId;
-      name = user.displayName ?? user.username ?? targetInput;
+      name = mentionUser(user, targetInput);
     }
 
     if (userId == null) {

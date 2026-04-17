@@ -143,18 +143,6 @@
                 "success": "Swapped {userA} and {userB}.",
                 "error": "Failed to swap: {error}"
             },
-            "timeguard": {
-                "description": "Toggle time guard.",
-                "usage": "!timeguard [on|off]",
-                "enabled": "Time guard enabled.",
-                "disabled": "Time guard disabled."
-            },
-            "maxlength": {
-                "description": "Set the max song length.",
-                "usage": "!maxlength <minutes>",
-                "usageMessage": "Usage: !maxlength <minutes>",
-                "updated": "Max song length set to {minutes} min."
-            },
             "kick": {
                 "description": "Kick a user from the room.",
                 "usage": "!kick <user>",
@@ -258,16 +246,21 @@
                 "usage": "!duelmute <minutes>",
                 "usageMessage": "Usage: !duelmute <minutes>",
                 "updated": "Duel mute set to {minutes} min."
+            },
+            "give": {
+                "description": "Give points or VIP to a user.",
+                "usage": "!give <points|vip> <user> <value>",
+                "usageMessage": "Usage: !give <points|vip> <user> <value>. Examples: !give points <user> 5000 | !give vip <user> 30d [bronze|silver|gold]",
+                "userNotFound": "User not found: {user}",
+                "invalidAmount": "Invalid points amount.",
+                "pointsGranted": "{user} received {amount} points. Current balance: {balance}.",
+                "vipUsage": "Usage: !give vip <user> <duration|daily|weekly|monthly|yearly> [bronze|silver|gold]",
+                "vipHigherLevel": "{user} already has a higher VIP active.",
+                "vipFailed": "Could not apply VIP right now.",
+                "vipGranted": "{user} received {level} VIP for {duration}."
             }
         },
         "music": {
-            "woot": {
-                "description": "Cast a woot for the current track.",
-                "usage": "!woot",
-                "noTrack": "No track playing.",
-                "voted": "Wooted {title} for {user}.",
-                "error": "Woot failed: {error}"
-            },
             "blacklist": {
                 "description": "Manage the track blacklist.",
                 "usage": "!blacklist <add|remove|list|info> ...",
@@ -445,21 +438,82 @@
                 "description": "Restore a user's waitlist position after a DC.",
                 "usage": "!dc [user]",
                 "usageMessage": "Usage: !dc [user]",
+                "usageLines": [
+                    "Let's do it: use !dc [user] and I'll try to rescue the spot.",
+                    "Call me like this: !dc [user]. Recovery mode on.",
+                    "Quick format: !dc [user]. Let's bring that position back."
+                ],
                 "userNotFound": "User not found: {user}",
                 "noPermission": "You don't have permission to move another user.",
+                "noPermissionLines": [
+                    "Easy there, captain. Moving someone else requires bouncer+.",
+                    "No VIP pass for moving others right now. Ask a bouncer and we roll.",
+                    "That lever is for bouncer or above only. Queue safety first."
+                ],
                 "noSnapshot": "No recent snapshot for that user.",
+                "noSnapshotLines": [
+                    "I couldn't find a recent snapshot for that user.",
+                    "I checked the DC trail, but nothing fresh showed up.",
+                    "No saved checkpoint for that user right now."
+                ],
                 "expired": "Snapshot expired.",
+                "expiredLines": [
+                    "DC window expired. We missed the timing this round.",
+                    "Timeout. The snapshot is already out of the restore window.",
+                    "That DC snapshot has expired. Next round we'll catch it sooner."
+                ],
+                "expiredNearLines": [
+                    "That was close 👀. The DC window expired just moments ago.",
+                    "So close 👀. It expired by a tiny margin.",
+                    "Almost had it 👀, but the restore window just closed."
+                ],
                 "invalidPosition": "Invalid saved position.",
+                "invalidPositionLines": [
+                    "Saved position looks invalid, so I won't risk a bad move.",
+                    "Snapshot has an invalid position. Better not scramble the queue.",
+                    "Checkpoint issue: invalid position for restore."
+                ],
                 "mustJoin": "User must be in the waitlist.",
+                "mustJoinLines": [
+                    "First join the waitlist, then I'll restore the saved position.",
+                    "I need the user in the waitlist right now to move them safely.",
+                    "Get the user into the waitlist and I'll handle the DC right after."
+                ],
+                "noDcDetected": "I couldn't find a recent DC signal for that user.",
+                "noDcDetectedLines": [
+                    "No clear recent DC signal for that user, so I won't touch the queue.",
+                    "Looks like there wasn't a valid DC right now. Better keep the queue as-is.",
+                    "No recent evidence of a DC drop. Restore canceled for safety."
+                ],
+                "alreadyRestored": "That DC has already been restored for {user}.",
+                "alreadyRestoredLines": [
+                    "That restore was already applied for {user}. No infinite replay here 😄",
+                    "I already restored this same DC for {user}. Let's avoid restore spam.",
+                    "Checkpoint already recovered for {user}. No need to repeat this restore."
+                ],
+                "alreadyBetterPosition": "{user} is already in a better or equal position ({current}) than target ({target}).",
+                "alreadyBetterPositionLines": [
+                    "No reason to make position worse: {user} is already at {current}, target is {target}.",
+                    "No moving backwards: {user} is already better at {current} than restore target {target}.",
+                    "Restore canceled: {user} is already at {current}, which is better/equal than {target}."
+                ],
                 "moved": "Moved {user} back to position {position}.",
-                "error": "Failed to restore position: {error}"
-            },
-            "savequeue": {
-                "description": "Save the current waitlist snapshot.",
-                "usage": "!savequeue",
-                "empty": "Waitlist is empty.",
-                "saved": "Saved {count} entries.",
-                "error": "Failed to save queue: {error}"
+                "movedLines": [
+                    "Done. {user} is back at position {position}.",
+                    "Recovery complete: {user} is now at position {position}.",
+                    "Nice. I moved {user} to position {position}."
+                ],
+                "movedNearLines": [
+                    "Whew 👀, just in time. {user} is back at position {position} ({remaining} left).",
+                    "Right on the edge 👀, but it worked. {user} is at position {position}. {remaining} remaining.",
+                    "Clock almost ran out 👀. {user} recovered position {position} with {remaining} to spare."
+                ],
+                "error": "Failed to restore position: {error}",
+                "errorLines": [
+                    "Restore hiccup: {error}",
+                    "Technical stumble on restore: {error}",
+                    "I tried to recover it, but failed: {error}"
+                ]
             }
         },
         "economy": {
@@ -476,6 +530,7 @@
                 "noUser": "Could not identify you.",
                 "cardTitle": "Balance",
                 "cardBalance": "Balance",
+                "cardVip": "VIP",
                 "cardPoints": "points"
             },
             "transfer": {
@@ -519,11 +574,13 @@
             },
             "buy": {
                 "description": "Buy a shop item.",
-                "usage": "!buy <item>",
-                "usageMessage": "Usage: !buy <item>",
+                "usage": "!buy <item> or !buy vip <level> <duration>",
+                "usageMessage": "Usage: !buy <item> or !buy vip <level> <duration>",
+                "vipUsageMessage": "VIP usage: !buy vip <bronze|silver|gold> <daily|weekly|monthly|yearly>. Example: !buy vip bronze monthly",
                 "disabled": "Economy is disabled.",
                 "noUser": "Could not identify you.",
                 "notFound": "Item not found: {item}",
+                "vipNotFound": "VIP plan not found for level {level} and duration {duration}.",
                 "alreadyOwned": "You already bought: {item}",
                 "invalidItem": "Invalid item.",
                 "insufficient": "Insufficient balance. You have {balance} points.",
@@ -531,7 +588,10 @@
                 "notInQueue": "You're not in the waitlist.",
                 "noMove": "No movement is possible right now.",
                 "success": "Purchase complete: {item}{extra}.",
-                "failed": "Failed to apply purchase: {error}"
+                "failed": "Failed to apply purchase: {error}",
+                "vipHigherLevel": "You already have a higher VIP level active. Buy a plan of the same or higher level.",
+                "vipActivateFailed": "Could not activate VIP right now. Please try again.",
+                "vipSuccess": "Purchase complete: {item}. VIP active for {remaining}."
             },
             "work": {
                 "description": "Daily work system.",
@@ -634,6 +694,7 @@
                 "cardXp": "XP",
                 "cardReward": "Next reward",
                 "cardBalance": "Balance",
+                "cardVip": "VIP",
                 "cardPoints": "points"
             },
             "xptop": {
@@ -642,6 +703,63 @@
                 "empty": "No XP data yet.",
                 "line": "#{pos} {user}: level {level} ({xp} XP)",
                 "disabled": "XP is disabled."
+            }
+        },
+        "vip": {
+            "vip": {
+                "description": "Show VIP status, plans, renewal and auto-renew.",
+                "usage": "!vip [planos|renew|autorenew on|off|greet set|clear|show]",
+                "disabled": "VIP system is disabled.",
+                "noUser": "Could not identify you.",
+                "plansEmpty": "No VIP plans configured.",
+                "plansReply": "VIP plans: {lines}",
+                "renewNoPlan": "There is no saved renewal plan. Use !vip autorenew on <level> <duration> or buy VIP first.",
+                "renewInsufficient": "Insufficient balance to renew {plan}. It costs {price} points and you have {balance}.",
+                "renewFailed": "Could not renew VIP right now.",
+                "renewSuccess": "Renewal completed: {plan}. New expiry in {remaining}.",
+                "autoUsage": "Usage: !vip autorenew <on|off> [bronze|silver|gold] [daily|weekly|monthly|yearly]",
+                "autoNoPlan": "There is no base plan for auto-renew. Provide level and duration, for example: !vip autorenew on bronze monthly",
+                "autoEnabled": "Auto-renew enabled for {plan}. When it expires and there is enough balance, the renewal will be applied on join.",
+                "autoDisabled": "Auto-renew disabled.",
+                "greetVipOnly": "Custom greet is only available for users with active VIP.",
+                "greetUsage": "Usage: !vip greet <set|show|clear>. Limit: {max} characters. Placeholders: {name}, {username}.",
+                "greetEmpty": "Empty message.",
+                "greetTooLong": "The message can have at most {max} characters.",
+                "greetNoMentionsLinks": "Do not use @mentions or links in the custom greet.",
+                "greetNoAngleBrackets": "Characters < and > are not allowed.",
+                "greetInvalidPlaceholder": "Use only the {name} and {username} placeholders.",
+                "greetShow": "Your current custom greet: {message}",
+                "greetShowEmpty": "You have not configured a custom greet.",
+                "greetCleared": "Custom greet removed.",
+                "greetSaved": "Custom greet saved: {message}",
+                "expiredWithPrevious": "Your previous VIP expired {elapsed} ago.",
+                "noActive": "You do not have an active VIP.",
+                "renewPlanSaved": "Saved plan: {plan}.",
+                "statusHint": "Use !vip planos to view options, !buy vip <level> <duration> to purchase or !vip renew to renew.",
+                "statusReply": "VIP {level} active | expires in {remaining} | XP x{xp} | Economy x{economy} | Daily x{daily} | Work x{work} | DC x{dc}.",
+                "cards": {
+                    "plansTitle": "Premium VIP Plans",
+                    "plansFooter": "Buy through the shop with !buy vip <level> <duration>. Example: !buy vip bronze monthly.",
+                    "statusTitle": "Premium VIP",
+                    "statusActive": "Active",
+                    "statusExpired": "Expired",
+                    "statusLabel": "Level",
+                    "expiresIn": "Expires in",
+                    "expiredAgo": "Expired",
+                    "balanceLabel": "Balance",
+                    "renewLabel": "Renewal",
+                    "renewAuto": "Auto ({plan})",
+                    "renewAutoEnabled": "on",
+                    "renewManual": "Manual",
+                    "benefits": {
+                        "xp": "XP",
+                        "economy": "Economy",
+                        "daily": "Daily",
+                        "work": "Work",
+                        "dcWindow": "DC Window",
+                        "shopAfk": "Shop/AFK"
+                    }
+                }
             }
         },
         "system": {
@@ -950,55 +1068,6 @@
                 "notFound": "No meme found right now.",
                 "error": "Meme error: {error}"
             },
-            "hack": {
-                "description": "Fake hack a user.",
-                "usage": "!hack <user>",
-                "usageMessage": "Usage: !hack <user>",
-                "lines": [
-                    "🔓 Hacking {target}...",
-                    "📂 Searching files...",
-                    "💳 Card found...",
-                    "❌ Just kidding 😂"
-                ]
-            },
-            "virus": {
-                "description": "Launch a fake virus.",
-                "usage": "!virus",
-                "lines": [
-                    "🦠 Preparing virus...",
-                    "📡 Sending to the network...",
-                    "⚠️ System unstable...",
-                    "✅ Just kidding!"
-                ]
-            },
-            "summon": {
-                "description": "Summon something mysterious.",
-                "usage": "!summon",
-                "lines": [
-                    "✨ Opening the portal...",
-                    "🔮 Energy is building...",
-                    "⚡ Something has been summoned!"
-                ]
-            },
-            "explode": {
-                "description": "Fake explosion effect.",
-                "usage": "!explode",
-                "lines": [
-                    "💥 Loading explosives...",
-                    "💣 Countdown started...",
-                    "💥 BOOM!"
-                ]
-            },
-            "fakeban": {
-                "description": "Fake ban a user.",
-                "usage": "!fakeban <user>",
-                "usageMessage": "Usage: !fakeban <user>",
-                "lines": [
-                    "🚨 {target} was reported...",
-                    "⛔ Banning {target}...",
-                    "✅ Just kidding, {target} is safe!"
-                ]
-            },
             "fortune": {
                 "description": "Show a fortune.",
                 "usage": "!fortune",
@@ -1041,10 +1110,6 @@
         "economyGrab": {
             "description": "Rewards grabs."
         },
-        "timeGuard": {
-            "description": "Skips tracks longer than the configured limit.",
-            "skip": "Track too long ({minutes} min): {label}. Skipping..."
-        },
         "autoSkip": {
             "description": "Skips stalled tracks after they end.",
             "skip": "Auto-skip: track stalled. Skipping..."
@@ -1079,6 +1144,12 @@
         },
         "waitlistSnapshot": {
             "description": "Saves waitlist snapshots for !dc."
+        },
+        "waitlistJoinSnapshot": {
+            "description": "Saves snapshot immediately when user joins the waitlist."
+        },
+        "waitlistLeaveSnapshot": {
+            "description": "Saves snapshot immediately when user leaves the waitlist."
         }
     },
     "helpers": {

@@ -35,7 +35,6 @@ export default {
     if (!Array.isArray(waitlist) || waitlist.length === 0) return;
 
     const now = Date.now();
-    const limitMs = limitMin * 60 * 1000;
     let removed = 0;
 
     for (const entry of waitlist) {
@@ -49,6 +48,9 @@ export default {
 
       const lastAt = bot.getLastActivityAt(userId);
       if (!lastAt) continue;
+
+      const userLimitMin = await bot.getAfkLimitMinutes(userId, limitMin);
+      const limitMs = Math.max(1, userLimitMin) * 60 * 1000;
 
       const idleMs = now - lastAt;
       if (idleMs < limitMs) continue;

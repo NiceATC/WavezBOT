@@ -2,7 +2,6 @@ import { pickRandom } from "./random.js";
 import { getWaitlist } from "./waitlist.js";
 import { getRoleLevel } from "../lib/permissions.js";
 
-export const ROULETTE_DURATION_MS = 60_000;
 export const rouletteState = {
   open: false,
   participants: new Map(),
@@ -28,8 +27,19 @@ export async function closeRoulette(bot, api) {
   rouletteState.participants.clear();
 
   if (!bot) return;
-  if (entries.length === 0) {
-    await bot.sendChat(bot.t("helpers.roulette.closed.noParticipants"));
+
+  const minParticipants = bot.cfg.rouletteMinParticipants ?? 3;
+  if (entries.length < minParticipants) {
+    const lines =
+      bot.tArray("helpers.roulette.closed.fewParticipantsLines") ?? [];
+    const msg =
+      lines.length > 0
+        ? pickRandom(lines).replace("{count}", String(entries.length))
+        : bot.t("helpers.roulette.closed.fewParticipants", {
+            count: entries.length,
+            min: minParticipants,
+          });
+    await bot.sendChat(msg);
     return;
   }
 
@@ -56,9 +66,7 @@ export async function closeRoulette(bot, api) {
   }
 
   const waitlistIds = new Set(
-    waitlist
-      .map((u) => String(u.id ?? u.userId ?? u.user_id ?? ""))
-      .filter(Boolean),
+    waitlist.map((u) => u?.internalId ?? u?.id ?? "").filter(Boolean),
   );
   const eligible = entries.filter(([id]) => waitlistIds.has(String(id)));
 

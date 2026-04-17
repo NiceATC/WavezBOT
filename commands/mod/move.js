@@ -12,8 +12,8 @@ export default {
   minRole: "bouncer",
 
   async execute(ctx) {
-    const { api, bot, args, reply, t } = ctx;
-    const target = (args[0] ?? "").replace(/^@/, "").trim();
+    const { api, bot, args, reply, t, mention, mentionUser } = ctx;
+    const target = (args[0] ?? "").trim();
     const pos = parseInt(args[1], 10);
     if (!target || isNaN(pos) || pos < 1) {
       await reply(t("commands.mod.move.usageMessage"));
@@ -22,7 +22,9 @@ export default {
 
     const user = bot.findRoomUser(target);
     if (!user) {
-      await reply(t("commands.mod.move.userNotFound", { user: target }));
+      await reply(
+        t("commands.mod.move.userNotFound", { user: mention(target) }),
+      );
       return;
     }
 
@@ -36,7 +38,7 @@ export default {
       bot.wsReorderQueue(user.userId, apiPos);
       await reply(
         t("commands.mod.move.moved", {
-          user: user.displayName ?? user.username,
+          user: mentionUser(user, target),
           position: pos,
         }),
       );

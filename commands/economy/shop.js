@@ -1,7 +1,21 @@
-import { formatPoints, toPointsInt } from "../../helpers/points.js";
+import {
+  formatPoints,
+  POINT_SCALE,
+  toPointsInt,
+} from "../../helpers/points.js";
 import { sendChatChunks } from "../../helpers/chat.js";
+import { formatDuration } from "../../helpers/time.js";
 import { addShopPurchase, getShopPurchase } from "../../lib/storage.js";
 import { getRoleLevel } from "../../lib/permissions.js";
+import {
+  buildVipPlans,
+  normalizeVipDuration,
+  normalizeVipLevel,
+} from "../../lib/vip.js";
+import {
+  getQueueEntryUserId,
+  getWaitlistPositionForIndex,
+} from "../../lib/waitlist.js";
 
 function normalizeItems(list) {
   if (!Array.isArray(list)) return [];
@@ -42,6 +56,62 @@ function findItem(items, query, bot) {
   );
 }
 
+function getShopItems(bot) {
+  const base = normalizeItems(bot.cfg.shopItems);
+  const vipItems = normalizeItems(buildVipPlans(bot.cfg));
+  return [...base, ...vipItems];
+}
+
+function resolveBuyTarget(bot, args) {
+  const items = getShopItems(bot);
+  const first = String(args[0] ?? "")
+    .trim()
+    .toLowerCase();
+  if (!first) return { items, item: null, reason: "usage" };
+
+  if (first !== "vip") {
+    return {
+      items,
+      item: findItem(items, first, bot),
+      reason: "item",
+      query: first,
+    };
+  }
+
+  const tokens = args
+    .slice(1)
+    .map((token) =>
+      String(token ?? "")
+        .trim()
+        .toLowerCase(),
+    )
+    .filter(Boolean);
+  const levelKey = tokens.map(normalizeVipLevel).find(Boolean) ?? "bronze";
+  const durationKey = tokens.map(normalizeVipDuration).find(Boolean) ?? null;
+  if (!durationKey) {
+    return {
+      items,
+      item: null,
+      reason: "vip_usage",
+    };
+  }
+
+  const item =
+    items.find(
+      (candidate) =>
+        candidate.type === "vip" &&
+        candidate.vipLevel === levelKey &&
+        candidate.vipDuration === durationKey,
+    ) ?? null;
+  return {
+    items,
+    item,
+    reason: "vip",
+    vipLevel: levelKey,
+    vipDuration: durationKey,
+  };
+}
+
 const shop = {
   name: "shop",
   aliases: ["loja"],
@@ -51,28 +121,44 @@ const shop = {
   deleteOn: 60_000,
 
   async execute(ctx) {
-    const { bot, reply, t } = ctx;
+    const { bot, reply, t, sender } = ctx;
     if (!bot.cfg.economyEnabled) {
       await reply(t("commands.economy.shop.disabled"));
       return;
     }
 
-    const items = normalizeItems(bot.cfg.shopItems);
+    const items = getShopItems(bot);
     if (!items.length) {
       await reply(t("commands.economy.shop.empty"));
       return;
     }
 
-    const lines = items.map((item) => {
-      const name = resolveItemName(bot, item);
-      const desc = resolveItemDesc(bot, item);
-      return t("commands.economy.shop.line", {
-        key: item.key,
-        name,
-        price: formatPoints(toPointsInt(item.price)),
-        description: desc,
-      });
-    });
+    const userId = sender?.userId ?? null;
+    const identity =
+      userId != null ? bot._getUserIdentity(userId, sender) : null;
+    const lines = await Promise.all(
+      items.map(async (item) => {
+        const name = resolveItemName(bot, item);
+        const desc = resolveItemDesc(bot, item);
+        const priceInt =
+          userId != null
+            ? await bot.getVipAdjustedShopPriceInt(
+                userId,
+                item.price,
+                identity,
+                {
+                  itemType: item.type,
+                },
+              )
+            : toPointsInt(item.price);
+        return t("commands.economy.shop.line", {
+          key: item.key,
+          name,
+          price: formatPoints(priceInt),
+          description: desc,
+        });
+      }),
+    );
 
     await sendChatChunks(
       reply,
@@ -102,18 +188,34 @@ const buy = {
       return;
     }
 
-    const key = args[0];
-    if (!key) {
+    const target = resolveBuyTarget(bot, args);
+    if (target.reason === "usage") {
       await reply(t("commands.economy.buy.usageMessage"));
       return;
     }
 
-    const items = normalizeItems(bot.cfg.shopItems);
-    const item = findItem(items, key, bot);
-    if (!item) {
-      await reply(t("commands.economy.buy.notFound", { item: key }));
+    const { item } = target;
+    if (target.reason === "vip_usage") {
+      await reply(t("commands.economy.buy.vipUsageMessage"));
       return;
     }
+    if (!item) {
+      if (target.reason === "vip") {
+        await reply(
+          t("commands.economy.buy.vipNotFound", {
+            level: target.vipLevel,
+            duration: target.vipDuration,
+          }),
+        );
+      } else {
+        await reply(
+          t("commands.economy.buy.notFound", { item: target.query ?? "" }),
+        );
+      }
+      return;
+    }
+
+    const identity = bot._getUserIdentity(userId, sender);
 
     if (item.oneTime) {
       const prior = await getShopPurchase(userId, item.key);
@@ -123,13 +225,19 @@ const buy = {
       }
     }
 
-    const priceInt = toPointsInt(item.price ?? 0);
+    const priceInt = await bot.getVipAdjustedShopPriceInt(
+      userId,
+      item.price ?? 0,
+      identity,
+      {
+        itemType: item.type,
+      },
+    );
     if (!priceInt || priceInt <= 0) {
       await reply(t("commands.economy.buy.invalidItem"));
       return;
     }
 
-    const identity = bot._getUserIdentity(userId, sender);
     const balance = await bot.getEconomyBalance(userId, identity);
     if (balance < priceInt) {
       await reply(
@@ -148,28 +256,37 @@ const buy = {
       const qRes = await api.room
         .getQueueStatus(bot.cfg.room)
         .catch(() => null);
-      const queueIds = qRes?.data?.queueUserIds ?? [];
-      const index = queueIds.indexOf(String(userId));
-      if (index < 0) {
+      const entries = Array.isArray(qRes?.data?.entries)
+        ? qRes.data.entries
+        : [];
+      const index = entries.findIndex(
+        (entry) => getQueueEntryUserId(entry) === String(userId),
+      );
+      const currentPos = getWaitlistPositionForIndex(index, entries);
+      if (currentPos == null) {
         await reply(t("commands.economy.buy.notInQueue"));
         return;
       }
 
-      let targetPos = index;
+      let targetPos = currentPos - 1;
       if (item.type === "moveUp") {
         const positions = Math.max(1, Math.floor(Number(item.positions) || 1));
-        targetPos = Math.max(0, index - positions);
+        targetPos = Math.max(0, targetPos - positions);
       } else {
         const pos = Math.max(1, Math.floor(Number(item.position) || 1));
         targetPos = Math.max(0, pos - 1);
       }
 
-      if (targetPos === index) {
+      if (targetPos === currentPos - 1) {
         await reply(t("commands.economy.buy.noMove"));
         return;
       }
 
-      const spent = await bot.spendEconomyPoints(userId, item.price, identity);
+      const spent = await bot.spendEconomyPoints(
+        userId,
+        priceInt / POINT_SCALE,
+        identity,
+      );
       if (spent == null) {
         await reply(
           t("commands.economy.buy.insufficient", {
@@ -189,13 +306,70 @@ const buy = {
         );
         return;
       } catch (err) {
-        await bot.awardEconomyPoints(userId, item.price, identity);
+        await bot.awardEconomyPoints(userId, priceInt / POINT_SCALE, identity, {
+          applyVipMultiplier: false,
+        });
         await reply(t("commands.economy.buy.failed", { error: err.message }));
         return;
       }
     }
 
-    const spent = await bot.spendEconomyPoints(userId, item.price, identity);
+    if (item.type === "vip") {
+      const spent = await bot.spendEconomyPoints(
+        userId,
+        priceInt / POINT_SCALE,
+        identity,
+      );
+      if (spent == null) {
+        await reply(
+          t("commands.economy.buy.insufficient", {
+            balance: formatPoints(balance),
+          }),
+        );
+        return;
+      }
+
+      const vipResult = await bot.purchaseVip(
+        userId,
+        {
+          levelKey: item.vipLevel,
+          durationMs: item.vipDurationMs,
+          durationKey: item.vipDuration,
+        },
+        identity,
+      );
+
+      if (!vipResult?.ok) {
+        await bot.awardEconomyPoints(userId, priceInt / POINT_SCALE, identity, {
+          applyVipMultiplier: false,
+        });
+        if (vipResult?.code === "higher_level_active") {
+          await reply(t("commands.economy.buy.vipHigherLevel"));
+          return;
+        }
+        await reply(t("commands.economy.buy.vipActivateFailed"));
+        return;
+      }
+
+      await addShopPurchase(userId, item.key, 1);
+      const remainingMs = Math.max(
+        0,
+        Number(vipResult.expiresAt ?? 0) - Date.now(),
+      );
+      await reply(
+        t("commands.economy.buy.vipSuccess", {
+          item: resolveItemName(bot, item),
+          remaining: formatDuration(remainingMs),
+        }),
+      );
+      return;
+    }
+
+    const spent = await bot.spendEconomyPoints(
+      userId,
+      priceInt / POINT_SCALE,
+      identity,
+    );
     if (spent == null) {
       await reply(
         t("commands.economy.buy.insufficient", {

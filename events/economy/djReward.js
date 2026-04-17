@@ -24,7 +24,10 @@ export default {
     };
 
     if (bot.cfg.economyEnabled && Number(bot.cfg.economyDjPoints) > 0) {
-      await bot.awardEconomyPoints(userId, bot.cfg.economyDjPoints, identity);
+      await bot.awardEconomyPoints(userId, bot.cfg.economyDjPoints, identity, {
+        applyVipMultiplier: true,
+        source: "dj",
+      });
     }
     if (bot.cfg.xpEnabled && Number(bot.cfg.xpDjPoints) > 0) {
       await bot.awardXp(userId, bot.cfg.xpDjPoints, identity);

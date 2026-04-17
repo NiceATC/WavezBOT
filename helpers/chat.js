@@ -5,6 +5,12 @@ function normalizeText(text) {
   return String(text).replace(/\s+/g, " ").trim();
 }
 
+export function ensureMention(name) {
+  const value = normalizeText(name);
+  if (!value) return "";
+  return value.startsWith("@") ? value : `@${value}`;
+}
+
 export function splitChatMessage(text, maxLen = DEFAULT_MAX_LEN) {
   const normalized = normalizeText(text);
   if (!normalized) return [];

@@ -60,7 +60,15 @@ export default {
 
     const identity = bot._getUserIdentity(userId, data?.user ?? data?.sender);
     if (bot.cfg.economyEnabled && Number(bot.cfg.economyWootPoints) > 0) {
-      await bot.awardEconomyPoints(userId, bot.cfg.economyWootPoints, identity);
+      await bot.awardEconomyPoints(
+        userId,
+        bot.cfg.economyWootPoints,
+        identity,
+        {
+          applyVipMultiplier: true,
+          source: "vote",
+        },
+      );
     }
     if (bot.cfg.xpEnabled && Number(bot.cfg.xpWootPoints) > 0) {
       await bot.awardXp(userId, bot.cfg.xpWootPoints, identity);
