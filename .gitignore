@@ -2,7 +2,6 @@
 node_modules/
 package-lock.json
 yarn.lock
-basicBot.js
 
 # Build & Distribution
 dist/
@@ -11,6 +10,7 @@ build/
 *.crx
 *.zip
 *.tar.gz
+*.sqlite
 
 # IDE
 .vscode/
@@ -31,7 +31,6 @@ logs/
 .env
 .env.local
 .env.*.local
-wavezbot.sqlite
 .bot-token.json
 config.json
 
