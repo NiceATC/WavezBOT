@@ -4,7 +4,7 @@ import { sendChatChunks } from "../../helpers/chat.js";
 
 export default {
   name: "top",
-  aliases: ["rank", "ranking", "topmoney"],
+  aliases: ["leaderboard"],
   descriptionKey: "commands.economy.top.description",
   usageKey: "commands.economy.top.usage",
   cooldown: 5000,

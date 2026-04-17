@@ -14,6 +14,7 @@ function resolveName(bot, input) {
 
 export default {
   name: "ship",
+  aliases: ["love", "casal"],
   descriptionKey: "commands.fun.ship.description",
   usageKey: "commands.fun.ship.usage",
   cooldown: 4000,

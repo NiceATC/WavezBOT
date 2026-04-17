@@ -2,7 +2,7 @@ import { pickRandom } from "../../helpers/random.js";
 
 export default {
   name: "coin",
-  aliases: ["flip"],
+  aliases: ["flip", "moeda"],
   descriptionKey: "commands.fun.coin.description",
   usageKey: "commands.fun.coin.usage",
   cooldown: 3000,

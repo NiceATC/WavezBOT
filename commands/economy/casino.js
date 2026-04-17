@@ -99,6 +99,7 @@ function formatNet(intValue) {
 
 export default {
   name: "casino",
+  aliases: ["tigrinho", "bet"],
   descriptionKey: "commands.economy.casino.description",
   usageKey: "commands.economy.casino.usage",
   cooldown: 0,

@@ -32,7 +32,7 @@ async function getUserLevel(bot, userId, identity) {
 
 const work = {
   name: "work",
-  aliases: ["job", "trabalho"],
+  aliases: ["job", "trabalhar"],
   descriptionKey: "commands.economy.work.description",
   usageKey: "commands.economy.work.usage",
   cooldown: 3000,

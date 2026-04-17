@@ -1,9 +1,14 @@
-import { closeRoulette, rouletteState } from "../../helpers/roulette.js";
+import {
+  closeRoulette,
+  openRoulette,
+  rouletteState,
+} from "../../helpers/roulette.js";
 
 const { pickRandom } = await import("../../helpers/random.js");
 
 const roulette = {
   name: "roulette",
+  aliases: ["roleta"],
   descriptionKey: "commands.fun.roulette.description",
   usageKey: "commands.fun.roulette.usage",
   cooldown: 5000,
@@ -22,20 +27,7 @@ const roulette = {
       return;
     }
 
-    rouletteState.open = true;
-    rouletteState.participants.clear();
-    const durationMs = bot.cfg.rouletteDurationMs ?? 60_000;
-    rouletteState.timeoutId = setTimeout(() => {
-      closeRoulette(bot, api).catch(() => {});
-    }, durationMs);
-
-    const lines = tArray("commands.fun.roulette.openedLines") ?? [];
-    const seconds = Math.round(durationMs / 1000);
-    const msg =
-      lines.length > 0
-        ? pickRandom(lines).replace("{seconds}", String(seconds))
-        : t("commands.fun.roulette.opened", { seconds });
-    await reply(msg);
+    await openRoulette(bot, api, { announce: reply });
   },
 };
 
@@ -47,7 +39,7 @@ const join = {
   deleteOn: 60_000,
 
   async execute(ctx) {
-    const { sender, reply, api, bot, t } = ctx;
+    const { sender, reply, api, bot, t, tArray } = ctx;
     if (!rouletteState.open) {
       await reply(t("commands.fun.join.closed"));
       return;
@@ -89,13 +81,14 @@ const join = {
 
 const leave = {
   name: "leave",
+  aliases: ["sair"],
   descriptionKey: "commands.fun.leave.description",
   usageKey: "commands.fun.leave.usage",
   cooldown: 3000,
   deleteOn: 60_000,
 
   async execute(ctx) {
-    const { sender, reply, t } = ctx;
+    const { sender, reply, t, tArray } = ctx;
     if (!rouletteState.open) {
       await reply(t("commands.fun.leave.closed"));
       return;
@@ -113,7 +106,12 @@ const leave = {
     }
 
     rouletteState.participants.delete(key);
-    await reply(t("commands.fun.leave.left", { name }));
+    const lines = tArray("commands.fun.leave.leftLines") ?? [];
+    const msg =
+      lines.length > 0
+        ? pickRandom(lines).replace("{name}", name)
+        : t("commands.fun.leave.left", { name });
+    await reply(msg);
   },
 };
 

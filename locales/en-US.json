@@ -840,7 +840,26 @@
                 "description": "Open the roulette.",
                 "usage": "!roulette",
                 "alreadyOpen": "Roulette is already open.",
-                "opened": "Roulette open for {seconds}s. Use !join."
+                "alreadyOpenLines": [
+                    "Roulette is already spinning. No double launch.",
+                    "Easy there, roulette is already live.",
+                    "The chamber is already loaded. Just wait for the result.",
+                    "Round already started. Chaos is in progress."
+                ],
+                "opened": "Roulette open for {seconds}s. Use !join.",
+                "openedLines": [
+                    "Roulette is live! You have {seconds}s to join with !join.",
+                    "Siren on: roulette open for {seconds}s. Type !join.",
+                    "The arena is open for {seconds}s. Join with !join if you dare.",
+                    "Chamber spinning for {seconds}s... !join now or watch from afar."
+                ],
+                "autoOpened": "Auto-roulette started for {seconds}s. Use !join.",
+                "autoOpenedLines": [
+                    "Auto-roulette woke up on its own. {seconds}s to join with !join.",
+                    "No warning, no mercy: auto-roulette is open for {seconds}s.",
+                    "Fate pulled the trigger. Auto-roulette live for {seconds}s.",
+                    "Automatic mode engaged: roulette open for {seconds}s. !join."
+                ]
             },
             "join": {
                 "description": "Join the roulette.",
@@ -850,7 +869,13 @@
                 "mustBeInQueue": "You must be in the waitlist to join.",
                 "waitlistError": "Failed to check waitlist: {error}",
                 "alreadyIn": "You're already in.",
-                "joined": "{name} joined the roulette."
+                "joined": "{name} joined the roulette.",
+                "joinedLines": [
+                    "{name} joined and signed the risk waiver.",
+                    "{name} stepped into the arena. No refunds.",
+                    "{name} accepted the chaos and joined.",
+                    "{name} is in. Let fate decide."
+                ]
             },
             "leave": {
                 "description": "Leave the roulette.",
@@ -858,7 +883,13 @@
                 "closed": "Roulette is closed.",
                 "noUser": "Could not identify you.",
                 "notIn": "You're not in the roulette.",
-                "left": "{name} left the roulette."
+                "left": "{name} left the roulette.",
+                "leftLines": [
+                    "{name} bailed out and left safely.",
+                    "{name} decided to keep their dignity and left.",
+                    "{name} walked out before the final click.",
+                    "{name} left the roulette with heart rate at 200."
+                ]
             },
             "thor": {
                 "description": "Spin Thor's hammer on the waitlist.",
@@ -871,19 +902,22 @@
                 "moveError": "Failed to move {user}: {error}",
                 "removeError": "Failed to remove {user}: {error}",
                 "goodLines": [
-                    "{name} is blessed and goes to the top! ⚡",
-                    "{name} rises to the top of the queue!",
-                    "{name} gets the top spot!"
+                    "Mjolnir spun true: {name} is worthy and goes to the top! ⚡",
+                    "Thor smiled at {name}. One-way ticket to the top.",
+                    "Lightning favored {name}. Top spot granted.",
+                    "The Allfather approved {name}. Crown of the queue secured."
                 ],
                 "neutralLines": [
-                    "{name} survives this round.",
-                    "{name} stays where they are.",
-                    "{name} is spared."
+                    "Thor watched {name}... and chose not to interfere.",
+                    "Mjolnir passed by, but {name} stays put.",
+                    "No thunder, no blessing: {name} remains in place.",
+                    "A draw with the gods today. {name} survives."
                 ],
                 "badLines": [
-                    "{name} gets zapped and leaves the queue! ⚡",
-                    "{name} is removed from the queue!",
-                    "{name} loses the spot and leaves!"
+                    "Thor did not approve {name} today. Hammer down, out of queue! ⚡",
+                    "Thunder struck hard: {name} was wiped from the queue.",
+                    "Mjolnir has spoken. {name} is out.",
+                    "Asgard rejected {name}'s application. Queue access revoked."
                 ]
             },
             "duel": {
@@ -895,18 +929,33 @@
                 "cannotTargetBot": "I cannot duel the bot.",
                 "alreadyPending": "A duel is already pending between {challenger} and {target} (expires in {seconds}s).",
                 "challenge": "{challenger} challenged {target}! {target}, use {accept} or {recuse}.",
+                "challengeLines": [
+                    "{challenger} threw down the gauntlet at {target}! {accept} or {recuse}.",
+                    "Challenge declared: {challenger} vs {target}. Respond with {accept} or {recuse}.",
+                    "Arena doors are open: {challenger} called out {target}. {accept} / {recuse}.",
+                    "Official drama: {challenger} challenged {target}. Choose: {accept} or {recuse}."
+                ],
                 "accepted": "{target} accepted the duel!",
+                "acceptedLines": [
+                    "{target} accepted. No turning back now.",
+                    "{target} locked it in. Crowd goes wild.",
+                    "Contract signed in metaphorical blood: {target} accepted.",
+                    "{target} said 'bring it on'. Here we go."
+                ],
                 "suspenseLines": [
                     "Silence falls over the arena...",
                     "Dust rises as fate decides...",
-                    "Preparing the duel verdict..."
+                    "Preparing the duel verdict...",
+                    "War drums grow louder...",
+                    "One mistake and this becomes legendary."
                 ],
                 "result": "Winner: {winner} | Loser: {loser}.",
-                "muted": "{user} was muted for {minutes} min.",
-                "muteReason": "Lost a duel",
-                "muteFailed": "Failed to mute {user}: {error}",
-                "muteUnavailable": "Mute is unavailable right now.",
-                "muteRoleTooHigh": "I cannot mute {user} (role too high).",
+                "resultLines": [
+                    "Duel over: {winner} wins, {loser} walks it off.",
+                    "The arena has chosen: {winner} triumphs over {loser}.",
+                    "Final strike lands! {winner} defeats {loser}.",
+                    "Victory for {winner}. {loser} will hear about this for weeks."
+                ],
                 "noPermission": "I need the bouncer role to apply duel mutes.",
                 "deleteMessagesFallback": "Messages from {user} will be deleted for {minutes} min.",
                 "silenceExpired": "{user} can speak again!",
@@ -915,12 +964,19 @@
                 "alreadyAccepted": "This duel was already accepted.",
                 "expired": "The duel expired.",
                 "refused": "{target} refused the duel.",
+                "refusedLines": [
+                    "{target} refused and chose another day to fight.",
+                    "{target} backed out. No battle today.",
+                    "{target} sheathed the blade and declined.",
+                    "{target} picked peace (or fear) and refused."
+                ],
                 "timeout": "{target} did not accept in time.",
                 "cowardLines": [
-                    "Ran from the arena!",
-                    "Fled the duel!",
-                    "Fear won this time.",
-                    "Vanished into the mist."
+                    "Ran from the arena at top speed!",
+                    "Tapped out before the first hit.",
+                    "Fear wins by technical knockout.",
+                    "Vanished into the mist.",
+                    "Slipped away while chat yelled 'fight!'."
                 ]
             },
             "accept": {
@@ -1155,7 +1211,13 @@
     "helpers": {
         "roulette": {
             "closed": {
-                "noParticipants": "Roulette closed: no participants.",
+                "fewParticipants": "Roulette closed: at least {min} participants required (only {count} joined).",
+                "fewParticipantsLines": [
+                    "Roulette got bored with only {count} participant(s). Need {min}.",
+                    "{count} participant(s) is not enough for this chaos. Minimum is {min}.",
+                    "Not enough people for roulette: {count}/{min}.",
+                    "No quorum for mayhem: {count}/{min}. Roulette closed."
+                ],
                 "apiUnavailable": "Roulette closed: API unavailable.",
                 "waitlistError": "Roulette closed: failed to fetch waitlist: {error}",
                 "emptyQueue": "Roulette closed: waitlist is empty.",
@@ -1166,14 +1228,16 @@
             "moveError": "Failed to move {user}: {error}",
             "removeError": "Failed to remove {user}: {error}",
             "moveLines": [
-                "{name} spins and lands on position {pos}!",
-                "{name} is moved to position {pos}.",
-                "{name} gets moved to spot {pos}."
+                "CLICK! {name} survives and lands at position {pos}.",
+                "Chamber misfired: {name} gets moved to position {pos}.",
+                "Lucky break for {name}. New spot: {pos}.",
+                "Wild round: {name} stays alive but gets moved to {pos}."
             ],
             "shotLines": [
-                "{name} got blasted and left the queue!",
-                "{name} was removed from the queue!",
-                "{name} is out of the queue!"
+                "BANG! {name} is eliminated from the queue.",
+                "The loaded chamber found {name}. Out of queue.",
+                "End of the line for {name}: removed from queue.",
+                "No armor today. {name} is out of the queue."
             ]
         }
     },

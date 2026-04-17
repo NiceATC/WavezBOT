@@ -27,6 +27,7 @@ function getOutcome(userChoice, botChoice) {
 
 export default {
   name: "rps",
+  aliases: ["jokenpo"],
   descriptionKey: "commands.fun.rps.description",
   usageKey: "commands.fun.rps.usage",
   cooldown: 3000,

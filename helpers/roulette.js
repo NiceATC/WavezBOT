@@ -8,6 +8,13 @@ export const rouletteState = {
   timeoutId: null,
 };
 
+const autoRouletteState = {
+  timeoutId: null,
+};
+
+const AUTO_ROULETTE_MIN_INTERVAL_MS = 60_000;
+const AUTO_ROULETTE_DEFAULT_INTERVAL_MS = 15 * 60_000;
+
 export function resetRouletteState() {
   rouletteState.open = false;
   rouletteState.participants.clear();
@@ -15,7 +22,72 @@ export function resetRouletteState() {
   rouletteState.timeoutId = null;
 }
 
+function getAutoRouletteIntervalMs(bot) {
+  const raw = Number(bot?.cfg?.autoRouletteIntervalMs);
+  if (!Number.isFinite(raw) || raw <= 0) {
+    return AUTO_ROULETTE_DEFAULT_INTERVAL_MS;
+  }
+  return Math.max(AUTO_ROULETTE_MIN_INTERVAL_MS, Math.floor(raw));
+}
+
 const ROULETTE_MOVE_CHANCE = 75;
+
+export async function openRoulette(bot, api, options = {}) {
+  const { announce, automatic = false } = options;
+  if (rouletteState.open) return false;
+
+  rouletteState.open = true;
+  rouletteState.participants.clear();
+  const durationMs = bot?.cfg?.rouletteDurationMs ?? 60_000;
+  rouletteState.timeoutId = setTimeout(() => {
+    closeRoulette(bot, api).catch(() => {});
+  }, durationMs);
+
+  const seconds = Math.round(durationMs / 1000);
+  const out =
+    typeof announce === "function" ? announce : (msg) => bot.sendChat(msg);
+  const keyBase = automatic
+    ? "commands.fun.roulette.autoOpened"
+    : "commands.fun.roulette.opened";
+  const lines = bot.tArray(`${keyBase}Lines`) ?? [];
+  const msg =
+    lines.length > 0
+      ? pickRandom(lines).replaceAll("{seconds}", String(seconds))
+      : bot.t(keyBase, { seconds });
+  await out(msg);
+  return true;
+}
+
+function scheduleAutoRoulette(bot, api) {
+  stopAutoRoulette();
+  if (!bot?.cfg?.autoRouletteEnabled) return;
+
+  const intervalMs = getAutoRouletteIntervalMs(bot);
+  autoRouletteState.timeoutId = setTimeout(async () => {
+    autoRouletteState.timeoutId = null;
+    try {
+      if (!bot || !api || !bot.cfg?.autoRouletteEnabled) return;
+      if (typeof bot.isPaused === "function" && bot.isPaused()) return;
+      if (rouletteState.open) return;
+      await openRoulette(bot, api, { automatic: true });
+    } catch {
+      // best-effort
+    } finally {
+      scheduleAutoRoulette(bot, api);
+    }
+  }, intervalMs);
+}
+
+export function startAutoRoulette(bot, api) {
+  scheduleAutoRoulette(bot, api);
+}
+
+export function stopAutoRoulette() {
+  if (autoRouletteState.timeoutId) {
+    clearTimeout(autoRouletteState.timeoutId);
+  }
+  autoRouletteState.timeoutId = null;
+}
 
 export async function closeRoulette(bot, api) {
   if (!rouletteState.open) return;

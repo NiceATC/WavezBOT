@@ -841,15 +841,24 @@
                 "usage": "!roulette",
                 "alreadyOpen": "A roleta já está aberta.",
                 "alreadyOpenLines": [
-                    "A roleta já tá rolando, mano.",
-                    "Calma, a roleta já foi aberta.",
-                    "Partiu! A roleta já está em ação."
+                    "A roleta já tá girando sem freio.",
+                    "Calma aí, a roleta já abriu e tá no modo caos.",
+                    "Já está valendo! A roleta já está em ação.",
+                    "A munição já foi distribuída, só esperar o fim da rodada."
                 ],
                 "opened": "Roleta aberta por {seconds}s. Use !join.",
                 "openedLines": [
-                    "Ó a roleta aí galera! {seconds}s pra entrar com !join.",
-                    "Roleta no ar: {seconds}s. Bora entrar com !join!",
-                    "Let's go! Roleta aberta por {seconds}s. !join pra participar."
+                    "A roleta carregou! Vocês têm {seconds}s pra entrar com !join.",
+                    "Sirene tocou: roleta aberta por {seconds}s. Quem é corajoso vem de !join.",
+                    "Arena aberta por {seconds}s. Entra de !join e confia na sorte.",
+                    "Câmara girando por {seconds}s... !join agora ou assiste de fora."
+                ],
+                "autoOpened": "Auto-roleta iniciada por {seconds}s. Use !join.",
+                "autoOpenedLines": [
+                    "A auto-roleta acordou sozinha! {seconds}s pra entrar com !join.",
+                    "Sem aviso, sem piedade: auto-roleta aberta por {seconds}s. !join.",
+                    "O destino puxou o gatilho: auto-roleta no ar por {seconds}s.",
+                    "Modo automático ativado: roleta aberta por {seconds}s. Corre no !join."
                 ]
             },
             "join": {
@@ -862,9 +871,10 @@
                 "alreadyIn": "Você já está na roleta.",
                 "joined": "{name} entrou na roleta.",
                 "joinedLines": [
-                    "{name} entrou na roleta!",
-                    "{name} está na pista agora!",
-                    "{name} veio pra brincar."
+                    "{name} entrou na roleta e assinou o termo de risco.",
+                    "{name} pisou na arena. Sem choro depois.",
+                    "{name} aceitou o caos e entrou no jogo.",
+                    "{name} entrou. Que os deuses da fila decidam."
                 ]
             },
             "leave": {
@@ -873,7 +883,13 @@
                 "closed": "A roleta está fechada.",
                 "noUser": "Não consegui identificar você.",
                 "notIn": "Você não está na roleta.",
-                "left": "{name} saiu da roleta."
+                "left": "{name} saiu da roleta.",
+                "leftLines": [
+                    "{name} arregou e saiu da roleta em segurança.",
+                    "{name} decidiu preservar a dignidade e caiu fora.",
+                    "{name} abandonou a arena antes do disparo final.",
+                    "{name} saiu da roleta com o coração acelerado."
+                ]
             },
             "thor": {
                 "description": "Roda o martelo do Thor na fila.",
@@ -886,19 +902,22 @@
                 "moveError": "Falha ao mover {user}: {error}",
                 "removeError": "Falha ao remover {user}: {error}",
                 "goodLines": [
-                    "{name} foi abençoado e vai para o topo! ⚡",
-                    "{name} subiu para o topo da fila!",
-                    "{name} ganhou o topo da fila!"
+                    "Mjolnir girou bonito: {name} foi digno(a) e subiu pro topo! ⚡",
+                    "Thor sorriu para {name}. Bilhete direto para o trono da fila.",
+                    "Relâmpago favorável! {name} foi lançado(a) para o topo.",
+                    "O Pai de Todos aprovou {name}. Topo da fila concedido."
                 ],
                 "neutralLines": [
-                    "{name} escapou dessa vez.",
-                    "{name} ficou no mesmo lugar.",
-                    "{name} foi poupado."
+                    "Thor observou {name}... e decidiu não interferir dessa vez.",
+                    "Mjolnir passou raspando, mas {name} ficou onde estava.",
+                    "Sem trovão, sem bênção: {name} permanece no mesmo lugar.",
+                    "Hoje foi empate com os deuses. {name} segue vivo(a) na fila."
                 ],
                 "badLines": [
-                    "{name} levou um raio e saiu da fila! ⚡",
-                    "{name} foi removido da fila!",
-                    "{name} perdeu a vez e saiu da fila!"
+                    "Thor não curtiu {name} hoje. Martelo na mesa e rua da fila! ⚡",
+                    "O trovão veio seco: {name} foi varrido(a) da fila.",
+                    "Mjolnir decretou: {name} perdeu a vez e caiu fora.",
+                    "Asgard rejeitou o pedido de {name}. Resultado: fora da fila."
                 ]
             },
             "duel": {
@@ -909,19 +928,34 @@
                 "self": "Você não pode duelar consigo mesmo.",
                 "cannotTargetBot": "Não posso duelar contra o bot.",
                 "alreadyPending": "Já existe um duelo pendente entre {challenger} e {target} (expira em {seconds}s).",
-                "challenge": "{challenger} desafiou {target}! {target}, use {accept} ou {recuse}.",
-                "accepted": "{target} aceitou o duelo!",
-                "suspenseLines": [
-                    "O silencio toma conta da arena...",
-                    "A poeira sobe e o destino decide...",
-                    "Preparando o veredito do duelo..."
+                "challenge": "Parece que temos um desafio!",
+                "challengeLines": [
+                    "{challenger} jogou a luva em {target}! {target}, decide: {accept} ou {recuse}.",
+                    "Desafio lançado: {challenger} vs {target}. Responde com {accept} ou {recuse}.",
+                    "A arena abriu: {challenger} chamou {target} pro confronto! {accept} / {recuse}.",
+                    "Treta oficializada entre {challenger} e {target}. {target}, escolha seu destino: {accept} ou {recuse}."
                 ],
-                "result": "Vencedor: {winner} | Perdedor: {loser}.",
-                "muted": "{user} foi mutado(a) por {minutes} min.",
-                "muteReason": "Derrota em duelo",
-                "muteFailed": "Falha ao mutar {user}: {error}",
-                "muteUnavailable": "Mute indisponível no momento.",
-                "muteRoleTooHigh": "Não posso mutar {user} (cargo alto).",
+                "accepted": "aqui tem coragem! que vença o melhor (ou o mais sortudo)!",
+                "acceptedLines": [
+                    "{target} aceitou. Agora é sem volta.",
+                    "{target} confirmou o duelo. A plateia foi ao delírio.",
+                    "Contrato assinado em sangue (ou quase): {target} aceitou.",
+                    "{target} falou 'bora'. O caos começa agora."
+                ],
+                "suspenseLines": [
+                    "O silêncio toma conta da arena...",
+                    "A poeira sobe e o destino decide...",
+                    "As espadas tremem. O veredito está chegando...",
+                    "Os tambores da guerra tocam mais alto...",
+                    "Um passo em falso e vira meme eterno..."
+                ],
+                "result": "o destino decidiu!",
+                "resultLines": [
+                    "Fim do duelo: {winner} venceu e {loser} saiu cambaleando.",
+                    "A arena escolheu: {winner} triunfou. {loser}, recolha os cacos.",
+                    "Golpe final! {winner} derrotou {loser} sem piedade.",
+                    "Vitória de {winner}. {loser} vai ouvir essa derrota por semanas."
+                ],
                 "noPermission": "Preciso do cargo bouncer para aplicar o mute do duelo.",
                 "deleteMessagesFallback": "As mensagens de {user} serão apagadas por {minutes} min.",
                 "silenceExpired": "{user} pode falar novamente!",
@@ -929,13 +963,20 @@
                 "notTarget": "Este duelo não é para você.",
                 "alreadyAccepted": "Este duelo já foi aceito.",
                 "expired": "O duelo expirou.",
-                "refused": "{target} recusou o duelo.",
+                "refused": "A covardia falou mais alto!",
+                "refusedLines": [
+                    "{target} recusou o duelo e escolheu viver mais um dia.",
+                    "{target} deu para trás. Hoje não teve combate.",
+                    "{target} guardou a espada e negou o desafio.",
+                    "{target} preferiu a paz (ou o medo) e recusou."
+                ],
                 "timeout": "{target} não aceitou a tempo.",
                 "cowardLines": [
-                    "Fugiu da arena!",
-                    "Correu do duelo!",
-                    "O medo venceu desta vez.",
-                    "Sumiu no nevoeiro do combate."
+                    "Fugiu da arena em velocidade máxima!",
+                    "Pediu arrego antes do primeiro golpe.",
+                    "O medo venceu por nocaute técnico.",
+                    "Sumiu no nevoeiro do combate.",
+                    "Saiu de fininho enquanto a galera gritava 'luta!'."
                 ]
             },
             "accept": {
@@ -1172,9 +1213,10 @@
             "closed": {
                 "fewParticipants": "Roleta encerrada: precisa de mínimo {min} participantes (só {count} entrou).",
                 "fewParticipantsLines": [
-                    "Roleta morreu de tédio com só {count} participante(s). Bora trazer mais gente!",
-                    "Com {count} participante(s) não tem roleta. Precisa de pelo menos {min} pra girar.",
-                    "Só {count} galera? Não dá pra fazer roleta com poucos. Mínimo {min}."
+                    "A roleta esfriou: só {count} participante(s). Precisa de {min} pra valer.",
+                    "Com {count} pessoa(s) nem o revólver gira direito. Mínimo {min}.",
+                    "Pouca gente ({count}) pra muito drama. Volta quando der {min}.",
+                    "Sem quórum da treta: {count}/{min}. Roleta encerrada."
                 ],
                 "apiUnavailable": "Roleta encerrada: API indisponível.",
                 "waitlistError": "Roleta encerrada: erro ao buscar fila: {error}",
@@ -1186,14 +1228,16 @@
             "moveError": "Falha ao mover {user}: {error}",
             "removeError": "Falha ao remover {user}: {error}",
             "moveLines": [
-                "{name} girou e caiu na posição {pos}!",
-                "{name} foi movido para a posição {pos}.",
-                "{name} foi enviado para o lugar {pos}."
+                "CLICK! {name} escapou e caiu na posição {pos}.",
+                "A bala falhou: {name} foi teletransportado(a) para a posição {pos}.",
+                "Sobreviveu por pouco! {name} agora está na posição {pos}.",
+                "Rodada insana: {name} não caiu, mas foi jogado(a) para {pos}."
             ],
             "shotLines": [
-                "{name} levou um tiro e saiu da fila!",
-                "{name} foi removido da fila!",
-                "{name} está fora da fila!"
+                "BANG! {name} foi eliminado(a) da fila.",
+                "A câmara premiada achou {name}. Fora da fila!",
+                "Fim da linha para {name}: removido(a) da fila.",
+                "Sem colete hoje. {name} caiu fora da fila."
             ]
         }
     },

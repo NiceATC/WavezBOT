@@ -29,6 +29,22 @@ function toTag(name) {
   return name.startsWith("@") ? name : `@${name}`;
 }
 
+function fillVars(line, vars = {}) {
+  if (!line) return "";
+  let out = String(line);
+  for (const [key, value] of Object.entries(vars)) {
+    out = out.replaceAll(`{${key}}`, String(value));
+  }
+  return out;
+}
+
+function pickLineWithFallback(bot, key, fallbackKey, vars = {}) {
+  const lines = bot.tArray(key) ?? [];
+  const chosen =
+    lines.length > 0 ? pickRandom(lines) : bot.t(fallbackKey, vars);
+  return fillVars(chosen, vars);
+}
+
 function getMuteMinutes(bot) {
   const raw = Number(bot?.cfg?.duelMuteMin ?? DEFAULT_MUTE_MIN);
   if (!Number.isFinite(raw) || raw < 1) return DEFAULT_MUTE_MIN;
@@ -55,10 +71,15 @@ async function resolveDuel(bot, pending) {
   const loserTag = toTag(loser.name);
 
   await bot.sendChat(
-    bot.t("commands.fun.duel.result", {
-      winner: winnerTag,
-      loser: loserTag,
-    }),
+    pickLineWithFallback(
+      bot,
+      "commands.fun.duel.resultLines",
+      "commands.fun.duel.result",
+      {
+        winner: winnerTag,
+        loser: loserTag,
+      },
+    ),
   );
 
   const minutes = getMuteMinutes(bot);
@@ -157,13 +178,19 @@ const duel = {
       clearDuelState();
     }, DUEL_TIMEOUT_MS);
 
+    const vars = {
+      challenger: toTag(challengerName),
+      target: toTag(targetName),
+      accept: "!accept",
+      recuse: "!recuse",
+    };
     await reply(
-      t("commands.fun.duel.challenge", {
-        challenger: toTag(challengerName),
-        target: toTag(targetName),
-        accept: "!accept",
-        recuse: "!recuse",
-      }),
+      pickLineWithFallback(
+        bot,
+        "commands.fun.duel.challengeLines",
+        "commands.fun.duel.challenge",
+        vars,
+      ),
     );
   },
 };
@@ -211,9 +238,14 @@ const accept = {
     duelState.timeoutId = null;
 
     await reply(
-      t("commands.fun.duel.accepted", {
-        target: toTag(pending.targetName),
-      }),
+      pickLineWithFallback(
+        bot,
+        "commands.fun.duel.acceptedLines",
+        "commands.fun.duel.accepted",
+        {
+          target: toTag(pending.targetName),
+        },
+      ),
     );
 
     const suspense =
@@ -255,16 +287,16 @@ const recuse = {
 
     clearDuelState();
 
-    const line = pickRandom(bot.tArray("commands.fun.duel.cowardLines")) ?? "";
-    const msg = [
-      t("commands.fun.duel.refused", {
+    const base = pickLineWithFallback(
+      bot,
+      "commands.fun.duel.refusedLines",
+      "commands.fun.duel.refused",
+      {
         target: toTag(pending.targetName),
-      }),
-      line,
-    ]
-      .filter(Boolean)
-      .join(" ");
-    await reply(msg);
+      },
+    );
+    const line = pickRandom(bot.tArray("commands.fun.duel.cowardLines")) ?? "";
+    await reply([base, line].filter(Boolean).join(" "));
   },
 };
 

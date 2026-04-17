@@ -14,7 +14,7 @@ function formatUptime(seconds) {
 }
 
 export default {
-  name: "stats",
+  name: "uptime",
   aliases: ["status", "info", "bot"],
   descriptionKey: "commands.info.stats.description",
   usageKey: "commands.info.stats.usage",

@@ -7,6 +7,7 @@ function formatLabel(title, artist) {
 
 export default {
   name: "history",
+  aliases: ["historico"],
   descriptionKey: "commands.info.history.description",
   usageKey: "commands.info.history.usage",
   cooldown: 6000,

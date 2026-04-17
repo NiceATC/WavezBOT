@@ -8,7 +8,7 @@ function formatLine(line, senderName, targetName) {
 
 export default {
   name: "roast",
-  aliases: ["toaster"],
+  aliases: ["insulto"],
   descriptionKey: "commands.fun.roast.description",
   usageKey: "commands.fun.roast.usage",
   cooldown: 5000,
@@ -16,9 +16,7 @@ export default {
 
   async execute(ctx) {
     const { bot, sender, t, tArray, reply } = ctx;
-    const targetInput = String(ctx.rawArgs ?? "")
-      
-      .trim();
+    const targetInput = String(ctx.rawArgs ?? "").trim();
     const senderName =
       sender.displayName ?? sender.username ?? t("common.someone");
 

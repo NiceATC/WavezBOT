@@ -8,6 +8,7 @@ function formatCookieLine(line, senderName, targetName) {
 
 export default {
   name: "cookie",
+  aliases: ["biscoito"],
   descriptionKey: "commands.fun.cookie.description",
   usageKey: "commands.fun.cookie.usage",
   cooldown: 5000,

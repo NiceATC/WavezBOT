@@ -41,6 +41,8 @@
     ],
     "fun": {
         "rouletteDurationMs": 60000,
-        "rouletteMinParticipants": 3
+        "rouletteMinParticipants": 3,
+        "autoRouletteEnabled": false,
+        "autoRouletteIntervalMs": 900000
     }
 }

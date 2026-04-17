@@ -4,7 +4,7 @@ import { getDailyRewardState, setDailyRewardState } from "../../lib/storage.js";
 
 export default {
   name: "daily",
-  aliases: ["diario", "reward"],
+  aliases: ["check-in", "reward"],
   descriptionKey: "commands.economy.daily.description",
   usageKey: "commands.economy.daily.usage",
   cooldown: 3000,
