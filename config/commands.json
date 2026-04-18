@@ -22,6 +22,8 @@
         "economy": {
             "economy": true,
             "balance": true,
+            "bank": true,
+            "insurance": true,
             "daily": true,
             "work": true,
             "shop": true,
@@ -61,6 +63,7 @@
             "dice": true,
             "duel": true,
             "duelmute": true,
+            "evento": true,
             "fact": true,
             "fortune": true,
             "ghostbuster": true,
@@ -102,7 +105,10 @@
             "swap": true,
             "unlock": true,
             "voteskip": true,
-            "dc": true
+            "dc": true,
+            "warn": true,
+            "warnings": true,
+            "clearwarn": true
         },
         "music": {
             "blacklist": true,
@@ -126,7 +132,8 @@
         },
         "moderation": {
             "afkRemoval": true,
-            "mediaCheck": true
+            "mediaCheck": true,
+            "antiSpam": true
         },
         "queue": {
             "djAdvanceSnapshot": true,

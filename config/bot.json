@@ -43,6 +43,17 @@
         "rouletteDurationMs": 60000,
         "rouletteMinParticipants": 3,
         "autoRouletteEnabled": false,
-        "autoRouletteIntervalMs": 900000
+        "autoRouletteIntervalMs": 900000,
+        "quizRewardPoints": 5,
+        "quizRewardEasy": 3,
+        "quizRewardMedium": 5,
+        "quizRewardHard": 10,
+        "quizWindowMs": 45000,
+        "dropRewardPoints": 3,
+        "dropWindowMs": 20000,
+        "autoEventsEnabled": false,
+        "autoEventsMinIntervalMs": 900000,
+        "autoEventsMaxIntervalMs": 1800000,
+        "autoQuizChancePct": 60
     }
 }

@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import CommandsTable from "../../components/CommandsTable";
 import Footer from "../../components/Footer";
+import Navbar from "../../components/Navbar";
 import { useI18n } from "../../lib/i18n";
 import { publicFetch } from "../../lib/public-api";
 
@@ -55,24 +55,7 @@ export default function CommandsPage() {
           </div>
         </div>
         <div className="topbar-actions">
-          <Link className="nav-link" href="/">
-            <i className="fa-solid fa-house" />
-            {t("dashboard.nav.home")}
-          </Link>
-          <Link className="nav-link" href="/ranking">
-            <i className="fa-solid fa-chart-line" />
-            {t("dashboard.nav.ranking")}
-          </Link>
-          {autowootUrl ? (
-            <a className="nav-link accent" href={autowootUrl} target="_blank" rel="noreferrer">
-              <i className="fa-solid fa-bolt" />
-              {t("dashboard.nav.autowoot")}
-            </a>
-          ) : null}
-          <Link className="nav-link" href="/admin">
-            <i className="fa-solid fa-shield-halved" />
-            {t("dashboard.nav.admin")}
-          </Link>
+          <Navbar autowootUrl={autowootUrl} />
         </div>
       </header>
 

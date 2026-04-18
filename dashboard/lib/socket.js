@@ -10,6 +10,18 @@ export function useDashboardSocket(token, onMessage) {
   useEffect(() => {
     let active = true;
     let ws;
+    let reconnectTimer;
+    let reconnectAttempt = 0;
+
+    const scheduleReconnect = () => {
+      if (!active) return;
+      const delay = Math.min(1000 * 2 ** reconnectAttempt, 10_000);
+      reconnectAttempt += 1;
+      clearTimeout(reconnectTimer);
+      reconnectTimer = setTimeout(() => {
+        connect();
+      }, delay);
+    };
 
     const connect = async () => {
       const url = new URL("/ws", WS_BASE);
@@ -28,6 +40,10 @@ export function useDashboardSocket(token, onMessage) {
       if (!active) return;
       ws = new WebSocket(url.toString());
 
+      ws.onopen = () => {
+        reconnectAttempt = 0;
+      };
+
       ws.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
@@ -36,12 +52,25 @@ export function useDashboardSocket(token, onMessage) {
           // ignore
         }
       };
+
+      ws.onerror = () => {
+        try {
+          ws?.close();
+        } catch {
+          // ignore
+        }
+      };
+
+      ws.onclose = () => {
+        scheduleReconnect();
+      };
     };
 
     connect();
 
     return () => {
       active = false;
+      clearTimeout(reconnectTimer);
       if (ws) ws.close();
     };
   }, [token]);

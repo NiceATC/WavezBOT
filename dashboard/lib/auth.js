@@ -20,7 +20,14 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const stored = window.localStorage.getItem("dashboard-token");
-    if (stored) setToken(stored);
+    if (!stored) return;
+    const expiry = window.localStorage.getItem("dashboard-token-expiry");
+    if (expiry && Date.now() > Number(expiry)) {
+      window.localStorage.removeItem("dashboard-token");
+      window.localStorage.removeItem("dashboard-token-expiry");
+      return;
+    }
+    setToken(stored);
   }, []);
 
   const login = async (password) => {

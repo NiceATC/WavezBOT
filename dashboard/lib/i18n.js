@@ -7,6 +7,7 @@ const I18nContext = createContext({
   locale: "en-US",
   locales: [],
   setLocale: () => {},
+  reloadI18n: () => {},
   t: (key) => key,
   ready: false,
 });
@@ -30,6 +31,7 @@ export function I18nProvider({ children }) {
   const [locales, setLocales] = useState([]);
   const [strings, setStrings] = useState({});
   const [ready, setReady] = useState(false);
+  const [reloadTick, setReloadTick] = useState(0);
 
   const detectBrowserLocale = (list) => {
     if (typeof navigator === "undefined") return null;
@@ -49,7 +51,7 @@ export function I18nProvider({ children }) {
 
   useEffect(() => {
     let active = true;
-    fetch(buildApiUrl("/api/locales"))
+    fetch(buildApiUrl("/api/locales"), { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (!active || !data?.ok) return;
@@ -71,7 +73,13 @@ export function I18nProvider({ children }) {
     if (!locale) return;
     let active = true;
     setReady(false);
-    fetch(buildApiUrl(`/api/locales/${encodeURIComponent(locale)}`))
+    const stamp = Date.now();
+    fetch(
+      buildApiUrl(`/api/locales/${encodeURIComponent(locale)}?r=${stamp}`),
+      {
+        cache: "no-store",
+      },
+    )
       .then((res) => res.json())
       .then((data) => {
         if (!active || !data?.ok) return;
@@ -85,23 +93,45 @@ export function I18nProvider({ children }) {
     return () => {
       active = false;
     };
-  }, [locale]);
+  }, [locale, reloadTick]);
+
+  const reloadI18n = () => {
+    setReloadTick((prev) => prev + 1);
+  };
 
   const t = useMemo(
-    () =>
-      (key, fallback = key) => {
-        const value = getByPath(strings, key);
-        if (value == null) return fallback;
-        if (typeof value === "string" || typeof value === "number") {
-          return String(value);
-        }
-        return fallback;
-      },
+    () => (key, params, fallback) => {
+      let vars = {};
+      let fb = key;
+      if (typeof params === "string") {
+        fb = params;
+      } else if (params && typeof params === "object") {
+        vars = params;
+        if (typeof fallback === "string") fb = fallback;
+      }
+      const value = getByPath(strings, key);
+      let str;
+      if (value == null) {
+        str = fb;
+      } else if (typeof value === "string" || typeof value === "number") {
+        str = String(value);
+      } else {
+        str = fb;
+      }
+      if (Object.keys(vars).length > 0) {
+        str = str.replace(/\{(\w+)\}/g, (_, k) =>
+          Object.prototype.hasOwnProperty.call(vars, k)
+            ? String(vars[k])
+            : `{${k}}`,
+        );
+      }
+      return str;
+    },
     [strings],
   );
 
   const value = useMemo(
-    () => ({ locale, locales, setLocale, t, ready }),
+    () => ({ locale, locales, setLocale, reloadI18n, t, ready }),
     [locale, locales, t, ready],
   );
 

@@ -247,6 +247,32 @@
                 "usageMessage": "Usage: !duelmute <minutes>",
                 "updated": "Duel mute set to {minutes} min."
             },
+            "warn": {
+                "description": "Warn a user.",
+                "usage": "!warn <user> [reason]",
+                "usageMessage": "Usage: !warn <user> [reason]",
+                "userNotFound": "User not found: {user}",
+                "roleTooHigh": "I cannot warn {user}; role too high.",
+                "defaultReason": "No reason provided",
+                "added": "Warning applied to {user}. Reason: {reason}. Active: {count}/{threshold}.",
+                "banned": "{user} reached {count}/{threshold} warnings and was auto-banned.",
+                "error": "Failed to apply warning."
+            },
+            "warnings": {
+                "description": "Show active warnings for a user.",
+                "usage": "!warnings [user]",
+                "userNotFound": "User not found: {user}",
+                "noUser": "Could not identify the user.",
+                "empty": "{user} has no active warnings.",
+                "list": "Warnings for {user} ({count}): {lines}"
+            },
+            "clearwarn": {
+                "description": "Clear warnings for a user.",
+                "usage": "!clearwarn <user>",
+                "usageMessage": "Usage: !clearwarn <user>",
+                "userNotFound": "User not found: {user}",
+                "cleared": "Warnings for {user} were cleared."
+            },
             "give": {
                 "description": "Give points or VIP to a user.",
                 "usage": "!give <points|vip> <user> <value>",
@@ -533,6 +559,32 @@
                 "cardVip": "VIP",
                 "cardPoints": "points"
             },
+            "bank": {
+                "description": "Manage your points bank.",
+                "usage": "!bank <status|deposit|withdraw> [amount]",
+                "usageMessage": "Usage: !bank <status|deposit|withdraw> [amount]",
+                "disabled": "Bank is disabled.",
+                "noUser": "Could not identify you.",
+                "invalidAmount": "Invalid amount.",
+                "insufficient": "Insufficient wallet balance.",
+                "bankInsufficient": "Insufficient bank balance.",
+                "status": "Wallet: {wallet} | Bank: {bank}",
+                "deposited": "Deposit completed: {amount}. Current bank: {bank}.",
+                "withdrawn": "Withdraw completed: {amount}. Current bank: {bank}."
+            },
+            "insurance": {
+                "description": "Buy days of anti-steal protection (only counts days online).",
+                "usage": "!insurance <status|buy <days>>",
+                "usageMessage": "Usage: !insurance <status|buy <days>>",
+                "disabled": "Insurance is disabled.",
+                "noUser": "Could not identify you.",
+                "inactive": "You have no active insurance.",
+                "active": "Insurance active: {days} day(s) remaining (only counts online days).",
+                "insufficient": "Insufficient balance to buy insurance ({price}).",
+                "maxDays": "You can buy at most {max} days at once.",
+                "vipDiscount": "({pct}% VIP discount)",
+                "purchased": "Bought {days} day(s) of insurance for {price} points. Total remaining: {total} day(s). {discount}"
+            },
             "transfer": {
                 "description": "Transfer points to another user.",
                 "usage": "!transfer <user> <points>",
@@ -625,6 +677,7 @@
                 "userNotFound": "User not found: {user}",
                 "cannotTargetBot": "I cannot steal from the bot.",
                 "self": "You cannot steal from yourself.",
+                "targetInsured": "{user} is protected by insurance ({days} day(s) remaining).",
                 "targetPoor": "{user} does not have enough points to steal.",
                 "success": "You stole {amount} points from {user}.",
                 "failed": "The steal failed.",
@@ -836,6 +889,16 @@
                 "result": "Here you go: {url}",
                 "error": "GIF error: {error}"
             },
+            "lyrics": {
+                "description": "Look up song lyrics on Genius. Without argument, uses the current track.",
+                "usage": "!lyrics [song name]",
+                "usageMessage": "Usage: !lyrics [song name] (no argument uses the current track)",
+                "noApiKey": "Genius API key is not configured.",
+                "noTrack": "No song is playing right now.",
+                "notFound": "No song found for: {query}",
+                "error": "Error fetching from Genius. Please try again.",
+                "result": "🎵 {title} — {url}"
+            },
             "roulette": {
                 "description": "Open the roulette.",
                 "usage": "!roulette",
@@ -1019,8 +1082,8 @@
             },
             "ship": {
                 "description": "Ship two people.",
-                "usage": "!ship [user1] [user2]",
-                "reply": "{left} + {right} = {percent}%"
+                "usage": "!ship [@user1] [@user2]",
+                "reply": "{emoji} {left} + {right} {bar} {percent}%"
             },
             "coin": {
                 "description": "Flip a coin.",
@@ -1068,6 +1131,29 @@
                 "noActive": "No active trivia.",
                 "noQuestion": "Could not load a question right now.",
                 "error": "Trivia error: {error}"
+            },
+            "evento": {
+                "description": "Manage live events (quiz and drop).",
+                "usage": "!evento [status|quiz|drop|join|answer|top]",
+                "usageMessage": "Usage: !evento [status|quiz|drop|join|answer|top]",
+                "idle": "No live event is active right now.",
+                "alreadyRunning": "A live event is already running.",
+                "quizStarted": "⚡ Lightning quiz! Answer within {seconds}s and win {reward} points. [{category} | {difficulty}]",
+                "quizStartedNoReward": "⚡ Quiz started! Answer in chat within {seconds}s. [{category} | {difficulty}]",
+                "quizQuestion": "❓ {question}",
+                "quizOption": "   {option}",
+                "quizWon": "{user} answered first! Correct answer: {answer}. Won {reward} points.",
+                "quizExpired": "Quiz time is over. Correct answer: {answer}.",
+                "quizActive": "Quiz is running. Time left: {seconds}s.",
+                "dropStarted": "DROP is live! Type 'PEGUEI {code}' in chat (or !evento join) within {seconds}s to win {reward} points.",
+                "dropWon": "{user} claimed the drop first (code {code}) and won {reward} points!",
+                "dropExpired": "Drop expired with no winner.",
+                "dropActive": "Drop is running. Code: {code}. Time left: {seconds}s.",
+                "noDrop": "There is no active drop to claim.",
+                "noQuiz": "There is no active quiz right now.",
+                "top": "Events leaderboard: {lines}",
+                "topEmpty": "No live event scores yet.",
+                "answer": "Current answer: {answer}"
             },
             "roast": {
                 "description": "Deliver a mild roast.",
@@ -1153,6 +1239,17 @@
         },
         "keywordReply": {
             "description": "Automatically replies to configured chat keywords."
+        },
+        "antiSpam": {
+            "description": "Detects spam by similar repeated messages.",
+            "reason": "Spam by repeating similar messages",
+            "banReason": "Auto-ban for recurring spam",
+            "chatWarned": "⚠️ {user}, stop repeating messages or you will be removed.",
+            "kicked": "{user} was kicked for spam. Next offense will result in a ban.",
+            "banned": "{user} was banned for repeated spam after warning and kick."
+        },
+        "liveEvents": {
+            "description": "Handles live quiz/drop events and rewards first winner."
         },
         "economyChat": {
             "description": "Rewards for chat activity."
@@ -1249,6 +1346,8 @@
             "admin": "Admin",
             "ranking": "Ranking",
             "commands": "Commands",
+            "shop": "Shop",
+            "vip": "VIP",
             "autowoot": "AutoWoot"
         },
         "auth": {
@@ -1257,6 +1356,8 @@
             "passwordPlaceholder": "Enter the password",
             "login": "Sign in",
             "logout": "Sign out",
+            "cancel": "Cancel",
+            "rememberMe": "Stay logged in",
             "invalidPassword": "Invalid password.",
             "missingPassword": "Dashboard password is not configured."
         },
@@ -1280,6 +1381,44 @@
             "paused": "Paused",
             "running": "Running",
             "empty": "-"
+        },
+        "shop": {
+            "title": "Shop",
+            "subtitle": "Items available for purchase with points.",
+            "searchPlaceholder": "Search item...",
+            "itemsTitle": "Shop items",
+            "vipTitle": "VIP Plans",
+            "vipSubtitle": "Click to copy the buy command.",
+            "empty": "No items found."
+        },
+        "vip": {
+            "title": "VIP",
+            "subtitle": "VIP plan benefits and prices.",
+            "disabled": "VIP system is disabled.",
+            "levelsTitle": "VIP Levels",
+            "levelsSubtitle": "Each level brings multipliers and exclusive perks.",
+            "durationsTitle": "Available durations",
+            "durationsSubtitle": "Progressive discounts for longer plans.",
+            "insuranceTitle": "Insurance discount for VIPs",
+            "insuranceDesc": "Base insurance price: {price} pts/day. VIPs get a discount:",
+            "insuranceBuyCmd": "Use: {prefix}insurance buy <days>",
+            "howToBuy": "How to buy",
+            "howToBuyDesc": "Use the command {prefix}buy vip <level> <duration>:",
+            "goToShop": "View full shop",
+            "perMonth": "mo",
+            "days": "days",
+            "noDiscount": "No discount",
+            "benefit": {
+                "xpMultiplier": "XP multiplier",
+                "economyMultiplier": "Points multiplier",
+                "dailyMultiplier": "Daily multiplier",
+                "workMultiplier": "Work multiplier",
+                "dcWindowMultiplier": "DC window (×)",
+                "afkLimitMultiplier": "AFK limit (×)",
+                "shopDiscountPct": "Shop discount",
+                "stealProtectionPct": "Steal protection",
+                "insuranceDiscount": "Insurance discount"
+            }
         },
         "rankings": {
             "title": "Rankings",
@@ -1339,7 +1478,18 @@
             "pathPlaceholder": "category/new-command.js",
             "saved": "File saved.",
             "created": "File created.",
-            "disabled": "File editing is disabled on the server."
+            "disabled": "File editing is disabled on the server.",
+            "format": "Format",
+            "formatted": "Formatted successfully.",
+            "formatError": "Could not format this content.",
+            "syntaxError": "Syntax error",
+            "diff": "Diff",
+            "diffTitle": "Change Suggestions",
+            "diffHint": "Review line-by-line additions and removals before saving.",
+            "diffNoChanges": "No changes detected.",
+            "diffEmpty": "No suggestions available.",
+            "maximize": "Maximize",
+            "restore": "Restore"
         },
         "admin": {
             "title": "Admin",
@@ -1377,6 +1527,8 @@
                 "restart": "Restart",
                 "reloadCommands": "Reload commands",
                 "reloadEvents": "Reload events",
+                "reloadConfig": "Reload config",
+                "reloadLang": "Reload languages",
                 "system": "System health",
                 "cpu": "CPU load",
                 "memory": "Memory",
@@ -1384,7 +1536,36 @@
                 "network": "Network",
                 "ping": "Ping",
                 "empty": "No logs yet.",
-                "clear": "Clear"
+                "clear": "Clear",
+                "tabAll": "All",
+                "tabBot": "Bot",
+                "tabDashboard": "Dashboard",
+                "confirm": {
+                    "startTitle": "Start bot",
+                    "startMessage": "Resume the bot? It will start responding to commands and events again.",
+                    "stopTitle": "Stop bot",
+                    "stopMessage": "Pause the bot? It will stop responding to commands and events.",
+                    "restartTitle": "Restart bot",
+                    "restartMessage": "Restart and reload the bot? This will reconnect to the room.",
+                    "reloadCommandsTitle": "Reload commands",
+                    "reloadCommandsMessage": "Reload all command modules from disk?",
+                    "reloadEventsTitle": "Reload events",
+                    "reloadEventsMessage": "Reload all event handler modules from disk?",
+                    "reloadConfigTitle": "Reload config",
+                    "reloadConfigMessage": "Reload bot config values from files?",
+                    "reloadLangTitle": "Reload languages",
+                    "reloadLangMessage": "Clear cache and reload locale files?",
+                    "confirm": "Confirm"
+                },
+                "toast": {
+                    "started": "Bot resumed successfully.",
+                    "stopped": "Bot paused successfully.",
+                    "restarted": "Bot is restarting...",
+                    "commandsReloaded": "Commands reloaded.",
+                    "eventsReloaded": "Events reloaded.",
+                    "configReloaded": "Config reloaded.",
+                    "langReloaded": "Languages reloaded."
+                }
             },
             "i18n": {
                 "title": "Translation editor",
@@ -1401,12 +1582,136 @@
                 "noTable": "Select a table.",
                 "columns": "Columns",
                 "rows": "Rows",
+                "actions": "Actions",
+                "edit": "Edit",
+                "editRow": "Edit row",
+                "saveRow": "Save row",
+                "rowSaved": "Row updated successfully.",
+                "deleteRow": "Delete row",
+                "rowDeleted": "Row deleted successfully.",
+                "confirmDeleteTitle": "Confirm deletion",
+                "confirmDeleteBody": "Are you sure you want to delete this row? This action cannot be undone.",
+                "confirmDeleteAction": "Delete",
+                "editMissingPk": "This table has no primary key. Row edit is disabled.",
+                "totalRows": "Total rows: {count}",
+                "prev": "Previous",
+                "next": "Next",
                 "searchPlaceholder": "Filter rows...",
+                "noRows": "No rows found for this table/filter.",
+                "showLessColumns": "Show fewer columns",
                 "showSql": "Show SQL",
                 "hideSql": "Hide SQL",
                 "sql": "SQL",
                 "execute": "Execute",
                 "sqlDisabled": "SQL execution is disabled on the server."
+            },
+            "moderation": {
+                "tab": "Moderation",
+                "title": "Moderation Center",
+                "refresh": "Refresh",
+                "stats": {
+                    "totalUsers": "Total users",
+                    "online": "Online",
+                    "withWarnings": "With warnings",
+                    "activeWarnings": "Active warnings"
+                },
+                "users": {
+                    "title": "Users (online and offline)",
+                    "searchPlaceholder": "Search by userId, username, or display",
+                    "onlineOnly": "Online only",
+                    "withWarningsOnly": "With warnings only",
+                    "empty": "No users found with current filters.",
+                    "warnBadge": "Warns: {count}"
+                },
+                "actions": {
+                    "title": "Moderation actions",
+                    "warn": "Warn User",
+                    "kick": "Kick User",
+                    "mute": "Mute User",
+                    "unmute": "Unmute User",
+                    "ban": "Ban User",
+                    "userMessage": "User message"
+                },
+                "selected": {
+                    "title": "Selected user",
+                    "none": "No user selected.",
+                    "id": "ID: {id}",
+                    "online": "Online",
+                    "offline": "Offline",
+                    "activeWarnings": "{count} active warnings"
+                },
+                "broadcast": {
+                    "title": "Broadcast (no mention)",
+                    "placeholder": "Type the broadcast message",
+                    "send": "Send",
+                    "hint": "Broadcast does not mention anyone. For mention messages, use the \"User message\" button."
+                },
+                "warnings": {
+                    "title": "Active warnings",
+                    "onlySelected": "Selected user only",
+                    "allUsers": "All users",
+                    "clearSelected": "Clear selected user's warnings",
+                    "searchPlaceholder": "Filter warnings by user/reason",
+                    "empty": "No active warnings.",
+                    "system": "system",
+                    "noReason": "No reason",
+                    "by": "by"
+                },
+                "modal": {
+                    "confirmActionTitle": "Confirm action",
+                    "confirmActionBody": "Review details before confirming action '{action}'.",
+                    "confirm": "Confirm",
+                    "sendMessage": "Send message",
+                    "userMessageTitle": "Message user",
+                    "userMessageBody": "Write the message the bot will send mentioning the selected user.",
+                    "clearWarningsTitle": "Clear warnings",
+                    "clearWarningsBody": "Do you want to clear all active warnings for the selected user?",
+                    "clear": "Clear",
+                    "deleteWarningTitle": "Delete warning #{id}",
+                    "deleteWarningBody": "Do you want to permanently delete this warning?",
+                    "delete": "Delete",
+                    "targetUser": "Target user",
+                    "reason": "Reason",
+                    "reasonPlaceholder": "Describe the reason for this action",
+                    "muteDuration": "Mute duration (minutes)",
+                    "muteDurationPlaceholder": "e.g. 30",
+                    "message": "Message",
+                    "messagePlaceholder": "Type the message for the user"
+                },
+                "toast": {
+                    "close": "Close notification",
+                    "sectionTitle": "Moderation",
+                    "selectionRequiredTitle": "Selection required",
+                    "selectionRequiredAction": "Select a user before running an action.",
+                    "selectionRequiredDm": "Select a user to send a direct message.",
+                    "actionFailTitle": "Moderation failed",
+                    "actionFailMessage": "Failed to apply action.",
+                    "actionSuccess": {
+                        "warn": "Warning applied",
+                        "kick": "User kicked",
+                        "ban": "User banned",
+                        "mute": "User muted",
+                        "unmute": "User unmuted",
+                        "generic": "Action '{action}' applied",
+                        "done": "{action} completed successfully."
+                    },
+                    "emptyMessageTitle": "Empty message",
+                    "emptyMessageBody": "Type a message before sending.",
+                    "emptyUserMessageBody": "Fill in the message to send to the selected user.",
+                    "broadcastSentTitle": "Broadcast sent",
+                    "broadcastSentBody": "Broadcast message sent to chat without mention.",
+                    "messageSentTitle": "Message sent",
+                    "messageSentMention": "Message sent with mention to the selected user.",
+                    "sendFailTitle": "Send failed",
+                    "sendFailBroadcast": "Failed to send bot message.",
+                    "sendFailUser": "Failed to send message to selected user.",
+                    "warningsTitle": "Warnings",
+                    "warningsFailTitle": "Warnings operation failed",
+                    "warningsCleared": "Active warnings cleared for selected user.",
+                    "warningsClearFail": "Failed to clear warnings.",
+                    "warningRemoved": "Warning removed successfully.",
+                    "warningRemoveFail": "Failed to remove warning."
+                }
             }
         },
         "errors": {

@@ -22,7 +22,10 @@ export function formatReactions(reactions) {
 
 export function formatBytes(value) {
   const size = Math.max(0, Number(value) || 0);
-  if (size < 1024) return `${size} B`;
+  if (size < 1024) {
+    const rounded = size >= 100 ? size.toFixed(0) : size.toFixed(1);
+    return `${rounded.replace(/\.0$/, "")} B`;
+  }
   const units = ["KB", "MB", "GB", "TB"];
   let idx = -1;
   let scaled = size;
@@ -30,7 +33,7 @@ export function formatBytes(value) {
     scaled /= 1024;
     idx += 1;
   }
-  return `${scaled.toFixed(scaled >= 100 ? 0 : 1)} ${units[idx]}`;
+  return `${scaled.toFixed(scaled >= 100 ? 0 : scaled >= 10 ? 1 : 2)} ${units[idx]}`;
 }
 
 export function formatRate(bytesPerSec) {

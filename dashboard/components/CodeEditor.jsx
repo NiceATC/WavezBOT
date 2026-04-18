@@ -1,52 +1,103 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { loader } from "@monaco-editor/react";
+import ReactCodeMirror from "@uiw/react-codemirror";
+import { indentWithTab } from "@codemirror/commands";
+import { keymap, EditorView } from "@codemirror/view";
+import { javascript } from "@codemirror/lang-javascript";
+import { json } from "@codemirror/lang-json";
+import { sql } from "@codemirror/lang-sql";
+import { css } from "@codemirror/lang-css";
+import { html } from "@codemirror/lang-html";
+import { markdown } from "@codemirror/lang-markdown";
+import { yaml } from "@codemirror/lang-yaml";
+import { syntaxTree } from "@codemirror/language";
+import { linter, lintGutter } from "@codemirror/lint";
+import { search } from "@codemirror/search";
+import { oneDark } from "@codemirror/theme-one-dark";
 
-// Serve Monaco assets from the local bundle (public/) instead of CDN.
-// Run `npm run copy-monaco` (or `npm run build`) to populate public/monaco-editor/.
-loader.config({
-  paths: {
-    vs: "/monaco-editor/min/vs",
-  },
+const parserSyntaxLinter = linter((view) => {
+  const diagnostics = [];
+  syntaxTree(view.state).iterate({
+    enter: ({ type, from, to }) => {
+      if (!type.isError) return;
+      diagnostics.push({
+        from,
+        to: Math.max(from + 1, to),
+        severity: "error",
+        message: "Syntax error",
+      });
+    },
+  });
+  return diagnostics;
 });
 
-const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
-  ssr: false,
-});
+function getExtensions(language) {
+  const lang = String(language || "plaintext").toLowerCase();
+
+  const common = [
+    EditorView.lineWrapping,
+    search({ top: true }),
+    keymap.of([indentWithTab]),
+    lintGutter(),
+  ];
+
+  if (lang === "json") return [json(), parserSyntaxLinter, ...common];
+  if (lang === "javascript" || lang === "js") {
+    return [javascript({ jsx: false }), parserSyntaxLinter, ...common];
+  }
+  if (lang === "sql") {
+    return [sql(), parserSyntaxLinter, ...common];
+  }
+  if (lang === "yaml" || lang === "yml") return [yaml(), ...common];
+  if (lang === "markdown" || lang === "md") return [markdown(), ...common];
+  if (lang === "html") return [html(), ...common];
+  if (lang === "css") return [css(), ...common];
+
+  return common;
+}
 
 export default function CodeEditor({
   value,
   onChange,
-  language = "javascript",
+  language = "plaintext",
   placeholder = "",
   minHeight = 260,
   className = "",
 }) {
-  const height = typeof minHeight === "number" ? `${minHeight}px` : minHeight;
-  const editorOptions = {
-    minimap: { enabled: true },
-    fontFamily: "JetBrains Mono, SFMono-Regular, Menlo, monospace",
-    fontSize: 14,
-    lineHeight: 20,
-    scrollBeyondLastLine: false,
-    automaticLayout: true,
-    wordWrap: "on",
-    renderWhitespace: "selection",
-    smoothScrolling: true,
-    scrollbar: { verticalScrollbarSize: 10, horizontalScrollbarSize: 10 },
-  };
+  const extensions = getExtensions(language);
+  const minH = typeof minHeight === "number" ? `${minHeight}px` : String(minHeight);
 
   return (
     <div className={`code-editor ${className}`.trim()} style={{ minHeight }}>
-      <MonacoEditor
-        height={height}
-        language={language}
-        value={value}
-        onChange={(next) => onChange(next ?? "")}
-        theme="vs-dark"
-        options={editorOptions}
-        loading={<div className="muted">{placeholder || "Loading editor..."}</div>}
+      <ReactCodeMirror
+        value={value ?? ""}
+        onChange={(val) => onChange(val)}
+        extensions={extensions}
+        theme={oneDark}
+        basicSetup={{
+          lineNumbers: true,
+          foldGutter: true,
+          dropCursor: true,
+          allowMultipleSelections: true,
+          indentOnInput: true,
+          bracketMatching: true,
+          closeBrackets: true,
+          autocompletion: true,
+          rectangularSelection: false,
+          crosshairCursor: false,
+          highlightActiveLine: true,
+          highlightSelectionMatches: true,
+          closeBracketsKeymap: true,
+          searchKeymap: true,
+          foldKeymap: true,
+          completionKeymap: true,
+          lintKeymap: true,
+          tabSize: 2,
+        }}
+        placeholder={placeholder}
+        height="100%"
+        minHeight={minH}
+        style={{ height: "100%" }}
       />
     </div>
   );

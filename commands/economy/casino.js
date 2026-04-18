@@ -12,6 +12,7 @@ import {
   getCasinoJackpot,
   incrementCasinoJackpot,
   setCasinoJackpot,
+  incrementCasinoStat,
 } from "../../lib/storage.js";
 
 const casinoCooldowns = new Map();
@@ -280,6 +281,7 @@ export default {
       }
 
       if (payoutInt > 0 && jackpotWonInt) {
+        void incrementCasinoStat(String(userId), true);
         await reply(
           t("commands.economy.casino.slots.jackpot", {
             reels: reelsText,
@@ -289,6 +291,7 @@ export default {
           }),
         );
       } else if (payoutInt > 0) {
+        void incrementCasinoStat(String(userId), true);
         await reply(
           t("commands.economy.casino.slots.win", {
             reels: reelsText,
@@ -297,6 +300,7 @@ export default {
           }),
         );
       } else {
+        void incrementCasinoStat(String(userId), false);
         await reply(
           t("commands.economy.casino.slots.lose", { reels: reelsText }),
         );
@@ -389,6 +393,7 @@ export default {
       }
 
       if (payoutInt > 0) {
+        void incrementCasinoStat(String(userId), true);
         await reply(
           t("commands.economy.casino.roulette.win", {
             choice: t(`commands.casino.roulette.color.${choice}`),
@@ -399,6 +404,7 @@ export default {
           }),
         );
       } else {
+        void incrementCasinoStat(String(userId), false);
         await reply(
           t("commands.economy.casino.roulette.lose", {
             choice: t(`commands.casino.roulette.color.${choice}`),
@@ -449,6 +455,7 @@ export default {
       }
 
       if (payoutInt > 0) {
+        void incrementCasinoStat(String(userId), true);
         await reply(
           t("commands.economy.casino.dice.win", {
             roll,
@@ -458,6 +465,7 @@ export default {
           }),
         );
       } else {
+        void incrementCasinoStat(String(userId), false);
         await reply(
           t("commands.economy.casino.dice.lose", {
             roll,

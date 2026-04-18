@@ -247,6 +247,32 @@
                 "usageMessage": "Uso: !duelmute <minutos>",
                 "updated": "Mute do duelo definido para {minutes} min."
             },
+            "warn": {
+                "description": "Aplica advertência a um usuário.",
+                "usage": "!warn <usuario> [motivo]",
+                "usageMessage": "Uso: !warn <usuario> [motivo]",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "roleTooHigh": "Não posso advertir {user}; cargo alto demais.",
+                "defaultReason": "Sem motivo informado",
+                "added": "Advertência aplicada em {user}. Motivo: {reason}. Ativos: {count}/{threshold}.",
+                "banned": "{user} atingiu {count}/{threshold} warns e foi banido automaticamente.",
+                "error": "Falha ao aplicar advertência."
+            },
+            "warnings": {
+                "description": "Mostra advertências ativas de um usuário.",
+                "usage": "!warnings [usuario]",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "noUser": "Não consegui identificar o usuário.",
+                "empty": "{user} não possui advertências ativas.",
+                "list": "Advertências de {user} ({count}): {lines}"
+            },
+            "clearwarn": {
+                "description": "Limpa advertências de um usuário.",
+                "usage": "!clearwarn <usuario>",
+                "usageMessage": "Uso: !clearwarn <usuario>",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "cleared": "Advertências de {user} foram limpas."
+            },
             "give": {
                 "description": "Dá pontos ou VIP para um usuário.",
                 "usage": "!give <points|vip> <usuario> <valor>",
@@ -533,6 +559,32 @@
                 "cardVip": "VIP",
                 "cardPoints": "pontos"
             },
+            "bank": {
+                "description": "Gerencia seu cofre de pontos.",
+                "usage": "!bank <status|deposit|withdraw> [valor]",
+                "usageMessage": "Uso: !bank <status|deposit|withdraw> [valor]",
+                "disabled": "Cofre desativado.",
+                "noUser": "Não consegui identificar você.",
+                "invalidAmount": "Valor inválido.",
+                "insufficient": "Saldo insuficiente na carteira.",
+                "bankInsufficient": "Saldo insuficiente no cofre.",
+                "status": "Carteira: {wallet} | Cofre: {bank}",
+                "deposited": "Depósito realizado: {amount}. Cofre atual: {bank}.",
+                "withdrawn": "Saque realizado: {amount}. Cofre atual: {bank}."
+            },
+            "insurance": {
+                "description": "Compra dias de proteção contra roubo (conta apenas dias online).",
+                "usage": "!seguro <status|buy <dias>>",
+                "usageMessage": "Uso: !seguro <status|buy <dias>>",
+                "disabled": "Seguro desativado.",
+                "noUser": "Não consegui identificar você.",
+                "inactive": "Você não possui seguro ativo.",
+                "active": "Seguro ativo: {days} dia(s) restante(s) (conta só dias online).",
+                "insufficient": "Saldo insuficiente para comprar seguro ({price}).",
+                "maxDays": "Você pode comprar no máximo {max} dias de uma vez.",
+                "vipDiscount": "({pct}% de desconto VIP)",
+                "purchased": "Comprou {days} dia(s) de seguro por {price} pontos. Total restante: {total} dia(s). {discount}"
+            },
             "transfer": {
                 "description": "Transfere pontos para outro usuário.",
                 "usage": "!transfer <usuario> <pontos>",
@@ -625,6 +677,7 @@
                 "userNotFound": "Usuário não encontrado: {user}",
                 "cannotTargetBot": "Nao posso roubar o bot.",
                 "self": "Voce nao pode roubar a si mesmo.",
+                "targetInsured": "{user} está protegido(a) por seguro ({days} dia(s) restantes).",
                 "targetPoor": "{user} nao tem pontos suficientes para roubar.",
                 "success": "Voce roubou {amount} pontos de {user}.",
                 "failed": "O roubo falhou.",
@@ -836,6 +889,16 @@
                 "result": "Aqui vai: {url}",
                 "error": "Erro ao buscar GIF: {error}"
             },
+            "lyrics": {
+                "description": "Busca a letra de uma música no Genius. Sem argumento, usa a música tocando agora.",
+                "usage": "!lyrics [nome da música]",
+                "usageMessage": "Uso: !lyrics [nome da música] (sem argumento usa a música atual)",
+                "noApiKey": "Chave da API Genius não configurada.",
+                "noTrack": "Nenhuma música tocando no momento.",
+                "notFound": "Nenhuma música encontrada para: {query}",
+                "error": "Erro ao buscar no Genius. Tente novamente.",
+                "result": "🎵 {title} — {url}"
+            },
             "roulette": {
                 "description": "Abre a roleta.",
                 "usage": "!roulette",
@@ -1019,8 +1082,8 @@
             },
             "ship": {
                 "description": "Faz um ship entre duas pessoas.",
-                "usage": "!ship [usuario1] [usuario2]",
-                "reply": "{left} + {right} = {percent}%"
+                "usage": "!ship [@usuario1] [@usuario2]",
+                "reply": "{emoji} {left} + {right} {bar} {percent}%"
             },
             "coin": {
                 "description": "Joga uma moeda.",
@@ -1068,6 +1131,29 @@
                 "noActive": "Nenhuma trivia ativa.",
                 "noQuestion": "Nao consegui carregar uma pergunta agora.",
                 "error": "Erro ao buscar trivia: {error}"
+            },
+            "evento": {
+                "description": "Gerencia eventos ao vivo (quiz e drop).",
+                "usage": "!evento [status|quiz|drop|join|answer|top]",
+                "usageMessage": "Uso: !evento [status|quiz|drop|join|answer|top]",
+                "idle": "Nenhum evento ao vivo ativo agora.",
+                "alreadyRunning": "Ja existe um evento ao vivo em andamento.",
+                "quizStarted": "⚡ Quiz relampago! Responda em ate {seconds}s e ganhe {reward} pontos. [{category} | {difficulty}]",
+                "quizStartedNoReward": "⚡ Quiz iniciado! Responda no chat em ate {seconds}s. [{category} | {difficulty}]",
+                "quizQuestion": "❓ {question}",
+                "quizOption": "   {option}",
+                "quizWon": "{user} acertou primeiro! Resposta: {answer}. Ganhou {reward} pontos.",
+                "quizExpired": "Tempo esgotado no quiz.",
+                "quizActive": "Quiz em andamento. Tempo restante: {seconds}s.",
+                "dropStarted": "DROP liberado! Digite 'PEGUEI {code}' no chat (ou !evento join) em ate {seconds}s para ganhar {reward} pontos.",
+                "dropWon": "{user} pegou o drop primeiro (codigo {code}) e ganhou {reward} pontos!",
+                "dropExpired": "Drop expirou sem vencedor.",
+                "dropActive": "Drop em andamento. Codigo: {code}. Tempo restante: {seconds}s.",
+                "noDrop": "Nao ha drop ativo para pegar agora.",
+                "noQuiz": "Nao ha quiz ativo no momento.",
+                "top": "Top eventos: {lines}",
+                "topEmpty": "Ainda nao ha pontuacao de eventos ao vivo.",
+                "answer": "Resposta atual: {answer}"
             },
             "roast": {
                 "description": "Solta uma zoeira leve.",
@@ -1153,6 +1239,17 @@
         },
         "keywordReply": {
             "description": "Responde automaticamente a palavras-chave configuradas no chat."
+        },
+        "antiSpam": {
+            "description": "Detecta spam por mensagens semelhantes em curto período.",
+            "reason": "Spam por repetição de mensagens semelhantes",
+            "banReason": "Auto-ban por spam recorrente",
+            "chatWarned": "⚠️ {user}, pare de repetir mensagens ou será removido(a).",
+            "kicked": "{user} foi removido(a) por spam. Próxima infração resultará em ban.",
+            "banned": "{user} foi banido(a) por spam recorrente após aviso e remoção."
+        },
+        "liveEvents": {
+            "description": "Gerencia quiz/drop ao vivo e premia o primeiro vencedor."
         },
         "economyChat": {
             "description": "Recompensas por mensagens no chat."
@@ -1249,6 +1346,8 @@
             "admin": "Admin",
             "ranking": "Ranking",
             "commands": "Comandos",
+            "shop": "Loja",
+            "vip": "VIP",
             "autowoot": "AutoWoot"
         },
         "auth": {
@@ -1257,6 +1356,8 @@
             "passwordPlaceholder": "Digite a senha",
             "login": "Entrar",
             "logout": "Sair",
+            "cancel": "Cancelar",
+            "rememberMe": "Continuar conectado",
             "invalidPassword": "Senha invalida.",
             "missingPassword": "Senha do painel nao configurada."
         },
@@ -1280,6 +1381,44 @@
             "paused": "Pausado",
             "running": "Ativo",
             "empty": "-"
+        },
+        "shop": {
+            "title": "Loja",
+            "subtitle": "Itens disponíveis para compra com pontos.",
+            "searchPlaceholder": "Buscar item...",
+            "itemsTitle": "Itens da loja",
+            "vipTitle": "Planos VIP",
+            "vipSubtitle": "Clique para copiar o comando de compra.",
+            "empty": "Nenhum item encontrado."
+        },
+        "vip": {
+            "title": "VIP",
+            "subtitle": "Benefícios e preços dos planos VIP.",
+            "disabled": "Sistema VIP desativado.",
+            "levelsTitle": "Níveis VIP",
+            "levelsSubtitle": "Cada nível traz multiplicadores e benefícios exclusivos.",
+            "durationsTitle": "Durações disponíveis",
+            "durationsSubtitle": "Descontos progressivos para planos mais longos.",
+            "insuranceTitle": "Desconto de seguro para VIPs",
+            "insuranceDesc": "Preço base do seguro: {price} pts/dia. VIPs têm desconto:",
+            "insuranceBuyCmd": "Use: {prefix}seguro buy <dias>",
+            "howToBuy": "Como comprar",
+            "howToBuyDesc": "Use o comando {prefix}buy vip <nível> <duração>:",
+            "goToShop": "Ver loja completa",
+            "perMonth": "mês",
+            "days": "dias",
+            "noDiscount": "Sem desconto",
+            "benefit": {
+                "xpMultiplier": "Multiplicador de XP",
+                "economyMultiplier": "Multiplicador de pontos",
+                "dailyMultiplier": "Multiplicador de daily",
+                "workMultiplier": "Multiplicador de work",
+                "dcWindowMultiplier": "Janela de DC (×)",
+                "afkLimitMultiplier": "Limite AFK (×)",
+                "shopDiscountPct": "Desconto na loja",
+                "stealProtectionPct": "Proteção contra roubo",
+                "insuranceDiscount": "Desconto no seguro"
+            }
         },
         "rankings": {
             "title": "Rankings",
@@ -1339,7 +1478,18 @@
             "pathPlaceholder": "categoria/novo-comando.js",
             "saved": "Arquivo salvo.",
             "created": "Arquivo criado.",
-            "disabled": "Edicao de arquivos desativada no servidor."
+            "disabled": "Edicao de arquivos desativada no servidor.",
+            "format": "Formatar",
+            "formatted": "Formatado com sucesso.",
+            "formatError": "Nao foi possivel formatar este conteudo.",
+            "syntaxError": "Erro de sintaxe",
+            "diff": "Diff",
+            "diffTitle": "Sugestoes de mudanca",
+            "diffHint": "Revise adicoes e remocoes linha a linha antes de salvar.",
+            "diffNoChanges": "Nenhuma mudanca detectada.",
+            "diffEmpty": "Nenhuma sugestao disponivel.",
+            "maximize": "Maximizar",
+            "restore": "Restaurar"
         },
         "admin": {
             "title": "Admin",
@@ -1377,6 +1527,8 @@
                 "restart": "Reiniciar",
                 "reloadCommands": "Recarregar comandos",
                 "reloadEvents": "Recarregar eventos",
+                "reloadConfig": "Recarregar config",
+                "reloadLang": "Recarregar idiomas",
                 "system": "Saude do sistema",
                 "cpu": "Carga da CPU",
                 "memory": "Memoria",
@@ -1384,7 +1536,36 @@
                 "network": "Rede",
                 "ping": "Ping",
                 "empty": "Sem logs ainda.",
-                "clear": "Limpar"
+                "clear": "Limpar",
+                "tabAll": "Todos",
+                "tabBot": "Bot",
+                "tabDashboard": "Dashboard",
+                "confirm": {
+                    "startTitle": "Iniciar bot",
+                    "startMessage": "Retomar o bot? Ele voltara a responder comandos e eventos.",
+                    "stopTitle": "Parar bot",
+                    "stopMessage": "Pausar o bot? Ele vai parar de responder comandos e eventos.",
+                    "restartTitle": "Reiniciar bot",
+                    "restartMessage": "Reiniciar e recarregar o bot? Isso vai reconectar ao room.",
+                    "reloadCommandsTitle": "Recarregar comandos",
+                    "reloadCommandsMessage": "Recarregar todos os modulos de comandos do disco?",
+                    "reloadEventsTitle": "Recarregar eventos",
+                    "reloadEventsMessage": "Recarregar todos os modulos de eventos do disco?",
+                    "reloadConfigTitle": "Recarregar config",
+                    "reloadConfigMessage": "Recarregar as configuracoes do bot a partir dos arquivos?",
+                    "reloadLangTitle": "Recarregar idiomas",
+                    "reloadLangMessage": "Limpar cache e recarregar os arquivos de idioma?",
+                    "confirm": "Confirmar"
+                },
+                "toast": {
+                    "started": "Bot retomado com sucesso.",
+                    "stopped": "Bot pausado com sucesso.",
+                    "restarted": "Bot esta reiniciando...",
+                    "commandsReloaded": "Comandos recarregados.",
+                    "eventsReloaded": "Eventos recarregados.",
+                    "configReloaded": "Configuracoes recarregadas.",
+                    "langReloaded": "Idiomas recarregados."
+                }
             },
             "i18n": {
                 "title": "Editor de traducoes",
@@ -1401,12 +1582,136 @@
                 "noTable": "Selecione uma tabela.",
                 "columns": "Colunas",
                 "rows": "Linhas",
+                "actions": "Ações",
+                "edit": "Editar",
+                "editRow": "Editar linha",
+                "saveRow": "Salvar linha",
+                "rowSaved": "Linha atualizada com sucesso.",
+                "deleteRow": "Excluir linha",
+                "rowDeleted": "Linha excluida com sucesso.",
+                "confirmDeleteTitle": "Confirmar exclusao",
+                "confirmDeleteBody": "Tem certeza que deseja excluir esta linha? Esta acao nao pode ser desfeita.",
+                "confirmDeleteAction": "Excluir",
+                "editMissingPk": "Esta tabela não possui chave primária. Edição por linha desativada.",
+                "totalRows": "Total de linhas: {count}",
+                "prev": "Anterior",
+                "next": "Próxima",
                 "searchPlaceholder": "Filtrar linhas...",
+                "noRows": "Nenhuma linha encontrada para esta tabela/filtro.",
+                "showLessColumns": "Ver menos colunas",
                 "showSql": "Mostrar SQL",
                 "hideSql": "Ocultar SQL",
                 "sql": "SQL",
                 "execute": "Executar",
                 "sqlDisabled": "Execucao de SQL desativada no servidor."
+            },
+            "moderation": {
+                "tab": "Moderação",
+                "title": "Central de Moderação",
+                "refresh": "Atualizar",
+                "stats": {
+                    "totalUsers": "Total usuários",
+                    "online": "Online",
+                    "withWarnings": "Com warnings",
+                    "activeWarnings": "Warnings ativos"
+                },
+                "users": {
+                    "title": "Usuários",
+                    "searchPlaceholder": "Buscar por userId, username ou display",
+                    "onlineOnly": "Só online",
+                    "withWarningsOnly": "Só com warns",
+                    "empty": "Nenhum usuário encontrado com os filtros atuais.",
+                    "warnBadge": "Warns: {count}"
+                },
+                "actions": {
+                    "title": "Ações de moderação",
+                    "warn": "Warn",
+                    "kick": "Kick",
+                    "mute": "Mute",
+                    "unmute": "Unmute",
+                    "ban": "Ban",
+                    "userMessage": "Mensagem"
+                },
+                "selected": {
+                    "title": "Usuário selecionado",
+                    "none": "Nenhum usuário selecionado.",
+                    "id": "ID: {id}",
+                    "online": "Online",
+                    "offline": "Offline",
+                    "activeWarnings": "{count} warnings ativos"
+                },
+                "broadcast": {
+                    "title": "Broadcast",
+                    "placeholder": "Digite a mensagem de broadcast",
+                    "send": "Enviar",
+                    "hint": "Broadcast na sala como o bot."
+                },
+                "warnings": {
+                    "title": "Warnings ativos",
+                    "onlySelected": "Só usuário selecionado",
+                    "allUsers": "Todos usuários",
+                    "clearSelected": "Limpar warns do usuário selecionado",
+                    "searchPlaceholder": "Filtrar warnings por usuário/motivo",
+                    "empty": "Nenhum warning ativo.",
+                    "system": "sistema",
+                    "noReason": "Sem motivo",
+                    "by": "por"
+                },
+                "modal": {
+                    "confirmActionTitle": "Confirmar ação",
+                    "confirmActionBody": "Revise os dados antes de confirmar a ação '{action}'.",
+                    "confirm": "Confirmar",
+                    "sendMessage": "Enviar mensagem",
+                    "userMessageTitle": "Mensagem para usuário",
+                    "userMessageBody": "Escreva a mensagem que o bot enviará com menção ao usuário selecionado.",
+                    "clearWarningsTitle": "Limpar warnings",
+                    "clearWarningsBody": "Deseja limpar todos os warnings ativos do usuário selecionado?",
+                    "clear": "Limpar",
+                    "deleteWarningTitle": "Excluir warning #{id}",
+                    "deleteWarningBody": "Deseja excluir permanentemente este warning?",
+                    "delete": "Excluir",
+                    "targetUser": "Usuário alvo",
+                    "reason": "Motivo",
+                    "reasonPlaceholder": "Descreva o motivo da ação",
+                    "muteDuration": "Tempo de mute (minutos)",
+                    "muteDurationPlaceholder": "Ex.: 30",
+                    "message": "Mensagem",
+                    "messagePlaceholder": "Digite a mensagem para o usuário"
+                },
+                "toast": {
+                    "close": "Fechar notificação",
+                    "sectionTitle": "Moderação",
+                    "selectionRequiredTitle": "Seleção obrigatória",
+                    "selectionRequiredAction": "Selecione um usuário antes de executar a ação.",
+                    "selectionRequiredDm": "Selecione um usuário para enviar mensagem direta.",
+                    "actionFailTitle": "Falha na moderação",
+                    "actionFailMessage": "Falha ao aplicar ação.",
+                    "actionSuccess": {
+                        "warn": "Warn aplicado",
+                        "kick": "Usuário kickado",
+                        "ban": "Usuário banido",
+                        "mute": "Usuário mutado",
+                        "unmute": "Usuário desmutado",
+                        "generic": "Ação '{action}' aplicada",
+                        "done": "{action} com sucesso."
+                    },
+                    "emptyMessageTitle": "Mensagem vazia",
+                    "emptyMessageBody": "Digite uma mensagem antes de enviar.",
+                    "emptyUserMessageBody": "Preencha a mensagem para enviar ao usuário selecionado.",
+                    "broadcastSentTitle": "Broadcast enviado",
+                    "broadcastSentBody": "Mensagem de broadcast enviada para o chat sem menção.",
+                    "messageSentTitle": "Mensagem enviada",
+                    "messageSentMention": "Mensagem enviada com menção ao usuário selecionado.",
+                    "sendFailTitle": "Falha no envio",
+                    "sendFailBroadcast": "Falha ao enviar mensagem do bot.",
+                    "sendFailUser": "Falha ao enviar mensagem para o usuário selecionado.",
+                    "warningsTitle": "Warnings",
+                    "warningsFailTitle": "Falha em warnings",
+                    "warningsCleared": "Warnings ativos limpos para o usuário selecionado.",
+                    "warningsClearFail": "Falha ao limpar warnings.",
+                    "warningRemoved": "Warning removido com sucesso.",
+                    "warningRemoveFail": "Falha ao remover warning."
+                }
             }
         },
         "errors": {

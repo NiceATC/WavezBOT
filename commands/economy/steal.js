@@ -4,6 +4,7 @@ import {
   POINT_SCALE,
 } from "../../helpers/points.js";
 import { getRoleLevel } from "../../lib/permissions.js";
+import { getInsuranceDays, hasActiveInsurance } from "../../lib/storage.js";
 
 function randomInt(min, max) {
   const low = Math.min(min, max);
@@ -65,6 +66,19 @@ export default {
       target.userId,
       targetIdentity,
     );
+
+    if (bot.cfg.insuranceEnabled !== false) {
+      if (await hasActiveInsurance(target.userId)) {
+        const days = await getInsuranceDays(target.userId);
+        await reply(
+          t("commands.economy.steal.targetInsured", {
+            user: mentionUser(target, targetInput),
+            days,
+          }),
+        );
+        return;
+      }
+    }
 
     const minInt = toPointsInt(bot.cfg.stealMinAmount ?? 0.5);
     const maxInt = toPointsInt(bot.cfg.stealMaxAmount ?? 2);

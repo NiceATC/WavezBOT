@@ -8,8 +8,22 @@ function splitTargets(raw) {
 
 function resolveName(bot, input) {
   if (!input) return null;
-  const user = bot.findRoomUser(input);
-  return user?.displayName ?? user?.username ?? input;
+  const clean = input.replace(/^@/, "");
+  const user = bot.findRoomUser(clean);
+  return user?.displayName ?? user?.username ?? clean;
+}
+
+function shipBar(percent) {
+  const filled = Math.round(percent / 10);
+  return "[" + "█".repeat(filled) + "░".repeat(10 - filled) + "]";
+}
+
+function shipEmoji(percent) {
+  if (percent >= 90) return "💞";
+  if (percent >= 70) return "❤️";
+  if (percent >= 50) return "💛";
+  if (percent >= 30) return "🤝";
+  return "💔";
 }
 
 export default {
@@ -42,11 +56,16 @@ export default {
     }
 
     const percent = Math.floor(Math.random() * 101);
+    const bar = shipBar(percent);
+    const emoji = shipEmoji(percent);
+
     await reply(
       t("commands.fun.ship.reply", {
         left,
         right,
         percent,
+        bar,
+        emoji,
       }),
     );
   },
