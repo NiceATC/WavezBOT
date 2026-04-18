@@ -32,6 +32,15 @@ export default {
       return;
     }
 
+    if (bot.hasPlatformRole(user.userId)) {
+      await reply(
+        t("commands.mod.cannotTargetPlatformRole", {
+          user: mentionUser(user, target),
+        }),
+      );
+      return;
+    }
+
     try {
       const qRes = await api.room.getQueueStatus(bot.cfg.room);
       const queueIds = qRes?.data?.queueUserIds ?? [];

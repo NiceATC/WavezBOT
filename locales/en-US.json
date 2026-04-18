@@ -91,6 +91,7 @@
         },
         "mod": {
             "cannotTargetBot": "I can't use this command on the bot.",
+            "cannotTargetPlatformRole": "I can't apply this action to {user}; users with a platform role are not affected.",
             "cmddelete": {
                 "description": "Toggle command message cleanup.",
                 "usage": "!cmddelete [on|off]",
@@ -247,6 +248,14 @@
                 "usageMessage": "Usage: !duelmute <minutes>",
                 "updated": "Duel mute set to {minutes} min."
             },
+            "clearduel": {
+                "description": "Remove the duel mute from a user or everyone.",
+                "usage": "!clearduel [@user]",
+                "userNotFound": "User not found: {user}",
+                "notMuted": "{user} does not have an active duel mute.",
+                "cleared": "Duel mute cleared for {user}.",
+                "clearedAll": "Duel mutes cleared for all users."
+            },
             "warn": {
                 "description": "Warn a user.",
                 "usage": "!warn <user> [reason]",
@@ -256,6 +265,7 @@
                 "defaultReason": "No reason provided",
                 "added": "Warning applied to {user}. Reason: {reason}. Active: {count}/{threshold}.",
                 "banned": "{user} reached {count}/{threshold} warnings and was auto-banned.",
+                "banBlockedPlatformRole": "{user} reached {count}/{threshold} warnings, but users with platform roles cannot be banned by this action.",
                 "error": "Failed to apply warning."
             },
             "warnings": {
@@ -1246,7 +1256,8 @@
             "banReason": "Auto-ban for recurring spam",
             "chatWarned": "⚠️ {user}, stop repeating messages or you will be removed.",
             "kicked": "{user} was kicked for spam. Next offense will result in a ban.",
-            "banned": "{user} was banned for repeated spam after warning and kick."
+            "banned": "{user} was banned for repeated spam after warning and kick.",
+            "cannotModeratePlatformRole": "{user} has a platform role; automatic moderation actions do not work on this user."
         },
         "liveEvents": {
             "description": "Handles live quiz/drop events and rewards first winner."
@@ -1303,6 +1314,9 @@
         },
         "waitlistLeaveSnapshot": {
             "description": "Saves snapshot immediately when user leaves the waitlist."
+        },
+        "roomLeaveSnapshot": {
+            "description": "Records last_left_at immediately when a user leaves the room."
         }
     },
     "helpers": {

@@ -91,6 +91,7 @@
         },
         "mod": {
             "cannotTargetBot": "Não posso usar esse comando no próprio bot.",
+            "cannotTargetPlatformRole": "Não posso aplicar essa ação em {user}; usuários com cargo de plataforma não são afetados.",
             "cmddelete": {
                 "description": "Ativa ou desativa a limpeza de comandos.",
                 "usage": "!cmddelete [on|off]",
@@ -247,6 +248,14 @@
                 "usageMessage": "Uso: !duelmute <minutos>",
                 "updated": "Mute do duelo definido para {minutes} min."
             },
+            "clearduel": {
+                "description": "Remove o mute de duelo de um usuário ou de todos.",
+                "usage": "!clearduel [@usuario]",
+                "userNotFound": "Usuário não encontrado: {user}",
+                "notMuted": "{user} não está com mute de duelo ativo.",
+                "cleared": "Mute de duelo removido para {user}.",
+                "clearedAll": "Mutes de duelo removidos para todos os usuários."
+            },
             "warn": {
                 "description": "Aplica advertência a um usuário.",
                 "usage": "!warn <usuario> [motivo]",
@@ -256,6 +265,7 @@
                 "defaultReason": "Sem motivo informado",
                 "added": "Advertência aplicada em {user}. Motivo: {reason}. Ativos: {count}/{threshold}.",
                 "banned": "{user} atingiu {count}/{threshold} warns e foi banido automaticamente.",
+                "banBlockedPlatformRole": "{user} atingiu {count}/{threshold} warns, mas usuários com cargo de plataforma não podem ser banidos por essa ação.",
                 "error": "Falha ao aplicar advertência."
             },
             "warnings": {
@@ -1246,7 +1256,8 @@
             "banReason": "Auto-ban por spam recorrente",
             "chatWarned": "⚠️ {user}, pare de repetir mensagens ou será removido(a).",
             "kicked": "{user} foi removido(a) por spam. Próxima infração resultará em ban.",
-            "banned": "{user} foi banido(a) por spam recorrente após aviso e remoção."
+            "banned": "{user} foi banido(a) por spam recorrente após aviso e remoção.",
+            "cannotModeratePlatformRole": "{user} está com cargo de plataforma; ações automáticas de moderação não funcionam nesse usuário."
         },
         "liveEvents": {
             "description": "Gerencia quiz/drop ao vivo e premia o primeiro vencedor."
@@ -1303,6 +1314,9 @@
         },
         "waitlistLeaveSnapshot": {
             "description": "Salva snapshot imediatamente quando usuário sai da fila."
+        },
+        "roomLeaveSnapshot": {
+            "description": "Registra last_left_at imediatamente quando usuário sai da sala."
         }
     },
     "helpers": {

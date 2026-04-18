@@ -7,55 +7,51 @@
 
 import { Events } from "../../lib/wavez-events.js";
 import { upsertWaitlistSnapshot } from "../../lib/storage.js";
-import { getWaitlistPositionForIndex } from "../../lib/waitlist.js";
+import { parseRoomQueueSnapshot } from "@wavezfm/api";
+
+function entriesToRows(entries) {
+  return entries
+    .filter((e) => e?.internalId)
+    .map((entry) => ({
+      userId: entry.internalId,
+      publicId: entry.publicId ?? entry.id ?? null,
+      username: entry.username ?? null,
+      displayName: entry.displayName ?? entry.username ?? null,
+      position: entry.position,
+      isCurrentDj: Boolean(entry.isCurrentDj),
+    }));
+}
 
 export default {
   name: "waitlistJoinSnapshot",
   descriptionKey: "events.waitlistJoinSnapshot.description",
   event: Events.ROOM_WAITLIST_JOIN,
-  // No cooldown - must trigger immediately on join to clear last_left_at
+  // No cooldown - must trigger immediately on join to update snapshot
   cooldown: 0,
 
   async handle(ctx, data) {
     try {
-      // When user joins, we need to get the full queue to save positions correctly
-      const res = await ctx.api.room.getQueueStatus(ctx.room);
-      const queue = res?.data ?? {};
-      const entries = Array.isArray(queue?.entries) ? queue.entries : [];
+      // Try to parse the event payload first (new API may include full queue).
+      let snapshot = parseRoomQueueSnapshot(data ?? {});
+      let rows = entriesToRows(snapshot?.entries ?? []);
 
-      if (!entries.length) {
-        return; // Queue is empty, nothing to save
+      if (!rows.length) {
+        const res = await ctx.api.room.getQueueStatus(ctx.room);
+        const fresh = parseRoomQueueSnapshot(res?.data ?? {});
+        rows = entriesToRows(fresh?.entries ?? []);
       }
 
-      const currentDjId = queue?.playback?.djId ?? null;
-      const rows = entries
-        .map((entry, index) => {
-          const position = getWaitlistPositionForIndex(index, entries, {
-            currentDjId,
-          });
-          if (position == null) return null;
-
-          return {
-            userId:
-              entry?.internalId ?? entry?.userId ?? entry?.user_id ?? entry?.id,
-            publicId: entry?.publicId ?? entry?.id ?? null,
-            username: entry?.username ?? null,
-            displayName:
-              entry?.displayName ??
-              entry?.display_name ??
-              entry?.username ??
-              null,
-            position,
-            isCurrentDj: false,
-          };
-        })
-        .filter((entry) => entry?.userId != null);
+      if (!rows.length) return;
 
       await upsertWaitlistSnapshot(rows, {
         roomSlug: ctx.room,
-        roomId: queue?.roomId ?? null,
+        roomId: snapshot?.roomId ?? null,
         source: "event.waitlistJoinSnapshot",
-        markMissingLeft: true,
+        // markMissingLeft is intentionally false: the WS waitlist_join event
+        // fires before the REST API includes the new entry, so the joining
+        // user often appears absent — markMissingLeft would incorrectly stamp
+        // last_left_at on them. Leave events handle that via waitlistLeaveSnapshot.
+        markMissingLeft: false,
       });
     } catch (err) {
       ctx.bot._log("warn", `[waitlistJoinSnapshot] ${err.message}`);

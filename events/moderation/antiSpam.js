@@ -125,6 +125,7 @@ const antiSpam = {
       ? userDisplayName
       : `@${userDisplayName}`;
     const canAct = bot.getBotRoleLevel() > bot.getUserRoleLevel(uid);
+    const platformProtected = bot.hasPlatformRole(uid);
 
     if (currentState === SPAM_STATE_NONE) {
       // First detection: warn in chat only, delete messages
@@ -136,6 +137,12 @@ const antiSpam = {
     if (currentState === SPAM_STATE_WARNED) {
       // Second detection: kick
       state.spamState.set(uid, SPAM_STATE_KICKED);
+      if (platformProtected) {
+        await bot.sendChat(
+          t("events.antiSpam.cannotModeratePlatformRole", { user: userTag }),
+        );
+        return;
+      }
       if (canAct) bot.wsKickUser(uid, { reason: t("events.antiSpam.reason") });
       await bot.sendChat(t("events.antiSpam.kicked", { user: userTag }));
       return;
@@ -143,6 +150,12 @@ const antiSpam = {
 
     // Third detection (returned after kick): ban directly
     state.spamState.delete(uid);
+    if (platformProtected) {
+      await bot.sendChat(
+        t("events.antiSpam.cannotModeratePlatformRole", { user: userTag }),
+      );
+      return;
+    }
     if (canAct) {
       bot.wsBanUser(uid, { reason: t("events.antiSpam.banReason") });
     }

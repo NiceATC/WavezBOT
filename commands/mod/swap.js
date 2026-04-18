@@ -17,7 +17,7 @@ export default {
   minRole: "bouncer",
 
   async execute(ctx) {
-    const { api, bot, args, reply, t } = ctx;
+    const { api, bot, args, reply, t, mentionUser } = ctx;
     const targetA = (args[0] ?? "").trim();
     const targetB = (args[1] ?? "").trim();
 

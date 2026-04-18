@@ -40,6 +40,15 @@ const delmsg = {
       return;
     }
 
+    if (bot.hasPlatformRole(user.userId)) {
+      await reply(
+        t("commands.mod.cannotTargetPlatformRole", {
+          user: mentionUser(user, target),
+        }),
+      );
+      return;
+    }
+
     const targetId = String(user.userId);
     let count = 0;
 

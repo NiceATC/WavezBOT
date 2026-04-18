@@ -6,31 +6,7 @@
 
 import { Events } from "../../lib/wavez-events.js";
 import { upsertWaitlistSnapshot } from "../../lib/storage.js";
-import { getWaitlistPositionForIndex } from "../../lib/waitlist.js";
-
-function toRowsFromQueueStatus(queue) {
-  const entries = Array.isArray(queue?.entries) ? queue.entries : [];
-  const currentDjId = queue?.playback?.djId ?? null;
-  return entries
-    .map((entry, index) => {
-      const position = getWaitlistPositionForIndex(index, entries, {
-        currentDjId,
-      });
-      if (position == null) return null;
-
-      return {
-        userId:
-          entry?.internalId ?? entry?.userId ?? entry?.user_id ?? entry?.id,
-        publicId: entry?.publicId ?? entry?.id ?? null,
-        username: entry?.username ?? null,
-        displayName:
-          entry?.displayName ?? entry?.display_name ?? entry?.username ?? null,
-        position,
-        isCurrentDj: false,
-      };
-    })
-    .filter((entry) => entry?.userId != null);
-}
+import { parseRoomQueueSnapshot } from "@wavezfm/api";
 
 export default {
   name: "djAdvanceSnapshot",
@@ -41,12 +17,21 @@ export default {
   async handle(ctx) {
     try {
       const res = await ctx.api.room.getQueueStatus(ctx.room);
-      const queue = res?.data ?? {};
-      const rows = toRowsFromQueueStatus(queue);
+      const snapshot = parseRoomQueueSnapshot(res?.data ?? {});
+      const rows = (snapshot?.entries ?? [])
+        .filter((e) => e?.internalId)
+        .map((entry) => ({
+          userId: entry.internalId,
+          publicId: entry.publicId ?? entry.id ?? null,
+          username: entry.username ?? null,
+          displayName: entry.displayName ?? entry.username ?? null,
+          position: entry.position,
+          isCurrentDj: Boolean(entry.isCurrentDj),
+        }));
 
       await upsertWaitlistSnapshot(rows, {
         roomSlug: ctx.room,
-        roomId: queue?.roomId ?? null,
+        roomId: snapshot?.roomId ?? null,
         source: "event.djAdvanceSnapshot",
         markMissingLeft: true,
       });

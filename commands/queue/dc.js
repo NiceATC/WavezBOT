@@ -4,10 +4,7 @@
  * !dc [usuario] - restaura a posicao do usuario na fila se o DC foi recente
  */
 
-import {
-  findWaitlistSnapshotByIdentity,
-  getWaitlistSnapshot,
-} from "../../lib/storage.js";
+import { findWaitlistSnapshotByIdentity } from "../../lib/storage.js";
 import { ROLE_LEVELS } from "../../lib/permissions.js";
 import { pickRandom } from "../../helpers/random.js";
 import { formatDuration } from "../../helpers/time.js";
@@ -223,7 +220,7 @@ export default {
         (String(roomUser?.userId ?? roomUser?.id ?? "") || null);
 
       let snap = hintedTargetUserId
-        ? await getWaitlistSnapshot(hintedTargetUserId, {
+        ? await findWaitlistSnapshotByIdentity(hintedTargetUserId, {
             roomSlug: bot.cfg.room,
           })
         : null;
@@ -326,10 +323,15 @@ export default {
       const { leftAt, seenAt } = getSnapshotDcMeta(snap);
 
       const sinceIso = new Date(Date.now() - dcWindowMs * 2).toISOString();
+      // getRecentPresenceMeta filters events by userId; the platform presence
+      // API uses the stable platform UUID (same as WS user_joined/user_left),
+      // NOT the session-scoped internalId stored in waitlist_state.  Prefer
+      // roomUser.userId (UUID) so the lookup actually finds events.
+      const presenceTargetId = roomUser?.userId ?? roomUser?.id ?? targetUserId;
       const presence = await getRecentPresenceMeta(
         api,
         bot.roomId ?? bot.cfg.room,
-        targetUserId,
+        presenceTargetId,
         sinceIso,
       );
       const presenceLeftAt = Number(presence?.lastLeftAt ?? 0) || 0;

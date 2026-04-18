@@ -1,13 +1,35 @@
 /**
  * events/queue/waitlistLeaveSnapshot.js
  *
- * Saves snapshot immediately when a user leaves the waitlist.
- * This marks last_left_at quickly to avoid stale data.
+ * Immediately marks last_left_at when a user leaves the waitlist, then
+ * updates positions for the remaining queue.
+ *
+ * IMPORTANT: We mark the leaving user DIRECTLY via markWaitlistUserLeft
+ * instead of relying on markMissingLeft.  The markMissingLeft approach is
+ * subject to a race condition: the REST API may still include the user in
+ * the queue snapshot for a brief moment after the WS event fires, causing
+ * the mark to be silently skipped.
  */
 
 import { Events } from "../../lib/wavez-events.js";
-import { upsertWaitlistSnapshot } from "../../lib/storage.js";
-import { getWaitlistPositionForIndex } from "../../lib/waitlist.js";
+import {
+  upsertWaitlistSnapshot,
+  markWaitlistUserLeft,
+} from "../../lib/storage.js";
+import { parseRoomQueueSnapshot } from "@wavezfm/api";
+
+function entriesToRows(entries) {
+  return entries
+    .filter((e) => e?.internalId)
+    .map((entry) => ({
+      userId: entry.internalId,
+      publicId: entry.publicId ?? entry.id ?? null,
+      username: entry.username ?? null,
+      displayName: entry.displayName ?? entry.username ?? null,
+      position: entry.position,
+      isCurrentDj: Boolean(entry.isCurrentDj),
+    }));
+}
 
 export default {
   name: "waitlistLeaveSnapshot",
@@ -18,41 +40,43 @@ export default {
 
   async handle(ctx, data) {
     try {
-      // When user leaves, get full queue to update all positions
-      const res = await ctx.api.room.getQueueStatus(ctx.room);
-      const queue = res?.data ?? {};
-      const entries = Array.isArray(queue?.entries) ? queue.entries : [];
+      // Step 1: immediately mark the leaving user.  The WS event carries the
+      // stable platform userId (UUID) which matches waitlist_state.user_id.
+      const userId =
+        data?.userId ??
+        data?.user_id ??
+        data?.user?.userId ??
+        data?.user?.user_id ??
+        null;
+      const username = data?.username ?? data?.user?.username ?? null;
 
-      const currentDjId = queue?.playback?.djId ?? null;
-      const rows = entries
-        .map((entry, index) => {
-          const position = getWaitlistPositionForIndex(index, entries, {
-            currentDjId,
-          });
-          if (position == null) return null;
+      if (userId) {
+        await markWaitlistUserLeft(String(userId), {
+          roomSlug: ctx.room,
+          username: username ? String(username) : undefined,
+        });
+      }
 
-          return {
-            userId:
-              entry?.internalId ?? entry?.userId ?? entry?.user_id ?? entry?.id,
-            publicId: entry?.publicId ?? entry?.id ?? null,
-            username: entry?.username ?? null,
-            displayName:
-              entry?.displayName ??
-              entry?.display_name ??
-              entry?.username ??
-              null,
-            position,
-            isCurrentDj: false,
-          };
-        })
-        .filter((entry) => entry?.userId != null);
+      // Step 2: update positions for remaining users.
+      // Try to use the event payload first (new API may include full queue).
+      // markMissingLeft is disabled — the direct call above handles last_left_at.
+      let snapshot = parseRoomQueueSnapshot(data ?? {});
+      let rows = entriesToRows(snapshot?.entries ?? []);
 
-      await upsertWaitlistSnapshot(rows, {
-        roomSlug: ctx.room,
-        roomId: queue?.roomId ?? null,
-        source: "event.waitlistLeaveSnapshot",
-        markMissingLeft: true, // Mark users not in current queue as left
-      });
+      if (!rows.length) {
+        const res = await ctx.api.room.getQueueStatus(ctx.room);
+        const fresh = parseRoomQueueSnapshot(res?.data ?? {});
+        rows = entriesToRows(fresh?.entries ?? []);
+      }
+
+      if (rows.length > 0) {
+        await upsertWaitlistSnapshot(rows, {
+          roomSlug: ctx.room,
+          roomId: snapshot?.roomId ?? null,
+          source: "event.waitlistLeaveSnapshot",
+          markMissingLeft: false,
+        });
+      }
     } catch (err) {
       ctx.bot._log("warn", `[waitlistLeaveSnapshot] ${err.message}`);
     }

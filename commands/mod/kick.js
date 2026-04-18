@@ -32,6 +32,15 @@ export default {
       return;
     }
 
+    if (bot.hasPlatformRole(user.userId)) {
+      await reply(
+        t("commands.mod.cannotTargetPlatformRole", {
+          user: mentionUser(user, target),
+        }),
+      );
+      return;
+    }
+
     if (bot.getUserRoleLevel(user.userId) >= bot.getBotRoleLevel()) {
       await reply(
         t("commands.mod.kick.roleTooHigh", {

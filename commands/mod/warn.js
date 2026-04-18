@@ -41,6 +41,15 @@ const warn = {
       return;
     }
 
+    if (bot.hasPlatformRole(target.userId)) {
+      await reply(
+        t("commands.mod.cannotTargetPlatformRole", {
+          user: mentionUser(target, targetInput),
+        }),
+      );
+      return;
+    }
+
     if (bot.getUserRoleLevel(target.userId) >= bot.getBotRoleLevel()) {
       await reply(
         t("commands.mod.warn.roleTooHigh", {
@@ -70,6 +79,17 @@ const warn = {
     if (out.banned) {
       await reply(
         t("commands.mod.warn.banned", {
+          user: mentionUser(target, targetInput),
+          count: out.count,
+          threshold: out.threshold,
+        }),
+      );
+      return;
+    }
+
+    if (out.banBlockedByPlatformRole) {
+      await reply(
+        t("commands.mod.warn.banBlockedPlatformRole", {
           user: mentionUser(target, targetInput),
           count: out.count,
           threshold: out.threshold,
@@ -168,6 +188,15 @@ const clearwarn = {
       await reply(
         t("commands.mod.clearwarn.userNotFound", {
           user: mention(targetInput),
+        }),
+      );
+      return;
+    }
+
+    if (bot.hasPlatformRole(target.userId)) {
+      await reply(
+        t("commands.mod.cannotTargetPlatformRole", {
+          user: mentionUser(target, targetInput),
         }),
       );
       return;

@@ -63,6 +63,7 @@
             "dice": true,
             "duel": true,
             "duelmute": true,
+            "clearduel": true,
             "evento": true,
             "fact": true,
             "fortune": true,
@@ -139,7 +140,8 @@
             "djAdvanceSnapshot": true,
             "waitlistJoinSnapshot": true,
             "waitlistLeaveSnapshot": true,
-            "waitlistSnapshot": true
+            "waitlistSnapshot": true,
+            "roomLeaveSnapshot": true
         },
         "vip": {
             "vipJoinCheck": true

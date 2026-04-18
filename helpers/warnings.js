@@ -30,9 +30,15 @@ export async function issueWarning(bot, options = {}) {
 
   const count = await getActiveWarningCount(userId);
   const threshold = Math.max(1, Number(bot.cfg.warnBanThreshold ?? 3) || 3);
-  const banned = count >= threshold;
+  const thresholdReached = count >= threshold;
+  const banBlockedByPlatformRole =
+    thresholdReached && bot.hasPlatformRole(userId);
+  const banned =
+    thresholdReached &&
+    !banBlockedByPlatformRole &&
+    bot.getBotRoleLevel() > bot.getUserRoleLevel(userId);
 
-  if (banned && bot.getBotRoleLevel() > bot.getUserRoleLevel(userId)) {
+  if (banned) {
     bot.wsBanUser(userId, {
       reason: options?.banReason ?? `Auto-ban por ${count} warns ativos`,
     });
@@ -43,6 +49,8 @@ export async function issueWarning(bot, options = {}) {
     count,
     threshold,
     banned,
+    thresholdReached,
+    banBlockedByPlatformRole,
     userId,
     expiresAt,
     userTag: toTag(bot, userId),

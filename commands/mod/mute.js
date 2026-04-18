@@ -38,6 +38,15 @@ const mute = {
       return;
     }
 
+    if (bot.hasPlatformRole(user.userId)) {
+      await reply(
+        t("commands.mod.cannotTargetPlatformRole", {
+          user: mentionUser(user, target),
+        }),
+      );
+      return;
+    }
+
     if (bot.getUserRoleLevel(user.userId) >= bot.getBotRoleLevel()) {
       await reply(
         t("commands.mod.mute.roleTooHigh", {
@@ -94,6 +103,15 @@ const unmute = {
 
     if (isBotTarget(bot, user)) {
       await reply(t("commands.mod.cannotTargetBot"));
+      return;
+    }
+
+    if (bot.hasPlatformRole(user.userId)) {
+      await reply(
+        t("commands.mod.cannotTargetPlatformRole", {
+          user: mentionUser(user, target),
+        }),
+      );
       return;
     }
 
