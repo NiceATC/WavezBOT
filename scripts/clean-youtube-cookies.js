@@ -24,7 +24,9 @@ import { cleanYoutubeCookieFile } from "../helpers/youtube-cookies.js";
 
 const args = process.argv.slice(2);
 const root = process.cwd();
-const inputFile  = args[0] ? path.resolve(args[0]) : path.join(root, "cookies.json");
+const inputFile = args[0]
+  ? path.resolve(args[0])
+  : path.join(root, "cookies.json");
 const outputFile = args[1] ? path.resolve(args[1]) : inputFile;
 
 if (!fs.existsSync(inputFile)) {
@@ -40,6 +42,7 @@ const { kept, removed } = cleanYoutubeCookieFile(outputFile);
 const keptNames = kept.map((c) => c.name).filter(Boolean);
 
 console.log(`✓ Mantidos  (${keptNames.length}): ${keptNames.join(", ")}`);
-console.log(`✗ Removidos (${removed.length}): ${removed.join(", ") || "nenhum"}`);
+console.log(
+  `✗ Removidos (${removed.length}): ${removed.join(", ") || "nenhum"}`,
+);
 console.log(`→ Salvo em: ${outputFile}`);
-

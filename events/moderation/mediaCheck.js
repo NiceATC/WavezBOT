@@ -129,7 +129,8 @@ let _cachedAgent = null;
 let _cachedAgentCfgPath = null;
 
 function getCookieAgent(bot, debug) {
-  const cfgPath = String(bot?.cfg?.mediaCheckCookieFile ?? "").trim() || "cookies.json";
+  const cfgPath =
+    String(bot?.cfg?.mediaCheckCookieFile ?? "").trim() || "cookies.json";
   if (_cachedAgent && _cachedAgentCfgPath === cfgPath) return _cachedAgent;
   _cachedAgent = createCookieAgent(bot?.cfg, debug);
   _cachedAgentCfgPath = cfgPath;
