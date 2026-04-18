@@ -20,6 +20,7 @@ import { printBanner } from "./helpers/banner.js";
 import { BOT_VERSION } from "./lib/version.js";
 import { t as translate } from "./lib/i18n.js";
 import { startDashboardServer } from "./lib/dashboard/server.js";
+import { maybeCleanCookieFileOnStart } from "./helpers/youtube-cookies.js";
 
 let bot;
 let locale;
@@ -77,6 +78,7 @@ async function main() {
     cfg = applyStoredSettings(loadConfig(), await getAllSettings());
     locale = cfg.locale;
     printBanner({ name: "NiceATC", version: BOT_VERSION, locale });
+    maybeCleanCookieFileOnStart(cfg);
     bot = new WavezBot(cfg);
     await bot.loadAfkState();
     await bot.loadModules();

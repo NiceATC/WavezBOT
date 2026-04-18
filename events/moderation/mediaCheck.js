@@ -8,9 +8,8 @@
 import { Events } from "../../lib/wavez-events.js";
 import ytdl from "@distube/ytdl-core";
 import { getRoleLevel } from "../../lib/permissions.js";
+import { createCookieAgent } from "../../helpers/youtube-cookies.js";
 import dns from "dns";
-import fs from "fs";
-import path from "path";
 dns.setDefaultResultOrder("ipv4first");
 
 const YOUTUBE_SOURCES = new Set(["youtube", "yt", "ytmusic", "youtubemusic"]);
@@ -125,57 +124,16 @@ function shouldRetryWithCookie(message, reason) {
   return LOGIN_BOT_CHECK_RE.test(text);
 }
 
-function toCookieHeaderFromNetscape(raw) {
-  const lines = String(raw ?? "").split(/\r?\n/);
-  const pairs = [];
+// Module-level cache: agent is created once from cookies.json and reused.
+let _cachedAgent = null;
+let _cachedAgentCfgPath = null;
 
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith("#")) continue;
-
-    // Netscape cookie file format (tab-separated, name at index 5, value at 6).
-    const cols = trimmed.split("\t");
-    if (cols.length >= 7) {
-      const name = cols[5]?.trim();
-      const value = cols[6]?.trim();
-      if (name && value != null) pairs.push(`${name}=${value}`);
-      continue;
-    }
-
-    // Allow already-header-like single lines as fallback.
-    if (trimmed.includes("=") && !trimmed.includes("\t")) {
-      pairs.push(trimmed.replace(/;\s*$/, ""));
-    }
-  }
-
-  return pairs.length ? pairs.join("; ") : null;
-}
-
-function loadCookieHeader(bot, debug) {
-  try {
-    const configuredPath = String(bot?.cfg?.mediaCheckCookieFile ?? "").trim();
-    const filePath = configuredPath
-      ? path.resolve(process.cwd(), configuredPath)
-      : path.resolve(process.cwd(), "cookie.txt");
-
-    if (!fs.existsSync(filePath)) return null;
-
-    const raw = fs.readFileSync(filePath, "utf8");
-    const header = toCookieHeaderFromNetscape(raw);
-    if (!header && debug) {
-      console.log(
-        `[mediaCheck] cookie file found but no valid cookies at ${filePath}`,
-      );
-    }
-    return header;
-  } catch (err) {
-    if (debug) {
-      console.log(
-        `[mediaCheck] failed to read cookie file: ${err?.message ?? err}`,
-      );
-    }
-    return null;
-  }
+function getCookieAgent(bot, debug) {
+  const cfgPath = String(bot?.cfg?.mediaCheckCookieFile ?? "").trim() || "cookies.json";
+  if (_cachedAgent && _cachedAgentCfgPath === cfgPath) return _cachedAgent;
+  _cachedAgent = createCookieAgent(bot?.cfg, debug);
+  _cachedAgentCfgPath = cfgPath;
+  return _cachedAgent;
 }
 
 export default {
@@ -242,20 +200,14 @@ export default {
     }
 
     if (!info && shouldRetryWithCookie(fetchErrorMessage, "")) {
-      const cookieHeader = loadCookieHeader(bot, debug);
-      if (!cookieHeader) {
+      const agent = getCookieAgent(bot, debug);
+      if (!agent) {
         // No cookie configured: ignore silently as requested.
         return;
       }
 
       try {
-        info = await ytdl.getBasicInfo(url, {
-          requestOptions: {
-            headers: {
-              Cookie: cookieHeader,
-            },
-          },
-        });
+        info = await ytdl.getBasicInfo(url, { agent });
       } catch (err) {
         if (debug) {
           console.log(
@@ -294,17 +246,11 @@ export default {
 
       if (isLoginRequired && !restricted) {
         if (shouldRetryWithCookie(fetchErrorMessage, reason)) {
-          const cookieHeader = loadCookieHeader(bot, debug);
-          if (!cookieHeader) return;
+          const agent = getCookieAgent(bot, debug);
+          if (!agent) return;
 
           try {
-            const withCookie = await ytdl.getBasicInfo(url, {
-              requestOptions: {
-                headers: {
-                  Cookie: cookieHeader,
-                },
-              },
-            });
+            const withCookie = await ytdl.getBasicInfo(url, { agent });
             const parsed = getPlayability(withCookie);
             if (parsed.status === "OK" && !parsed.ageRestricted) {
               if (debug) console.log(t("events.mediaCheck.log.ytdlAllowed"));

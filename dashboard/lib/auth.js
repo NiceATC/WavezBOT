@@ -25,6 +25,7 @@ export function AuthProvider({ children }) {
   const [errorCode, setErrorCode] = useState("");
   const [turnstileRequired, setTurnstileRequired] = useState(false);
   const [turnstileSiteKey, setTurnstileSiteKey] = useState("");
+  const [expiresAt, setExpiresAt] = useState(null);
 
   useEffect(() => {
     let active = true;
@@ -43,6 +44,7 @@ export function AuthProvider({ children }) {
         }
         if (res.ok && data?.ok !== false) {
           setToken(SESSION_MARKER);
+          setExpiresAt(data.expiresAt ?? null);
         } else {
           setToken("");
         }
@@ -79,6 +81,7 @@ export function AuthProvider({ children }) {
         return false;
       }
       setToken(SESSION_MARKER);
+      setExpiresAt(data.expiresAt ?? null);
       if (options?.remember) {
         try {
           const expiry = Date.now() + REMEMBER_DAYS * 24 * 60 * 60 * 1000;
@@ -112,9 +115,29 @@ export function AuthProvider({ children }) {
       // ignore
     }
     setToken("");
+    setExpiresAt(null);
   };
 
   const clearError = () => setErrorCode("");
+
+  useEffect(() => {
+    if (!expiresAt || !token) return;
+    const delay = expiresAt - Date.now() - 60_000;
+    const doLogout = () => {
+      setToken("");
+      setExpiresAt(null);
+      fetch(buildApiUrl("/api/auth/logout"), {
+        method: "POST",
+        credentials: "include",
+      }).catch(() => {});
+    };
+    if (delay <= 0) {
+      doLogout();
+      return;
+    }
+    const timer = setTimeout(doLogout, delay);
+    return () => clearTimeout(timer);
+  }, [expiresAt, token]);
 
   const apiFetch = async (path, options = {}) => {
     const headers = { ...(options.headers || {}) };

@@ -1,6 +1,6 @@
 {
     "_comment": "Comportamento do bot: auto-woot, mensagens, saudações, MOTD e respostas por palavra-chave.",
-    "autoWoot": true,
+    "mediaCheckCookieFile": "cookies.json",
     "autowootUrl": "",
     "botMessage": "Oi! Sou um bot e não consigo conversar. 🤖 Use !help para ver o que posso fazer!",
     "botMentionCooldownMs": 30000,
