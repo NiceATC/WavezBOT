@@ -488,13 +488,17 @@ export default function AdminPage() {
 
   const gridColumns = useMemo(
     () =>
-      tableColumns.map((col) => ({
-        key: col,
-        name: col,
-        minWidth: getDbColumnMinWidth(col, tableRows),
-        resizable: true,
-        sortable: true,
-      })),
+      tableColumns.map((col) => {
+        const w = getDbColumnMinWidth(col, tableRows);
+        return {
+          key: col,
+          name: col,
+          width: w,
+          minWidth: w,
+          resizable: true,
+          sortable: true,
+        };
+      }),
     [tableColumns, tableRows],
   );
   const gridRows = useMemo(() => {

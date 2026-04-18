@@ -19,6 +19,7 @@
 
 import { Events } from "../../lib/wavez-events.js";
 import { getGreetState, upsertGreetState } from "../../lib/storage.js";
+import { ensureMention } from "../../helpers/chat.js";
 
 export default {
   name: "greet",
@@ -105,7 +106,7 @@ export default {
         .replace(/{username}/g, username ?? display)
         .trim();
       if (customTemplate) {
-        template = customTemplate;
+        template = `${ensureMention(display)} ${customTemplate}`;
       }
     }
 

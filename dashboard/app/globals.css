@@ -1723,7 +1723,7 @@ label {
 
 .data-grid [role="columnheader"] > span {
   flex: 1 1 auto;
-  min-width: 0;
+  min-width: min-content;
   width: 100%;
   display: flex;
   align-items: center;
