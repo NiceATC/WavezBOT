@@ -46,6 +46,15 @@ DASHBOARD_JWT_SECRET=change_me_super_secret
 DASHBOARD_PUBLIC_URL=http://localhost:3000
 DASHBOARD_PORT=3100
 DASHBOARD_ALLOWED_ORIGINS=http://localhost:3000
+
+# Optional: protect admin login with Cloudflare Turnstile
+DASHBOARD_TURNSTILE_ENABLED=false
+DASHBOARD_TURNSTILE_SECRET=
+
+# Optional: tune brute-force protection on login
+DASHBOARD_AUTH_WINDOW_MS=600000
+DASHBOARD_AUTH_MAX_ATTEMPTS=6
+DASHBOARD_AUTH_LOCK_MS=900000
 ```
 
 Optional: enable raw SQL execution in the admin DB editor with
@@ -64,7 +73,16 @@ npm run dev
 
 If you run the dashboard from another host or port, copy `dashboard/.env.example`
 to `dashboard/.env.local` and set `NEXT_PUBLIC_DASHBOARD_API` accordingly.
-Make sure `NEXT_PUBLIC_DASHBOARD_API_KEY` matches `DASHBOARD_API_KEY`.
+Set `DASHBOARD_API_KEY` in `dashboard/.env.local` to match the bot API key.
+
+To enable Turnstile in the login UI, set in `dashboard/.env.local`:
+
+```bash
+NEXT_PUBLIC_DASHBOARD_TURNSTILE_ENABLED=true
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=your_turnstile_site_key
+```
+
+For local development, keep Turnstile disabled (`false`) on both backend and frontend toggles.
 
 3. Open the UI at `http://localhost:3000` and log in with the password.
 

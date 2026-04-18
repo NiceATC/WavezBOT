@@ -6,6 +6,8 @@
     "main": "index.js",
     "scripts": {
         "start": "node index.js",
+        "start:all": "concurrently -n web,bot -c green,cyan \"npm run start --prefix dashboard\" \"node index.js\"",
+        "start:all:port": "concurrently -n web,bot -c green,cyan \"npm run start --prefix dashboard -- -p 3014\" \"node index.js\"",
         "dev": "concurrently -n web,bot -c green,cyan \"npm run dev --prefix dashboard\" \"node index.js\"",
         "dev:bot": "node --watch index.js",
         "dev:web": "npm run dev --prefix dashboard"

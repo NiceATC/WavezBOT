@@ -458,15 +458,44 @@ export default function AdminPage() {
     ],
     [t],
   );
+
+  const getDbColumnMinWidth = (columnName, rows) => {
+    const name = String(columnName || "");
+    const sample = Array.isArray(rows) ? rows.slice(0, 80) : [];
+
+    const toDisplayText = (value) => {
+      if (value == null) return "";
+      if (typeof value === "string") return value;
+      if (typeof value === "number" || typeof value === "boolean") {
+        return String(value);
+      }
+      try {
+        return JSON.stringify(value);
+      } catch {
+        return String(value);
+      }
+    };
+
+    let maxLen = name.length;
+    for (const row of sample) {
+      const text = toDisplayText(row?.[columnName]);
+      if (text.length > maxLen) maxLen = text.length;
+    }
+
+    // 8px per glyph + internal padding, clamped to keep usability
+    return Math.max(100, Math.min(420, Math.round(maxLen * 8 + 28)));
+  };
+
   const gridColumns = useMemo(
     () =>
       tableColumns.map((col) => ({
         key: col,
         name: col,
+        minWidth: getDbColumnMinWidth(col, tableRows),
         resizable: true,
         sortable: true,
       })),
-    [tableColumns],
+    [tableColumns, tableRows],
   );
   const gridRows = useMemo(() => {
     const term = String(tableSearch || "").trim().toLowerCase();
@@ -553,8 +582,16 @@ export default function AdminPage() {
 
     const loadSystem = async () => {
       try {
+        const t0 = Date.now();
         const data = await apiFetch("/api/admin/system");
-        if (active) setSystem(data.system || null);
+        const rtt = Date.now() - t0;
+        if (active) {
+          const sys = data.system || null;
+          // si.inetLatency() usa ICMP que geralmente é bloqueado em VPS Linux;
+          // fallback para o RTT real da chamada HTTP.
+          if (sys && sys.pingMs == null) sys.pingMs = rtt;
+          setSystem(sys);
+        }
       } catch {
         // ignore
       }
@@ -2408,11 +2445,17 @@ export default function AdminPage() {
                     <div className="data-grid-shell">
                       <DataGrid
                         className="data-grid"
+                        defaultColumnOptions={{
+                          minWidth: 120,
+                          resizable: true,
+                          sortable: true,
+                        }}
                         columns={[
                           {
                             key: "__actions",
                             name: t("dashboard.admin.db.actions"),
-                            width: 110,
+                            width: 130,
+                            minWidth: 130,
                             renderCell: ({ row }) => (
                               <button className="button ghost small" onClick={() => openRowEditModal(row)}>
                                 <i className="fa-solid fa-pen" /> {t("dashboard.admin.db.edit")}

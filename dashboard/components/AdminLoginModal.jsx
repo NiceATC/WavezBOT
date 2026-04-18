@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../lib/auth";
 import { useI18n } from "../lib/i18n";
+import { destroyTurnstile, ensureTurnstile } from "../lib/turnstile";
 
-const REMEMBER_KEY = "dashboard-token-expiry";
 const REMEMBER_DAYS = 30;
 
 const ERROR_MAP = {
@@ -13,21 +13,76 @@ const ERROR_MAP = {
   missing_password: "dashboard.auth.missingPassword",
   invalid_api_key: "dashboard.errors.unauthorized",
   unauthorized: "dashboard.errors.unauthorized",
+  missing_turnstile_token: "dashboard.errors.unauthorized",
+  invalid_turnstile: "dashboard.errors.unauthorized",
+  turnstile_verification_failed: "dashboard.errors.network",
+  turnstile_unavailable: "dashboard.errors.network",
   network: "dashboard.errors.network",
   unknown: "dashboard.errors.unknown",
 };
 
+const TURNSTILE_SITE_KEY = String(
+  process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "",
+).trim();
+
 export default function AdminLoginModal({ onClose }) {
-  const { login, status, errorCode, clearError } = useAuth();
+  const { login, status, errorCode, clearError, turnstileRequired, turnstileSiteKey: contextSiteKey } = useAuth();
   const { t } = useI18n();
   const router = useRouter();
   const inputRef = useRef(null);
+  const containerRef = useRef(null);
+  const widgetIdRef = useRef(null);
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileError, setTurnstileError] = useState("");
+
+  const resolvedSiteKey = contextSiteKey || TURNSTILE_SITE_KEY;
+  const turnstileActive = turnstileRequired && Boolean(resolvedSiteKey);
 
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+
+  useEffect(() => {
+    if (!turnstileActive) return;
+    let disposed = false;
+
+    setTurnstileToken("");
+    setTurnstileError("");
+
+    ensureTurnstile()
+      .then((turnstile) => {
+        if (disposed || !containerRef.current) return;
+        destroyTurnstile(widgetIdRef.current, containerRef.current);
+        widgetIdRef.current = turnstile.render(containerRef.current, {
+          sitekey: resolvedSiteKey,
+          callback: (value) => {
+            setTurnstileToken(String(value || ""));
+            setTurnstileError("");
+          },
+          "expired-callback": () => {
+            setTurnstileToken("");
+          },
+          "error-callback": () => {
+            setTurnstileToken("");
+            setTurnstileError("Turnstile indisponivel. Recarregue a pagina.");
+          },
+        });
+      })
+      .catch(() => {
+        if (!disposed) {
+          setTurnstileToken("");
+          setTurnstileError("Turnstile indisponivel. Recarregue a pagina.");
+        }
+      });
+
+    return () => {
+      disposed = true;
+      destroyTurnstile(widgetIdRef.current, containerRef.current);
+      widgetIdRef.current = null;
+    };
+  }, [turnstileActive, resolvedSiteKey]);
 
   // Close on Escape
   useEffect(() => {
@@ -37,14 +92,11 @@ export default function AdminLoginModal({ onClose }) {
   }, [onClose]);
 
   const handleLogin = async () => {
-    const ok = await login(password);
+    const ok = await login(password, {
+      turnstileToken: turnstileActive ? turnstileToken : "",
+      remember,
+    });
     if (ok) {
-      if (remember) {
-        const expiry = Date.now() + REMEMBER_DAYS * 24 * 60 * 60 * 1000;
-        window.localStorage.setItem(REMEMBER_KEY, String(expiry));
-      } else {
-        window.localStorage.removeItem(REMEMBER_KEY);
-      }
       onClose();
       router.push("/admin");
     }
@@ -82,6 +134,12 @@ export default function AdminLoginModal({ onClose }) {
             }}
             onKeyDown={(e) => { if (e.key === "Enter") handleLogin(); }}
           />
+          {turnstileActive ? (
+            <div className="turnstile-wrap" style={{ marginTop: "4px" }}>
+              <div ref={containerRef} className="turnstile-host" />
+            </div>
+          ) : null}
+          {turnstileError ? <p className="modal-error" style={{ justifyContent: "center" }}><i className="fa-solid fa-circle-exclamation" />{turnstileError}</p> : null}
           {errorKey ? (
             <p className="modal-error">
               <i className="fa-solid fa-circle-exclamation" />
@@ -106,7 +164,7 @@ export default function AdminLoginModal({ onClose }) {
           <button
             className="button accent"
             onClick={handleLogin}
-            disabled={status === "loading"}
+            disabled={status === "loading" || (turnstileActive && !turnstileToken)}
           >
             {status === "loading" ? (
               <><i className="fa-solid fa-spinner fa-spin" /> {t("dashboard.auth.login")}</>

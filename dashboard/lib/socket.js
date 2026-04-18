@@ -3,6 +3,20 @@
 import { useEffect, useRef } from "react";
 import { WS_BASE, buildApiUrl } from "./constants";
 
+function resolveWsBase() {
+  if (WS_BASE && WS_BASE !== "ws://localhost:3100") {
+    return WS_BASE;
+  }
+
+  if (typeof window === "undefined") {
+    return WS_BASE;
+  }
+
+  const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+  const host = window.location.hostname;
+  return `${protocol}//${host}:3100`;
+}
+
 export function useDashboardSocket(token, onMessage) {
   const handlerRef = useRef(onMessage);
   handlerRef.current = onMessage;
@@ -24,12 +38,17 @@ export function useDashboardSocket(token, onMessage) {
     };
 
     const connect = async () => {
-      const url = new URL("/ws", WS_BASE);
-      if (token) {
+      const url = new URL("/ws", resolveWsBase());
+      const looksLikeJwt =
+        typeof token === "string" && token.split(".").length === 3;
+
+      if (looksLikeJwt) {
         url.searchParams.set("token", token);
       } else {
         try {
-          const res = await fetch(buildApiUrl("/api/ws-token"));
+          const res = await fetch(buildApiUrl("/api/ws-token"), {
+            credentials: "include",
+          });
           const data = await res.json().catch(() => ({}));
           if (data?.token) url.searchParams.set("wsToken", data.token);
         } catch {
