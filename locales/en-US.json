@@ -932,6 +932,98 @@
                     "No warning, no mercy: auto-roulette is open for {seconds}s.",
                     "Fate pulled the trigger. Auto-roulette live for {seconds}s.",
                     "Automatic mode engaged: roulette open for {seconds}s. !join."
+                ],
+                "joined": "{name} joined the roulette.",
+                "joinedLines": [
+                    "{name} joined and signed the risk waiver.",
+                    "{name} stepped into the arena. No refunds.",
+                    "{name} accepted the chaos and joined.",
+                    "{name} is in. Let fate decide."
+                ],
+                "left": "{name} left the roulette.",
+                "leftLines": [
+                    "{name} bailed out and left safely.",
+                    "{name} decided to keep their dignity and left.",
+                    "{name} walked out before the final click.",
+                    "{name} left the roulette with heart rate at 200."
+                ]
+            },
+            "troll": {
+                "description": "Open the troll roulette.",
+                "usage": "!roulette troll",
+                "alreadyOpen": "Troll roulette is already spinning.",
+                "alreadyOpenLines": [
+                    "Chill, troll roulette is already live and trolling.",
+                    "The trolling has begun. Troll roulette is open.",
+                    "Stop — troll roulette is already running.",
+                    "Chaos signal is already active. Troll roulette in progress."
+                ],
+                "opened": "Troll Roulette open for {seconds}s. Get in with !join!",
+                "openedLines": [
+                    "Attention trolls: Troll Roulette open for {seconds}s. !join now!",
+                    "Nobody asked but Troll Roulette showed up for {seconds}s. !join.",
+                    "The trolling begins: Troll Roulette for {seconds}s. Run to !join.",
+                    "Troll Roulette is live! {seconds}s of pure mayhem. !join."
+                ],
+                "autoOpened": "Auto Troll Roulette started for {seconds}s. Use !join.",
+                "autoOpenedLines": [
+                    "Troll Roulette summoned itself. {seconds}s for !join.",
+                    "System activated Troll Roulette! {seconds}s of pure chaos. !join.",
+                    "Troll Roulette escaped its cage: {seconds}s to join with !join.",
+                    "Auto-troll: {seconds}s of madness available. Run to !join."
+                ],
+                "joined": "{name} joined Troll Roulette.",
+                "joinedLines": [
+                    "{name} joined Troll Roulette and accepted the nonsense.",
+                    "{name} took the bait and entered Troll Roulette.",
+                    "{name} just enabled maximum chaos mode.",
+                    "{name} joined the troll game. Good luck."
+                ],
+                "left": "{name} left Troll Roulette.",
+                "leftLines": [
+                    "{name} bailed out of the trolling and left.",
+                    "{name} surrendered and abandoned the prank zone.",
+                    "{name} escaped before the final prank.",
+                    "{name} left Troll Roulette with mild emotional damage."
+                ]
+            },
+            "destiny": {
+                "description": "Open the destiny roulette (winner moves to position 2).",
+                "usage": "!roulette destiny",
+                "alreadyOpen": "The destiny roulette has already chosen its victim.",
+                "alreadyOpenLines": [
+                    "Destiny is already in motion. Destiny Roulette is active.",
+                    "The stars already aligned: Destiny Roulette is open.",
+                    "The prophecy has been cast — the roulette is spinning.",
+                    "The universe already opened the Destiny Roulette. Wait."
+                ],
+                "opened": "Destiny Roulette open for {seconds}s. Use !join.",
+                "openedLines": [
+                    "Destiny calls! Destiny Roulette open for {seconds}s. !join.",
+                    "The stars align for {seconds}s. Enter with !join.",
+                    "The prophecy begins: {seconds}s to join with !join.",
+                    "Destiny Roulette live for {seconds}s. The chosen one goes to second place!"
+                ],
+                "autoOpened": "Auto Destiny Roulette started for {seconds}s. Use !join.",
+                "autoOpenedLines": [
+                    "Destiny woke on its own: Destiny Roulette for {seconds}s. !join.",
+                    "Automatic prophecy: {seconds}s of Destiny Roulette. Run to !join.",
+                    "The universe decided by itself. Destiny Roulette: {seconds}s. !join.",
+                    "Auto-destiny engaged! {seconds}s to join with !join."
+                ],
+                "joined": "{name} joined Destiny Roulette.",
+                "joinedLines": [
+                    "{name} answered destiny's call.",
+                    "{name} entered Destiny Roulette and let fate decide.",
+                    "{name} stepped through the gate of destiny.",
+                    "{name} joined and trusted the stars."
+                ],
+                "left": "{name} left Destiny Roulette.",
+                "leftLines": [
+                    "{name} defied destiny and left the round.",
+                    "{name} stepped back before the stars judged.",
+                    "{name} safely left Destiny Roulette.",
+                    "{name} left and passed the prophecy to others."
                 ]
             },
             "join": {
@@ -941,28 +1033,14 @@
                 "noUser": "Could not identify you.",
                 "mustBeInQueue": "You must be in the waitlist to join.",
                 "waitlistError": "Failed to check waitlist: {error}",
-                "alreadyIn": "You're already in.",
-                "joined": "{name} joined the roulette.",
-                "joinedLines": [
-                    "{name} joined and signed the risk waiver.",
-                    "{name} stepped into the arena. No refunds.",
-                    "{name} accepted the chaos and joined.",
-                    "{name} is in. Let fate decide."
-                ]
+                "alreadyIn": "You're already in."
             },
             "leave": {
                 "description": "Leave the roulette.",
                 "usage": "!leave",
                 "closed": "Roulette is closed.",
                 "noUser": "Could not identify you.",
-                "notIn": "You're not in the roulette.",
-                "left": "{name} left the roulette.",
-                "leftLines": [
-                    "{name} bailed out and left safely.",
-                    "{name} decided to keep their dignity and left.",
-                    "{name} walked out before the final click.",
-                    "{name} left the roulette with heart rate at 200."
-                ]
+                "notIn": "You're not in the roulette."
             },
             "thor": {
                 "description": "Spin Thor's hammer on the waitlist.",
@@ -1349,6 +1427,44 @@
                 "The loaded chamber found {name}. Out of queue.",
                 "End of the line for {name}: removed from queue.",
                 "No armor today. {name} is out of the queue."
+            ]
+        },
+        "troll": {
+            "closed": {
+                "fewParticipantsLines": [
+                    "Only {count} coward(s) showed up. Needed {min} for this to be fun.",
+                    "What a disappointment: {count} person(s). Troll needs at least {min}.",
+                    "{count} showed up. Troll Roulette wanted {min}. Pathetic.",
+                    "With {count} soul(s) even the troll doesn't work. Where are the other {min}?"
+                ]
+            },
+            "moveLines": [
+                "Haha! {name} survived but got kicked to position {pos}. Classic.",
+                "Troll activated: {name} teleported without warning to spot {pos}.",
+                "Surprise! {name} lives, but now lives at position {pos}. 🤡",
+                "Chamber spun and {name} ended up at {pos}. Bad luck. Or good?"
+            ],
+            "shotLines": [
+                "BANG! {name} flew out of the queue. Bye! 👋",
+                "Troll found {name}. Removed with troll honors.",
+                "{name} was selected by the chaos algorithm. Out of queue!",
+                "Meant to be funny, but {name} will feel it. Removed."
+            ]
+        },
+        "destiny": {
+            "closed": {
+                "fewParticipantsLines": [
+                    "Destiny needed {min} souls. Only {count} showed. Roulette closed.",
+                    "The stars require {min} participants. Only {count} appeared.",
+                    "With {count} person(s) destiny cannot operate. Minimum: {min}.",
+                    "Vision of the future: {count} is not enough. Needed {min}."
+                ]
+            },
+            "moveLines": [
+                "Destiny has spoken: {name} goes to position {pos}. There is no escape.",
+                "The stars aligned and {name} was pushed to spot {pos}.",
+                "Prophecy fulfilled: {name} now occupies position {pos}.",
+                "The universe chose {name}. New position: {pos}."
             ]
         }
     },

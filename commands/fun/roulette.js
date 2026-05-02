@@ -6,6 +6,25 @@ import {
 
 const { pickRandom } = await import("../../helpers/random.js");
 
+// Map command argument → internal type key
+const TYPE_ALIASES = {
+  russa: "russian",
+  russian: "russian",
+  troll: "troll",
+  destino: "destiny",
+  destiny: "destiny",
+};
+
+function resolveType(arg) {
+  return TYPE_ALIASES[(arg ?? "").toLowerCase().trim()] ?? "russian";
+}
+
+function alreadyOpenKey(type) {
+  if (type === "troll") return "commands.fun.roulette.troll";
+  if (type === "destiny") return "commands.fun.roulette.destiny";
+  return "commands.fun.roulette";
+}
+
 const roulette = {
   name: "roulette",
   aliases: ["roleta"],
@@ -16,18 +35,25 @@ const roulette = {
   minRole: "bouncer",
 
   async execute(ctx) {
-    const { bot, api, reply, t, tArray } = ctx;
+    const { bot, api, args, reply, t, tArray } = ctx;
     if (rouletteState.open) {
-      const lines = tArray("commands.fun.roulette.alreadyOpenLines") ?? [];
+      const openType = rouletteState.type ?? "russian";
+      const prefix = alreadyOpenKey(openType);
+      const lines =
+        tArray(`${prefix}.alreadyOpenLines`) ??
+        tArray("commands.fun.roulette.alreadyOpenLines") ??
+        [];
       const msg =
         lines.length > 0
           ? pickRandom(lines)
-          : t("commands.fun.roulette.alreadyOpen");
+          : t(`${prefix}.alreadyOpen`) ||
+            t("commands.fun.roulette.alreadyOpen");
       await reply(msg);
       return;
     }
 
-    await openRoulette(bot, api, { announce: reply });
+    const type = resolveType(args[0]);
+    await openRoulette(bot, api, { announce: reply, type });
   },
 };
 
@@ -70,11 +96,16 @@ const join = {
     }
 
     rouletteState.participants.set(key, name);
-    const lines = tArray("commands.fun.join.joinedLines") ?? [];
+    const typePrefix = alreadyOpenKey(rouletteState.type ?? "russian");
+    const lines =
+      tArray(`${typePrefix}.joinedLines`) ??
+      tArray("commands.fun.join.joinedLines") ??
+      [];
     const msg =
       lines.length > 0
         ? pickRandom(lines).replace("{name}", name)
-        : t("commands.fun.join.joined", { name });
+        : t(`${typePrefix}.joined`, { name }) ||
+          t("commands.fun.join.joined", { name });
     await reply(msg);
   },
 };
@@ -106,11 +137,16 @@ const leave = {
     }
 
     rouletteState.participants.delete(key);
-    const lines = tArray("commands.fun.leave.leftLines") ?? [];
+    const typePrefix = alreadyOpenKey(rouletteState.type ?? "russian");
+    const lines =
+      tArray(`${typePrefix}.leftLines`) ??
+      tArray("commands.fun.leave.leftLines") ??
+      [];
     const msg =
       lines.length > 0
         ? pickRandom(lines).replace("{name}", name)
-        : t("commands.fun.leave.left", { name });
+        : t(`${typePrefix}.left`, { name }) ||
+          t("commands.fun.leave.left", { name });
     await reply(msg);
   },
 };

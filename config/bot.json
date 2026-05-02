@@ -5,15 +5,16 @@
     "botMessage": "Oi! Sou um bot e não consigo conversar. 🤖 Use !help para ver o que posso fazer!",
     "botMentionCooldownMs": 30000,
     "greetEnabled": true,
-    "greetMessage": "🎵 Bem-vindo(a) à sala, @{name}!",
-    "greetBackMessage": "🎵 Bem-vindo(a) de volta, @{name}!",
-    "greetMessages": [],
-    "greetBackMessages": [],
+    "greetMessages": [
+        "🎵 Bem-vindo(a) à sala, @{name}!"
+    ],
+    "greetBackMessages": [
+        "🎵 Bem-vindo(a) de volta, @{name}!"
+    ],
     "greetDeleteMs": 5000,
     "greetCooldownMs": 3600000,
     "motdEnabled": false,
     "motdInterval": 5,
-    "motd": "Mensagem do dia",
     "intervalMessages": [],
     "messageInterval": 5,
     "chatKeywordReplyEnabled": false,
@@ -43,7 +44,7 @@
         "rouletteDurationMs": 60000,
         "rouletteMinParticipants": 3,
         "autoRouletteEnabled": false,
-        "autoRouletteIntervalMs": 900000,
+        "autoRouletteIntervalMs": 1200000,
         "quizRewardPoints": 5,
         "quizRewardEasy": 3,
         "quizRewardMedium": 5,
@@ -54,6 +55,7 @@
         "autoEventsEnabled": false,
         "autoEventsMinIntervalMs": 900000,
         "autoEventsMaxIntervalMs": 1800000,
-        "autoQuizChancePct": 60
+        "autoQuizChancePct": 60,
+        "liveEventsResultDeleteMs": 30000
     }
 }

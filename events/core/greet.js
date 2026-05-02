@@ -72,18 +72,13 @@ export default {
 
     const isReturning = greetedCount > 0;
 
-    // Resolve template: prefer array (random pick), fall back to single string
+    // Resolve template from arrays only.
     function resolveGreetTemplate(bot, isReturning, display, username) {
       const arrKey = isReturning ? "greetBackMessages" : "greetMessages";
-      const singleKey = isReturning ? "greetBackMessage" : "greetMessage";
 
-      let base;
       const arr = bot.cfg[arrKey];
-      if (Array.isArray(arr) && arr.length > 0) {
-        base = arr[Math.floor(Math.random() * arr.length)];
-      } else {
-        base = bot.cfg[singleKey];
-      }
+      if (!Array.isArray(arr) || arr.length === 0) return "";
+      const base = arr[Math.floor(Math.random() * arr.length)];
 
       const resolved = String(bot.localizeValue(base) ?? "");
       const template = resolved

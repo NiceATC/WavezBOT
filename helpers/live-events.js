@@ -310,6 +310,12 @@ export async function startQuizEvent(bot, options = {}) {
   clearQuizTimer();
   liveEventsState.quiz = quiz;
 
+  const _getMsgId = (res) => {
+    const msg = res?.data?.data?.message ?? res?.data?.message ?? null;
+    return msg?.id ?? res?.data?.data?.id ?? res?.data?.id ?? null;
+  };
+  const _deleteMs = Number(bot.cfg.deleteCommandMessagesDelayMs ?? 0);
+
   quiz.timeoutId = setTimeout(() => {
     if (!liveEventsState.quiz || liveEventsState.quiz.id !== quiz.id) return;
     liveEventsState.quiz = null;
@@ -319,6 +325,13 @@ export async function startQuizEvent(bot, options = {}) {
           answer: correct,
         }),
       )
+      .then((res) => {
+        const _deleteMs = Number(bot.cfg.liveEventsResultDeleteMs ?? 0);
+        if (_deleteMs > 0) {
+          const id = _getMsgId(res);
+          if (id) bot.scheduleMessageDelete(id, _deleteMs);
+        }
+      })
       .catch(() => {});
   }, quizTtlMs);
 
@@ -326,7 +339,7 @@ export async function startQuizEvent(bot, options = {}) {
   const noReward = options.noReward === true;
 
   // line 1: header (sem prêmio se for trivia sem pontos)
-  await bot.sendChat(
+  const r1 = await bot.sendChat(
     bot.t(
       noReward
         ? "commands.fun.evento.quizStartedNoReward"
@@ -339,15 +352,29 @@ export async function startQuizEvent(bot, options = {}) {
       },
     ),
   );
+  if (_deleteMs > 0) {
+    const id = _getMsgId(r1);
+    if (id) bot.scheduleMessageDelete(id, quizTtlMs);
+  }
 
   // line 2: question
-  await bot.sendChat(bot.t("commands.fun.evento.quizQuestion", { question }));
+  const r2 = await bot.sendChat(
+    bot.t("commands.fun.evento.quizQuestion", { question }),
+  );
+  if (_deleteMs > 0) {
+    const id = _getMsgId(r2);
+    if (id) bot.scheduleMessageDelete(id, quizTtlMs);
+  }
 
   // lines 3+: one option per message
   for (const opt of labeled) {
-    await bot.sendChat(
+    const ro = await bot.sendChat(
       bot.t("commands.fun.evento.quizOption", { option: opt }),
     );
+    if (_deleteMs > 0) {
+      const id = _getMsgId(ro);
+      if (id) bot.scheduleMessageDelete(id, quizTtlMs);
+    }
   }
 
   return { ok: true, quiz };
@@ -375,20 +402,39 @@ export async function startDropEvent(bot, options = {}) {
   clearDropTimer();
   liveEventsState.drop = drop;
 
+  const _getMsgId = (res) => {
+    const msg = res?.data?.data?.message ?? res?.data?.message ?? null;
+    return msg?.id ?? res?.data?.data?.id ?? res?.data?.id ?? null;
+  };
+  const _deleteMs = Number(bot.cfg.deleteCommandMessagesDelayMs ?? 0);
+
   drop.timeoutId = setTimeout(() => {
     if (!liveEventsState.drop || liveEventsState.drop.id !== drop.id) return;
     liveEventsState.drop = null;
-    bot.sendChat(bot.t("commands.fun.evento.dropExpired")).catch(() => {});
+    bot
+      .sendChat(bot.t("commands.fun.evento.dropExpired"))
+      .then((res) => {
+        const _deleteMs = Number(bot.cfg.liveEventsResultDeleteMs ?? 0);
+        if (_deleteMs > 0) {
+          const id = _getMsgId(res);
+          if (id) bot.scheduleMessageDelete(id, _deleteMs);
+        }
+      })
+      .catch(() => {});
   }, ttlMs);
 
   const seconds = Math.max(1, Math.round(ttlMs / 1000));
-  await bot.sendChat(
+  const rd = await bot.sendChat(
     bot.t("commands.fun.evento.dropStarted", {
       seconds,
       reward,
       code,
     }),
   );
+  if (_deleteMs > 0) {
+    const id = _getMsgId(rd);
+    if (id) bot.scheduleMessageDelete(id, ttlMs);
+  }
 
   return { ok: true, drop };
 }
@@ -408,13 +454,19 @@ async function awardWinner(
     source,
   });
   updateLeaderboard(userId, points);
-  await bot.sendChat(
+  const res = await bot.sendChat(
     bot.t(msgKey, {
       user: `@${sender?.displayName ?? sender?.username ?? userId}`,
       reward: points,
       ...vars,
     }),
   );
+  const deleteMs = Number(bot.cfg.liveEventsResultDeleteMs ?? 0);
+  if (deleteMs > 0) {
+    const msg = res?.data?.data?.message ?? res?.data?.message ?? null;
+    const id = msg?.id ?? res?.data?.data?.id ?? res?.data?.id ?? null;
+    if (id) bot.scheduleMessageDelete(id, deleteMs);
+  }
 }
 
 export async function tryClaimDrop(bot, sender, messageText = "") {

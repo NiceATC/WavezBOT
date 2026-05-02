@@ -932,6 +932,98 @@
                     "Sem aviso, sem piedade: auto-roleta aberta por {seconds}s. !join.",
                     "O destino puxou o gatilho: auto-roleta no ar por {seconds}s.",
                     "Modo automático ativado: roleta aberta por {seconds}s. Corre no !join."
+                ],
+                "joined": "{name} entrou na roleta.",
+                "joinedLines": [
+                    "{name} entrou na roleta e assinou o termo de risco.",
+                    "{name} pisou na arena. Sem choro depois.",
+                    "{name} aceitou o caos e entrou no jogo.",
+                    "{name} entrou. Que os deuses da fila decidam."
+                ],
+                "left": "{name} saiu da roleta.",
+                "leftLines": [
+                    "{name} arregou e saiu da roleta em segurança.",
+                    "{name} decidiu preservar a dignidade e caiu fora.",
+                    "{name} abandonou a arena antes do disparo final.",
+                    "{name} saiu da roleta com o coração acelerado."
+                ]
+            },
+            "troll": {
+                "description": "Abre a roleta troll.",
+                "usage": "!roleta troll",
+                "alreadyOpen": "A roleta troll já está rodando, vai esperar.",
+                "alreadyOpenLines": [
+                    "Relax, a roleta troll já abriu e já tá zoando alguém.",
+                    "A zoeira já começou, a roleta troll tá aberta.",
+                    "Para tudo: a roleta troll já foi ativada.",
+                    "Já deu o sinal de caos aqui. Roleta troll em andamento."
+                ],
+                "opened": "Roleta Troll aberta por {seconds}s. Corre no !join!",
+                "openedLines": [
+                    "Atenção zoadeiros: Roleta Troll aberta por {seconds}s. !join agora!",
+                    "Ninguém pediu mas a Roleta Troll apareceu por {seconds}s. !join.",
+                    "A zoeira chegou: Roleta Troll por {seconds}s. Corre no !join.",
+                    "Roleta Troll ligada! {seconds}s de pura bagunça. Entra no !join."
+                ],
+                "autoOpened": "Auto-roleta Troll iniciada por {seconds}s. Use !join.",
+                "autoOpenedLines": [
+                    "A Roleta Troll foi convocada automaticamente. {seconds}s pro !join.",
+                    "Sistema ativou a Roleta Troll! {seconds}s de caos puro. !join.",
+                    "A Roleta Troll saiu da jaula: {seconds}s pra entrar com !join.",
+                    "Auto-troll: {seconds}s de loucura disponíveis. Corre no !join."
+                ],
+                "joined": "{name} entrou na Roleta Troll.",
+                "joinedLines": [
+                    "{name} entrou na Roleta Troll e assinou sem ler os termos.",
+                    "{name} caiu no bait da Roleta Troll. Boa sorte.",
+                    "{name} entrou no modo zoeira máxima.",
+                    "{name} aceitou o caos troll e entrou no jogo."
+                ],
+                "left": "{name} saiu da Roleta Troll.",
+                "leftLines": [
+                    "{name} arregou da zoeira e saiu da Roleta Troll.",
+                    "{name} pediu arrego e abandonou a trollagem.",
+                    "{name} saiu antes da pegadinha final.",
+                    "{name} vazou da Roleta Troll com trauma leve."
+                ]
+            },
+            "destiny": {
+                "description": "Abre a roleta do destino (vencedor vai para posição 2).",
+                "usage": "!roleta destino",
+                "alreadyOpen": "A roleta do destino já escolheu sua vítima.",
+                "alreadyOpenLines": [
+                    "O destino já está em movimento. Roleta do Destino ativa.",
+                    "As estrelas já se alinharam: Roleta do Destino em aberto.",
+                    "A profecia já foi lançada, a roleta está girando.",
+                    "O universo já abriu a Roleta do Destino. Aguarda."
+                ],
+                "opened": "Roleta do Destino aberta por {seconds}s. Use !join.",
+                "openedLines": [
+                    "O destino chama! Roleta do Destino aberta por {seconds}s. !join.",
+                    "As estrelas se alinham por {seconds}s. Entra no !join.",
+                    "A profecia começou: {seconds}s pra entrar com !join.",
+                    "Roleta do Destino no ar por {seconds}s. Quem for sorteado vai para o segundo lugar!"
+                ],
+                "autoOpened": "Auto-roleta do Destino iniciada por {seconds}s. Use !join.",
+                "autoOpenedLines": [
+                    "O destino acordou sozinho: Roleta do Destino por {seconds}s. !join.",
+                    "Profecia automática: {seconds}s de Roleta do Destino. Corre no !join.",
+                    "O universo decidiu sozinho. Roleta do Destino: {seconds}s. !join.",
+                    "Auto-destino ativado! {seconds}s pra entrar com !join."
+                ],
+                "joined": "{name} entrou na Roleta do Destino.",
+                "joinedLines": [
+                    "{name} aceitou o chamado do destino.",
+                    "{name} entrou na Roleta do Destino e deixou o universo decidir.",
+                    "{name} cruzou o portal do destino.",
+                    "{name} entrou e confiou nas estrelas."
+                ],
+                "left": "{name} saiu da Roleta do Destino.",
+                "leftLines": [
+                    "{name} desafiou o destino e saiu da rodada.",
+                    "{name} recuou antes do julgamento das estrelas.",
+                    "{name} abandonou a Roleta do Destino em segurança.",
+                    "{name} saiu e deixou a profecia para os outros."
                 ]
             },
             "join": {
@@ -941,28 +1033,14 @@
                 "noUser": "Não consegui identificar você.",
                 "mustBeInQueue": "Você precisa estar na fila para entrar.",
                 "waitlistError": "Falha ao verificar a fila: {error}",
-                "alreadyIn": "Você já está na roleta.",
-                "joined": "{name} entrou na roleta.",
-                "joinedLines": [
-                    "{name} entrou na roleta e assinou o termo de risco.",
-                    "{name} pisou na arena. Sem choro depois.",
-                    "{name} aceitou o caos e entrou no jogo.",
-                    "{name} entrou. Que os deuses da fila decidam."
-                ]
+                "alreadyIn": "Você já está na roleta."
             },
             "leave": {
                 "description": "Sai da roleta.",
                 "usage": "!leave",
                 "closed": "A roleta está fechada.",
                 "noUser": "Não consegui identificar você.",
-                "notIn": "Você não está na roleta.",
-                "left": "{name} saiu da roleta.",
-                "leftLines": [
-                    "{name} arregou e saiu da roleta em segurança.",
-                    "{name} decidiu preservar a dignidade e caiu fora.",
-                    "{name} abandonou a arena antes do disparo final.",
-                    "{name} saiu da roleta com o coração acelerado."
-                ]
+                "notIn": "Você não está na roleta."
             },
             "thor": {
                 "description": "Roda o martelo do Thor na fila.",
@@ -1349,6 +1427,44 @@
                 "A câmara premiada achou {name}. Fora da fila!",
                 "Fim da linha para {name}: removido(a) da fila.",
                 "Sem colete hoje. {name} caiu fora da fila."
+            ]
+        },
+        "troll": {
+            "closed": {
+                "fewParticipantsLines": [
+                    "Só {count} covarde(s) apareceu. Precisava de {min} pra ter graça.",
+                    "Que decepção: {count} pessoa(s). A zoeira exige {min} no mínimo.",
+                    "Vieram {count}. A Roleta Troll esperava {min}. Que vergonha.",
+                    "Com {count} alma(s) nem a troll funciona. Cadê as outras {min}?"
+                ]
+            },
+            "moveLines": [
+                "Haha! {name} sobreviveu mas foi chutado(a) pra posição {pos}. Clássico.",
+                "A troll pegou: {name} foi teleportado(a) sem aviso pro {pos}º lugar.",
+                "Surpresa! {name} vive, mas agora mora na posição {pos}. 🤡",
+                "A câmara girou e {name} foi parar no {pos}. Que azar. Ou sorte?"
+            ],
+            "shotLines": [
+                "BANG! {name} saiu voando da fila. Até mais! 👋",
+                "A troll achou {name}. Removido(a) com honras de zoeira.",
+                "{name} foi selecionado(a) pelo algoritmo do caos. Fora da fila!",
+                "Era pra ser engraçado, mas {name} vai sentir. Removido(a)."
+            ]
+        },
+        "destiny": {
+            "closed": {
+                "fewParticipantsLines": [
+                    "O destino precisava de {min} almas. Só vieram {count}. Roleta encerrada.",
+                    "As estrelas exigem {min} participantes. Só {count} apareceram.",
+                    "Com {count} pessoa(s) o destino não consegue operar. Mínimo: {min}.",
+                    "Visão do futuro: {count} não chega. Precisava de {min}."
+                ]
+            },
+            "moveLines": [
+                "O destino falou: {name} vai para a posição {pos}. Não há como escapar.",
+                "As estrelas se alinharam e {name} foi empurrado(a) para o {pos}º lugar.",
+                "Profecia cumprida: {name} agora ocupa a posição {pos}.",
+                "O universo escolheu {name}. Nova posição: {pos}."
             ]
         }
     },

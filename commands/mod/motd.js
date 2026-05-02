@@ -22,7 +22,11 @@ const motd = {
     if (args.length === 0) {
       const enabled = Boolean(bot.cfg.motdEnabled);
       const interval = bot.cfg.motdInterval ?? 0;
-      const msg = bot.cfg.motd ?? "";
+      const list = Array.isArray(bot.cfg.intervalMessages)
+        ? bot.cfg.intervalMessages
+        : [];
+      const msg =
+        list.length > 0 ? String(bot.localizeValue(list[0]) ?? "") : "";
       const state = enabled
         ? t("commands.music.motd.stateOn")
         : t("commands.music.motd.stateOff");
@@ -42,7 +46,11 @@ const motd = {
       bot.updateConfig("motdEnabled", enabled);
       await setSetting("motdEnabled", enabled);
       await reply(
-        t(enabled ? "commands.music.motd.enabled" : "commands.music.motd.disabled"),
+        t(
+          enabled
+            ? "commands.music.motd.enabled"
+            : "commands.music.motd.disabled",
+        ),
       );
       return;
     }
@@ -69,9 +77,10 @@ const motd = {
       return;
     }
 
-    bot.updateConfig("motd", message);
+    const nextMessages = [message];
+    bot.updateConfig("intervalMessages", nextMessages);
     bot.updateConfig("motdEnabled", true);
-    await setSetting("motd", message);
+    await setSetting("intervalMessages", nextMessages);
     await setSetting("motdEnabled", true);
     await reply(t("commands.music.motd.updated"));
   },

@@ -203,15 +203,16 @@ export class CommandRegistry {
 
     const deleteOnMs = Number(cmd.deleteOn ?? 0);
     if (Number.isFinite(deleteOnMs) && deleteOnMs > 0) {
-      const baseReply = ctx.reply;
-      ctx.reply = async (text) => {
-        const res = await baseReply(text);
+      const wrapSend = (fn) => async (text) => {
+        const res = await fn(text);
         const msg = res?.data?.data?.message ?? res?.data?.message ?? null;
         const id = msg?.id ?? res?.data?.id ?? null;
         if (id && msg?.persisted !== false)
           ctx.bot.scheduleMessageDelete(id, deleteOnMs);
         return res;
       };
+      ctx.reply = wrapSend(ctx.reply);
+      ctx.send = wrapSend(ctx.send);
     }
 
     // ── Role check ────────────────────────────────────────────────────────────
