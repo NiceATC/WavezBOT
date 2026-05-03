@@ -251,6 +251,9 @@ export default {
         netInt = payoutInt - betInt;
       }
 
+      const didWin = payoutInt > 0;
+      void incrementCasinoStat(String(userId), didWin);
+
       const reelsText = `${a} | ${b} | ${c}`;
 
       if (bot.cfg.imageRenderingEnabled && process.env.IMGBB_API_KEY) {
@@ -281,7 +284,6 @@ export default {
       }
 
       if (payoutInt > 0 && jackpotWonInt) {
-        void incrementCasinoStat(String(userId), true);
         await reply(
           t("commands.economy.casino.slots.jackpot", {
             reels: reelsText,
@@ -291,7 +293,6 @@ export default {
           }),
         );
       } else if (payoutInt > 0) {
-        void incrementCasinoStat(String(userId), true);
         await reply(
           t("commands.economy.casino.slots.win", {
             reels: reelsText,
@@ -300,7 +301,6 @@ export default {
           }),
         );
       } else {
-        void incrementCasinoStat(String(userId), false);
         await reply(
           t("commands.economy.casino.slots.lose", { reels: reelsText }),
         );
@@ -358,6 +358,9 @@ export default {
       const payout = win ? bet * effective : 0;
       const payoutInt = toPointsInt(payout);
       const netInt = payoutInt - betInt;
+      const didWin = payoutInt > 0;
+
+      void incrementCasinoStat(String(userId), didWin);
 
       if (payoutInt > 0) {
         await bot.awardEconomyPoints(userId, payout, identity);
@@ -393,7 +396,6 @@ export default {
       }
 
       if (payoutInt > 0) {
-        void incrementCasinoStat(String(userId), true);
         await reply(
           t("commands.economy.casino.roulette.win", {
             choice: t(`commands.casino.roulette.color.${choice}`),
@@ -404,7 +406,6 @@ export default {
           }),
         );
       } else {
-        void incrementCasinoStat(String(userId), false);
         await reply(
           t("commands.economy.casino.roulette.lose", {
             choice: t(`commands.casino.roulette.color.${choice}`),

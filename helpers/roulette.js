@@ -42,15 +42,15 @@ function getAutoRouletteIntervalMs(bot) {
 
 // Returns the i18n prefix for command-level messages (opened, alreadyOpen…)
 function cmdKeyPrefix(type) {
-  if (type === "troll") return "commands.fun.roulette.troll";
-  if (type === "destiny") return "commands.fun.roulette.destiny";
+  if (type === "troll") return "commands.fun.troll";
+  if (type === "destiny") return "commands.fun.destiny";
   return "commands.fun.roulette";
 }
 
 // Returns the i18n prefix for helper-level messages (moveLines, shotLines…)
 function helperKeyPrefix(type) {
-  if (type === "troll") return "helpers.roulette.troll";
-  if (type === "destiny") return "helpers.roulette.destiny";
+  if (type === "troll") return "helpers.troll";
+  if (type === "destiny") return "helpers.destiny";
   return "helpers.roulette";
 }
 
@@ -76,7 +76,11 @@ function rouletteTypeRef(type) {
   return "russian";
 }
 
-async function sendRouletteChat(bot, message, deleteMs = getRouletteMessageDeleteMs(bot)) {
+async function sendRouletteChat(
+  bot,
+  message,
+  deleteMs = getRouletteMessageDeleteMs(bot),
+) {
   const res = await bot.sendChat(message);
   const id =
     res?.data?.data?.message?.id ??
@@ -121,9 +125,7 @@ export async function openRoulette(bot, api, options = {}) {
           { seconds },
         );
 
-  const withTypeRef = automatic
-    ? `${msg} [${rouletteTypeRef(type)}]`
-    : msg;
+  const withTypeRef = automatic ? `${msg} [${rouletteTypeRef(type)}]` : msg;
 
   if (typeof announce === "function") {
     await announce(withTypeRef);
@@ -206,7 +208,10 @@ export async function closeRoulette(bot, api) {
   }
 
   if (!api) {
-    await sendRouletteChat(bot, bot.t("helpers.roulette.closed.apiUnavailable"));
+    await sendRouletteChat(
+      bot,
+      bot.t("helpers.roulette.closed.apiUnavailable"),
+    );
     return;
   }
 

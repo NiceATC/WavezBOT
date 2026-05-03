@@ -8,14 +8,15 @@ import {
 const GOOD_CHANCE = 3;
 const NEUTRAL_CHANCE = 27;
 
-function formatThorLine(line, name) {
+function formatPingaLine(line, name) {
   return line.replaceAll("{name}", name);
 }
 
 export default {
-  name: "thor",
-  descriptionKey: "commands.fun.thor.description",
-  usageKey: "commands.fun.thor.usage",
+  name: "pinga",
+  aliases: ["51", "cachaça"],
+  descriptionKey: "commands.fun.pinga.description",
+  usageKey: "commands.fun.pinga.usage",
   cooldown: 1000_000,
   deleteOn: 60_000,
 
@@ -26,17 +27,17 @@ export default {
     const tag = `@${name}`;
 
     if (!userId) {
-      await reply(t("commands.fun.thor.noUser"));
+      await reply(t("commands.fun.pinga.noUser"));
       return;
     }
 
     if (!api?.room?.getQueueStatus) {
-      await reply(t("commands.fun.thor.apiUnavailable"));
+      await reply(t("commands.fun.pinga.apiUnavailable"));
       return;
     }
 
     if (bot.getBotRoleLevel() < getRoleLevel("bouncer")) {
-      await reply(t("commands.fun.thor.noPermission"));
+      await reply(t("commands.fun.pinga.noPermission"));
       return;
     }
 
@@ -45,7 +46,9 @@ export default {
       const qRes = await api.room.getQueueStatus(bot.cfg.room);
       entries = Array.isArray(qRes?.data?.entries) ? qRes.data.entries : [];
     } catch (err) {
-      await reply(t("commands.fun.thor.waitlistError", { error: err.message }));
+      await reply(
+        t("commands.fun.pinga.waitlistError", { error: err.message }),
+      );
       return;
     }
 
@@ -54,7 +57,7 @@ export default {
     );
     const inList = getWaitlistPositionForIndex(queueIndex, entries) != null;
     if (!inList) {
-      await reply(t("commands.fun.thor.mustBeInQueue"));
+      await reply(t("commands.fun.pinga.mustBeInQueue"));
       return;
     }
 
@@ -63,22 +66,25 @@ export default {
     if (roll < GOOD_CHANCE) {
       try {
         bot.wsReorderQueue(userId, 0);
-        const msg = formatThorLine(
-          pickRandom(tArray("commands.fun.thor.goodLines")) ?? "",
+        const msg = formatPingaLine(
+          pickRandom(tArray("commands.fun.pinga.goodLines")) ?? "",
           tag,
         );
         await reply(msg);
       } catch (err) {
         await reply(
-          t("commands.fun.thor.moveError", { user: tag, error: err.message }),
+          t("commands.fun.pinga.moveError", {
+            user: tag,
+            error: err.message,
+          }),
         );
       }
       return;
     }
 
     if (neutralEnabled && roll < GOOD_CHANCE + NEUTRAL_CHANCE) {
-      const msg = formatThorLine(
-        pickRandom(tArray("commands.fun.thor.neutralLines")) ?? "",
+      const msg = formatPingaLine(
+        pickRandom(tArray("commands.fun.pinga.neutralLines")) ?? "",
         tag,
       );
       await reply(msg);
@@ -87,14 +93,17 @@ export default {
 
     try {
       bot.wsRemoveFromQueue(userId);
-      const msg = formatThorLine(
-        pickRandom(tArray("commands.fun.thor.badLines")) ?? "",
+      const msg = formatPingaLine(
+        pickRandom(tArray("commands.fun.pinga.badLines")) ?? "",
         tag,
       );
       await reply(msg);
     } catch (err) {
       await reply(
-        t("commands.fun.thor.removeError", { user: tag, error: err.message }),
+        t("commands.fun.pinga.removeError", {
+          user: tag,
+          error: err.message,
+        }),
       );
     }
   },

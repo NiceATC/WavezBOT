@@ -46,6 +46,7 @@
         "rouletteDurationMs": 60000,
         "rouletteMinParticipants": 3,
         "rouletteMessageDeleteMs": 180000,
+        "neutralEnabled": true,
         "autoRouletteEnabled": false,
         "autoRouletteIntervalMs": 1200000,
         "quizRewardPoints": 5,

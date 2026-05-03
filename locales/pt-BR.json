@@ -1071,6 +1071,64 @@
                     "Asgard rejeitou o pedido de {name}. Resultado: fora da fila."
                 ]
             },
+            "pinga": {
+                "description": "Testa se você aguenta a pinga na fila.",
+                "usage": "!pinga",
+                "noUser": "Não consegui identificar você.",
+                "apiUnavailable": "API da fila indisponível.",
+                "noPermission": "Eu preciso de cargo bouncer para isso.",
+                "waitlistError": "Falha ao buscar a fila: {error}",
+                "mustBeInQueue": "Você precisa estar na fila.",
+                "moveError": "Falha ao mover {user}: {error}",
+                "removeError": "Falha ao remover {user}: {error}",
+                "goodLines": [
+                    "@{name} virou a pinga e continuou firme, direto pro topo da fila 🍶🔥",
+                    "O gole foi forte, mas @{name} aguentou e ganhou lugar VIP no topo 🥂",
+                    "Jailson brindou @{name}, resistência aprovada e subida garantida 🍻",
+                    "A glicose nem precisou: @{name} mostrou que é raiz e foi pro topo 💉😎"
+                ],
+                "neutralLines": [
+                    "@{name} tomou a pinga mas ficou só no meio termo, segue na mesma posição 🤷‍♂️",
+                    "O copo balançou, @{name} quase caiu mas se manteve na fila 🍶😅",
+                    "Nem PT, nem vitória: @{name} continua onde estava 🥴",
+                    "O gole foi médio, @{name} segue firme sem subir nem descer 🍺"
+                ],
+                "badLines": [
+                    "@{name} não resistiu à pinga e deu PT, volte para o final da fila enquanto toma uma glicose 💉",
+                    "O copo virou contra @{name}, fim da linha garantido 🍶🚪",
+                    "A ressaca bateu forte: @{name} foi chutado pro fim da fila 🤯",
+                    "Sem resistência, @{name} caiu fora da fila e foi direto pro boteco 🍻"
+                ]
+            },
+            "jailson": {
+                "description": "Prova se você é dlç o bastante para o suco de laranja.",
+                "usage": "!jailson",
+                "noUser": "Não consegui identificar você.",
+                "apiUnavailable": "API da fila indisponível.",
+                "noPermission": "Eu preciso de cargo bouncer para isso.",
+                "waitlistError": "Falha ao buscar a fila: {error}",
+                "mustBeInQueue": "Você precisa estar na fila.",
+                "moveError": "Falha ao mover {user}: {error}",
+                "removeError": "Falha ao remover {user}: {error}",
+                "goodLines": [
+                    "@{name} é delícia o bastante para provar o suco de laranja 🍊, sente-se e relaxe.",
+                    "O suco foi aprovado para @{name}, toque uma para mim :lenny:",
+                    "Jailson sorriu para @{name}, delícia confirmada e lugar garantido no topo 😏",
+                    "As frutas se abriram para @{name}, copo cheio e topo da fila 🍹✨"
+                ],
+                "neutralLines": [
+                    "Jailson olhou @{name} e ficou na dúvida, melhor deixar na mesma posição 🤔",
+                    "O suco de laranja foi servido, mas @{name} não provou… segue na fila 🍊😅",
+                    "Nada mudou para @{name}, ainda não foi julgado delícia o bastante 😶",
+                    "O copo ficou pela metade, @{name} continua onde estava 🥤"
+                ],
+                "badLines": [
+                    "@{name} não é dlç o bastante para provar o suco de laranja 🍊, volte para o final da fila bundão 💁‍♀️",
+                    "O suco azedou para @{name}, fim da fila garantido 🍋",
+                    "Jailson decretou: @{name} não merece o copo, rua da fila 🚪",
+                    "Sem delícia, sem suco: @{name} foi chutado pro fim da fila 😬"
+                ]
+            },
             "duel": {
                 "description": "Desafia um usuário para um duelo.",
                 "usage": "!duel <usuário>",

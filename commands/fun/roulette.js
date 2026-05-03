@@ -20,8 +20,8 @@ function resolveType(arg) {
 }
 
 function alreadyOpenKey(type) {
-  if (type === "troll") return "commands.fun.roulette.troll";
-  if (type === "destiny") return "commands.fun.roulette.destiny";
+  if (type === "troll") return "commands.fun.troll";
+  if (type === "destiny") return "commands.fun.destiny";
   return "commands.fun.roulette";
 }
 

@@ -41,6 +41,7 @@
 
 import { fileURLToPath, pathToFileURL } from "url";
 import path from "path";
+import fs from "fs";
 import { ROLE_LEVELS } from "../lib/permissions.js";
 import { listJsFilesRecursive } from "../helpers/fs.js";
 import { t as translate } from "../lib/i18n.js";
@@ -116,7 +117,8 @@ export class CommandRegistry {
       const rel = path.relative(dirPath, file);
       let exported;
       try {
-        const mod = await import(pathToFileURL(file).href);
+        const mtimeMs = Number(fs.statSync(file).mtimeMs || Date.now());
+        const mod = await import(`${pathToFileURL(file).href}?v=${mtimeMs}`);
         exported = mod.default ?? mod;
       } catch (err) {
         summary.failed++;
