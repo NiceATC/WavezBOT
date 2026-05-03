@@ -64,6 +64,30 @@ function tArrayWithFallback(bot, key, fallbackKey) {
 
 const ROULETTE_MOVE_CHANCE = 75;
 
+function getRouletteMessageDeleteMs(bot) {
+  const raw = Number(bot?.cfg?.rouletteMessageDeleteMs ?? 180_000);
+  if (!Number.isFinite(raw)) return 180_000;
+  return Math.max(0, Math.floor(raw));
+}
+
+function rouletteTypeRef(type) {
+  if (type === "troll") return "troll";
+  if (type === "destiny") return "destiny";
+  return "russian";
+}
+
+async function sendRouletteChat(bot, message, deleteMs = getRouletteMessageDeleteMs(bot)) {
+  const res = await bot.sendChat(message);
+  const id =
+    res?.data?.data?.message?.id ??
+    res?.data?.message?.id ??
+    res?.data?.data?.id ??
+    res?.data?.id ??
+    null;
+  if (id && deleteMs > 0) bot.scheduleMessageDelete(id, deleteMs);
+  return res;
+}
+
 export async function openRoulette(bot, api, options = {}) {
   const { announce, automatic = false, type = "russian" } = options;
   if (rouletteState.open) return false;
@@ -77,8 +101,6 @@ export async function openRoulette(bot, api, options = {}) {
   }, durationMs);
 
   const seconds = Math.round(durationMs / 1000);
-  const out =
-    typeof announce === "function" ? announce : (msg) => bot.sendChat(msg);
   const prefix = cmdKeyPrefix(type);
   const keyBase = automatic ? `${prefix}.autoOpened` : `${prefix}.opened`;
   const lines = tArrayWithFallback(
@@ -98,7 +120,16 @@ export async function openRoulette(bot, api, options = {}) {
             : "commands.fun.roulette.opened",
           { seconds },
         );
-  await out(msg);
+
+  const withTypeRef = automatic
+    ? `${msg} [${rouletteTypeRef(type)}]`
+    : msg;
+
+  if (typeof announce === "function") {
+    await announce(withTypeRef);
+  } else {
+    await sendRouletteChat(bot, withTypeRef);
+  }
   return true;
 }
 
@@ -170,12 +201,12 @@ export async function closeRoulette(bot, api) {
             count: entries.length,
             min: minParticipants,
           });
-    await bot.sendChat(msg);
+    await sendRouletteChat(bot, msg);
     return;
   }
 
   if (!api) {
-    await bot.sendChat(bot.t("helpers.roulette.closed.apiUnavailable"));
+    await sendRouletteChat(bot, bot.t("helpers.roulette.closed.apiUnavailable"));
     return;
   }
 
@@ -183,14 +214,15 @@ export async function closeRoulette(bot, api) {
   try {
     waitlist = await getWaitlist(api, bot.cfg.room);
   } catch (err) {
-    await bot.sendChat(
+    await sendRouletteChat(
+      bot,
       bot.t("helpers.roulette.closed.waitlistError", { error: err.message }),
     );
     return;
   }
 
   if (!waitlist.length) {
-    await bot.sendChat(bot.t("helpers.roulette.closed.emptyQueue"));
+    await sendRouletteChat(bot, bot.t("helpers.roulette.closed.emptyQueue"));
     return;
   }
 
@@ -200,13 +232,13 @@ export async function closeRoulette(bot, api) {
   const eligible = entries.filter(([id]) => waitlistIds.has(String(id)));
 
   if (!eligible.length) {
-    await bot.sendChat(bot.t("helpers.roulette.closed.noEligible"));
+    await sendRouletteChat(bot, bot.t("helpers.roulette.closed.noEligible"));
     return;
   }
 
   const [loserId, loserNameRaw] = pickRandom(eligible) ?? [];
   if (!loserId) {
-    await bot.sendChat(bot.t("helpers.roulette.closed.noTarget"));
+    await sendRouletteChat(bot, bot.t("helpers.roulette.closed.noTarget"));
     return;
   }
 
@@ -214,7 +246,8 @@ export async function closeRoulette(bot, api) {
   const loserTag = loserName.startsWith("@") ? loserName : `@${loserName}`;
 
   if (bot.getBotRoleLevel() < getRoleLevel("bouncer")) {
-    await bot.sendChat(
+    await sendRouletteChat(
+      bot,
       bot.t("helpers.roulette.closed.noPermission", { user: loserTag }),
     );
     return;
@@ -233,12 +266,13 @@ export async function closeRoulette(bot, api) {
     const msg = line
       .replaceAll("{name}", loserTag)
       .replaceAll("{pos}", String(dispPos));
-    await bot.sendChat(msg);
+    await sendRouletteChat(bot, msg);
     setTimeout(() => {
       try {
         bot.wsReorderQueue(loserId, apiPos);
       } catch (err) {
-        void bot.sendChat(
+        void sendRouletteChat(
+          bot,
           bot.t("helpers.roulette.moveError", {
             user: loserTag,
             error: err.message ?? bot.t("common.unknownError"),
@@ -265,12 +299,13 @@ export async function closeRoulette(bot, api) {
     const msg = line
       .replaceAll("{name}", loserTag)
       .replaceAll("{pos}", String(pos));
-    await bot.sendChat(msg);
+    await sendRouletteChat(bot, msg);
     setTimeout(() => {
       try {
         bot.wsReorderQueue(loserId, apiPos);
       } catch (err) {
-        void bot.sendChat(
+        void sendRouletteChat(
+          bot,
           bot.t("helpers.roulette.moveError", {
             user: loserTag,
             error: err.message ?? bot.t("common.unknownError"),
@@ -288,13 +323,14 @@ export async function closeRoulette(bot, api) {
   );
   const line = shotLines.length > 0 ? pickRandom(shotLines) : "";
   const msg = line.replaceAll("{name}", loserTag);
-  await bot.sendChat(msg);
+  await sendRouletteChat(bot, msg);
 
   setTimeout(() => {
     try {
       bot.wsRemoveFromQueue(loserId);
     } catch (err) {
-      void bot.sendChat(
+      void sendRouletteChat(
+        bot,
         bot.t("helpers.roulette.removeError", {
           user: loserTag,
           error: err.message ?? bot.t("common.unknownError"),

@@ -1,6 +1,6 @@
 {
     "_comment": "Configurações principais: sala, rede, prefixo e controle de mensagens.",
-    "room": "move-it-brasil",
+    "room": "mib",
     "roomUrl": "https://wavez.fm/~/{room}",
     "locale": "pt-BR",
     "apiUrl": "https://api.wavez.fm",

@@ -15,6 +15,8 @@
     "greetCooldownMs": 3600000,
     "motdEnabled": false,
     "motdInterval": 5,
+    "motdDeleteMs": 180000,
+    "onlineAnnouncementDeleteMs": 30000,
     "intervalMessages": [],
     "messageInterval": 5,
     "chatKeywordReplyEnabled": false,
@@ -43,6 +45,7 @@
     "fun": {
         "rouletteDurationMs": 60000,
         "rouletteMinParticipants": 3,
+        "rouletteMessageDeleteMs": 180000,
         "autoRouletteEnabled": false,
         "autoRouletteIntervalMs": 1200000,
         "quizRewardPoints": 5,
