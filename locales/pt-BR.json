@@ -1416,6 +1416,27 @@
                 "noQuestion": "Nao consegui carregar uma pergunta agora.",
                 "error": "Erro ao buscar trivia: {error}"
             },
+            "sorteio": {
+                "description": "Inicia um sorteio. Apenas co-host+.",
+                "usage": "!sorteio <tempo> <ganhadores> <premio> [imagemUrl] | cancelar | encerrar | reroll | status | lista",
+                "invalidTime": "Tempo invalido. Use: 30s, 5m, 1h.",
+                "invalidWinners": "Numero de ganhadores invalido. Use um numero entre 1 e 20.",
+                "alreadyActive": "Ja existe um sorteio ativo. Use !sorteio cancelar para cancelar.",
+                "noneActive": "Nao ha sorteio ativo no momento.",
+                "alreadyEnded": "O sorteio ja foi encerrado.",
+                "noReroll": "Nenhum sorteio recente para refazer.",
+                "started": "🎉 SORTEIO INICIADO! Premio: {prize} | Ganhadores: {winners} | Tempo: {time} | Digite {joinCmd} para participar!",
+                "cancelled": "Sorteio cancelado. Premio: {prize}.",
+                "noParticipants": "O sorteio encerrou sem participantes. Premio: {prize}.",
+                "winners": "🏆 RESULTADO DO SORTEIO! Premio: {prize} | Ganhador(es) ({count}): {names} — Parabens!",
+                "rerollWinners": "🔄 NOVO SORTEIO (reroll)! Premio: {prize} | Novo(s) ganhador(es) ({count}): {names} — Parabens!",
+                "status": "Sorteio ativo | Premio: {prize} | Ganhadores: {winners} | Participantes: {participants} | Tempo restante: {remaining}",
+                "list": "Participantes ({count}): {names}",
+                "listEmpty": "Nenhum participante inscrito ainda.",
+                "joined": "✅ {name} entrou no sorteio! ({count} participante(s)) | Premio: {prize}",
+                "joinAlready": "{name}, voce ja esta inscrito no sorteio!",
+                "reminder": "⏰ Sorteio em andamento! Premio: {prize} | Tempo restante: {remaining} | {count} participante(s) ate agora | Digite {joinCmd} para entrar!"
+            },
             "evento": {
                 "description": "Gerencia eventos ao vivo (quiz e drop).",
                 "usage": "!evento [status|quiz|drop|join|answer|top]",

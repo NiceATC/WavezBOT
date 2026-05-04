@@ -83,7 +83,8 @@
             "ship": true,
             "slap": true,
             "thor": true,
-            "trivia": true
+            "trivia": true,
+            "sorteio": true
         },
         "moderation": {
             "afklimit": true,

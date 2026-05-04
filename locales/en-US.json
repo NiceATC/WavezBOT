@@ -1343,6 +1343,27 @@
                 "noQuestion": "Could not load a question right now.",
                 "error": "Trivia error: {error}"
             },
+            "sorteio": {
+                "description": "Start a giveaway. Co-host+ only.",
+                "usage": "!giveaway <time> <winners> <prize> [imageUrl] | cancel | end | reroll | status | list",
+                "invalidTime": "Invalid time. Use: 30s, 5m, 1h.",
+                "invalidWinners": "Invalid winner count. Use a number between 1 and 20.",
+                "alreadyActive": "A giveaway is already active. Use !giveaway cancel to cancel it.",
+                "noneActive": "There is no active giveaway right now.",
+                "alreadyEnded": "The giveaway has already ended.",
+                "noReroll": "No recent giveaway to reroll.",
+                "started": "🎉 GIVEAWAY STARTED! Prize: {prize} | Winners: {winners} | Time: {time} | Type {joinCmd} to enter!",
+                "cancelled": "Giveaway cancelled. Prize: {prize}.",
+                "noParticipants": "Giveaway ended with no participants. Prize: {prize}.",
+                "winners": "🏆 GIVEAWAY RESULT! Prize: {prize} | Winner(s) ({count}): {names} — Congratulations!",
+                "rerollWinners": "🔄 GIVEAWAY REROLL! Prize: {prize} | New winner(s) ({count}): {names} — Congratulations!",
+                "status": "Active giveaway | Prize: {prize} | Winners: {winners} | Participants: {participants} | Time left: {remaining}",
+                "list": "Participants ({count}): {names}",
+                "listEmpty": "No participants yet.",
+                "joined": "✅ {name} entered the giveaway! ({count} participant(s)) | Prize: {prize}",
+                "joinAlready": "{name}, you are already entered in the giveaway!",
+                "reminder": "⏰ Giveaway in progress! Prize: {prize} | Time left: {remaining} | {count} participant(s) so far | Type {joinCmd} to enter!"
+            },
             "evento": {
                 "description": "Manage live events (quiz and drop).",
                 "usage": "!evento [status|quiz|drop|join|answer|top]",
