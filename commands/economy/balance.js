@@ -43,6 +43,7 @@ export default {
           username: identity.displayName ?? identity.username ?? "User",
           balance,
           vipLabel,
+          vipLevelKey: vipState.levelKey,
           labels,
         });
         const url = await uploadToImgbb(buffer, `balance-${userId}`);

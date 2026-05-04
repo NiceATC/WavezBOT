@@ -277,6 +277,7 @@ export class CommandRegistry {
         return;
       }
       this._cooldowns.set(ck, Date.now());
+      ctx.cancelCooldown = () => this._cooldowns.delete(ck);
     }
 
     await cmd.execute(ctx);

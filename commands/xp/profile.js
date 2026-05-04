@@ -57,6 +57,23 @@ export default {
     const vipLabel = vipState.isActive
       ? getVipLevelLabel(vipState.levelKey, ctx.locale)
       : null;
+    const marriage = await bot.getMarriageState(user.userId);
+    const spouseId = String(marriage?.spouseUserId ?? "");
+    const spouse = spouseId ? (bot._roomUsers.get(spouseId) ?? null) : null;
+    const spouseName = spouse
+      ? (spouse.displayName ?? spouse.username ?? spouseId)
+      : spouseId;
+    const marriageSince = Number(marriage?.marriedAt ?? 0)
+      ? new Date(Number(marriage.marriedAt)).toLocaleDateString(
+          ctx.locale ?? "pt-BR",
+        )
+      : "";
+    const marriageText = marriage?.isMarried
+      ? t("commands.xp.perfil.married", {
+          partner: spouseName || "-",
+          since: marriageSince || "-",
+        })
+      : null;
 
     if (bot.cfg.imageRenderingEnabled && process.env.IMGBB_API_KEY) {
       try {
@@ -67,6 +84,7 @@ export default {
           reward: t("commands.xp.perfil.cardReward"),
           balance: t("commands.xp.perfil.cardBalance"),
           vip: t("commands.xp.perfil.cardVip"),
+          marriage: t("commands.xp.perfil.cardMarriage"),
           points: t("commands.xp.perfil.cardPoints"),
         };
         const buffer = renderProfileCard({
@@ -77,6 +95,11 @@ export default {
           rewardPoints: toPointsInt(profile.rewardNext),
           balance,
           vipLabel,
+          vipLevelKey: vipState.levelKey,
+          marriageLabel: marriage?.isMarried
+            ? t("commands.xp.perfil.cardMarriage")
+            : null,
+          marriageValue: marriage?.isMarried ? spouseName || "-" : null,
           labels,
         });
         const url = await uploadToImgbb(buffer, `perfil-${user.userId}`);
@@ -111,6 +134,7 @@ export default {
         }),
       );
     }
+    if (marriageText) extras.push(marriageText);
     const message = extras.length ? `${base} | ${extras.join(" | ")}` : base;
     await reply(message);
   },

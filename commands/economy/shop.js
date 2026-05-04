@@ -286,6 +286,7 @@ const buy = {
         userId,
         priceInt / POINT_SCALE,
         identity,
+        { allowMarriagePool: true },
       );
       if (spent == null) {
         await reply(
@@ -319,6 +320,7 @@ const buy = {
         userId,
         priceInt / POINT_SCALE,
         identity,
+        { allowMarriagePool: true },
       );
       if (spent == null) {
         await reply(
@@ -369,6 +371,7 @@ const buy = {
       userId,
       priceInt / POINT_SCALE,
       identity,
+      { allowMarriagePool: true },
     );
     if (spent == null) {
       await reply(

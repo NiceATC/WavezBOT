@@ -21,22 +21,25 @@ export default {
   deleteOn: 60_000,
 
   async execute(ctx) {
-    const { bot, api, sender, reply, t, tArray } = ctx;
+    const { bot, api, sender, reply, t, tArray, cancelCooldown } = ctx;
     const userId = sender.userId != null ? String(sender.userId) : "";
     const name = sender.username ?? sender.displayName ?? t("common.someone");
     const tag = `@${name}`;
 
     if (!userId) {
+      cancelCooldown?.();
       await reply(t("commands.fun.jailson.noUser"));
       return;
     }
 
     if (!api?.room?.getQueueStatus) {
+      cancelCooldown?.();
       await reply(t("commands.fun.jailson.apiUnavailable"));
       return;
     }
 
     if (bot.getBotRoleLevel() < getRoleLevel("bouncer")) {
+      cancelCooldown?.();
       await reply(t("commands.fun.jailson.noPermission"));
       return;
     }
@@ -46,6 +49,7 @@ export default {
       const qRes = await api.room.getQueueStatus(bot.cfg.room);
       entries = Array.isArray(qRes?.data?.entries) ? qRes.data.entries : [];
     } catch (err) {
+      cancelCooldown?.();
       await reply(
         t("commands.fun.jailson.waitlistError", { error: err.message }),
       );
@@ -57,6 +61,7 @@ export default {
     );
     const inList = getWaitlistPositionForIndex(queueIndex, entries) != null;
     if (!inList) {
+      cancelCooldown?.();
       await reply(t("commands.fun.jailson.mustBeInQueue"));
       return;
     }

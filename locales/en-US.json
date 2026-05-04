@@ -569,6 +569,89 @@
                 "cardVip": "VIP",
                 "cardPoints": "points"
             },
+            "aviator": {
+                "description": "Bet on Aviator and cash out before the crash.",
+                "usage": "!casino aviator <bet> [auto_cashout]",
+                "usageMessage": "Usage: !casino aviator <bet> [auto_cashout]. Example: !casino aviator 10 2.5",
+                "disabled": "Aviator is disabled.",
+                "noUser": "Could not identify you.",
+                "alreadyActive": "You already have an Aviator round active. Use !casino cashout or wait for the result.",
+                "busy": "There is already an Aviator round in progress. Wait for it to finish before starting another.",
+                "noActiveGame": "You do not have an active Aviator round right now.",
+                "notOwner": "Only the user who started the current Aviator can cash out.",
+                "invalidAutoCashout": "Invalid auto cashout. Use a number greater than 1, for example 2.5",
+                "cardTitle": "Aviator",
+                "cardBet": "Bet",
+                "cardGain": "Gain",
+                "cardBalance": "Balance",
+                "cardAuto": "Auto",
+                "cardCurrent": "Current",
+                "cardStatus": "Status",
+                "cardRunning": "Flying",
+                "cardCrashed": "Crashed",
+                "cardCashedOut": "Cashed out"
+            },
+            "cashout": {
+                "description": "Cash out your current Aviator bet.",
+                "usage": "!casino cashout"
+            },
+            "marriage": {
+                "description": "Marriage system between users.",
+                "usage": "!marriage <@user|accept|reject|object|status|divorce|annul>",
+                "usageMessage": "Usage: !marriage <@user|accept|reject|object|status|divorce|annul>",
+                "noUser": "Could not identify you.",
+                "userNotFound": "User not found: {user}",
+                "self": "You cannot marry yourself.",
+                "targetBot": "You cannot marry the bot.",
+                "alreadyMarried": "One of you is already married.",
+                "penaltyActive": "One of you is still under divorce penalty.",
+                "targetHasProposal": "That user already has a pending proposal.",
+                "outgoingExists": "You already have a pending outgoing proposal.",
+                "proposed": "{from} proposed to {to}. Use !marriage accept or !marriage reject. Expires in {remaining}.",
+                "noProposal": "You do not have any pending marriage proposal.",
+                "accepted": "Marriage confirmed with {from}! Congrats to the couple.",
+                "rejected": "You rejected {from}'s proposal.",
+                "statusMarried": "You are married to {partner} since {since}.",
+                "statusPendingIncoming": "Pending proposal from {from}. Expires in {remaining}.",
+                "statusPendingOutgoing": "Your proposal to {to} is still pending. Expires in {remaining}.",
+                "objectionStart": "{left} and {right} accepted marriage. If anyone objects, speak now or forever hold your peace. Vote with !marriage object. {required} objection votes are needed within {remaining} to cancel.",
+                "objectionVoteRegistered": "Objection vote registered. Total: {votes}/{required}. Missing {missing} to cancel.",
+                "objectionAlreadyVoted": "You have already voted against this union.",
+                "objectionCoupleCannotVote": "The couple cannot vote against their own union.",
+                "objectionNone": "There is no active objection vote right now.",
+                "objectionStatus": "Active objection vote for {left} and {right}: {votes}/{required} votes. Ends in {remaining}.",
+                "objectionInProgress": "There is already an objection vote in progress. Wait for it to finish before opening another marriage.",
+                "objectionCancelled": "Marriage of {left} and {right} was cancelled by objection ({votes}/{required} votes).",
+                "objectionApproved": "No successful objection: marriage of {left} and {right} is confirmed ({votes}/{required} objection votes).",
+                "statusPenalty": "You are not married and still under divorce penalty for {remaining}.",
+                "statusSingle": "You are not married.",
+                "notMarried": "You are not married.",
+                "judgeNoPermission": "Only co-host or higher can annul marriages.",
+                "judgeUsage": "Usage: !marriage annul <@user|userId>",
+                "judgeNotMarried": "This user is not in an active marriage.",
+                "judgeAnnulled": "Marriage annulled by staff decision: {left} x {right}.",
+                "divorced": "Divorce completed with {partner}. {amount} points were transferred and you received a penalty for {penalty}.",
+                "certificate": {
+                    "title": "Marriage Certificate",
+                    "subtitle": "Union officially registered on WavezBOT",
+                    "between": "Between",
+                    "date": "Date"
+                },
+                "statusCard": {
+                    "title": "Marriage Status",
+                    "subtitle": "Active union on WavezBOT",
+                    "partner": "Partner",
+                    "since": "Married since",
+                    "together": "Time together"
+                },
+                "divorceCertificate": {
+                    "title": "Divorce Certificate",
+                    "subtitle": "Union formally dissolved",
+                    "marriedDate": "Marriage date",
+                    "divorceDate": "Divorce date",
+                    "together": "Time together"
+                }
+            },
             "bank": {
                 "description": "Manage your points bank.",
                 "usage": "!bank <status|deposit|withdraw> [amount]",
@@ -699,8 +782,8 @@
             },
             "casino": {
                 "description": "Casino games with bets.",
-                "usage": "!casino <slots|roulette|dice> <bet> [option]",
-                "usageMessage": "Usage: !casino <slots|roulette|dice> <bet> [option]",
+                "usage": "!casino <slots|roulette|dice|aviator|cashout> <bet> [option]",
+                "usageMessage": "Usage: !casino <slots|roulette|dice|aviator|cashout> <bet> [option]",
                 "disabled": "Casino is disabled.",
                 "noUser": "Could not identify you.",
                 "invalidBet": "Invalid bet.",
@@ -715,8 +798,7 @@
                     "cardTitle": "Slots",
                     "cardBet": "Bet",
                     "cardWin": "Win",
-                    "cardNet": "Net",
-                    "cardJackpot": "Jackpot"
+                    "cardBalance": "Balance"
                 },
                 "roulette": {
                     "usageMessage": "Usage: !casino roulette <bet> <red|black|green>",
@@ -730,14 +812,21 @@
                     "cardTitle": "Roulette",
                     "cardBet": "Bet",
                     "cardWin": "Win",
-                    "cardNet": "Net",
+                    "cardBalance": "Balance",
                     "cardPick": "Pick",
                     "cardResult": "Result"
                 },
                 "dice": {
-                    "usageMessage": "Usage: !casino dice <bet> <number> (1-{sides})",
-                    "win": "🎲 Rolled {roll}, you picked {guess} — won {win} ({net}).",
-                    "lose": "🎲 Rolled {roll}, you picked {guess} — lost."
+                    "usageMessage": "Usage: !casino dice <bet> <number> [dice] (number: 1-{sides}, dice: 1-3)",
+                    "win": "🎲 Dice: {rolls} | Pick: {guess} | Count: {dice} — won {win} ({net}).",
+                    "lose": "🎲 Dice: {rolls} | Pick: {guess} | Count: {dice} — lost.",
+                    "cardTitle": "Dice",
+                    "cardBet": "Bet",
+                    "cardWin": "Win",
+                    "cardBalance": "Balance",
+                    "cardPick": "Pick",
+                    "cardResult": "Result",
+                    "cardDice": "Dice"
                 }
             }
         },
@@ -752,12 +841,14 @@
                 "disabled": "XP is disabled.",
                 "nextBadge": "Next badge: {badge}",
                 "nextAchievement": "Next achievement: {achievement}",
+                "married": "Married to {partner} since {since}",
                 "cardTitle": "Profile",
                 "cardLevel": "Level",
                 "cardXp": "XP",
                 "cardReward": "Next reward",
                 "cardBalance": "Balance",
                 "cardVip": "VIP",
+                "cardMarriage": "Marriage",
                 "cardPoints": "points"
             },
             "xptop": {
@@ -1171,7 +1262,39 @@
             "ship": {
                 "description": "Ship two people.",
                 "usage": "!ship [@user1] [@user2]",
-                "reply": "{emoji} {left} + {right} {bar} {percent}%"
+                "reply": "{emoji} {left} + {right} {bar} {percent}% — {message}",
+                "messages": {
+                    "max": [
+                        "Soulmates! This is true love. 💞",
+                        "Perfect for each other, no doubt about it!",
+                        "The universe conspired for this couple. 🌟",
+                        "This ship is basically official. 💍"
+                    ],
+                    "high": [
+                        "So much chemistry here! Something will happen. ❤️",
+                        "Super compatible — watch out for the sparks!",
+                        "This couple has a future, for sure!",
+                        "Almost perfect — just needs a good pickup line. 😏"
+                    ],
+                    "mid": [
+                        "There's potential! Worth a shot. 💛",
+                        "Compatible enough for a good friendship... or more.",
+                        "Could work with a bit of effort!",
+                        "Halfway there. 🚶"
+                    ],
+                    "low": [
+                        "Take it slow, it won't be easy. 🤝",
+                        "Friendship works, romance maybe not so much.",
+                        "Incompatible on many levels, but who knows?",
+                        "Would need a lot of flexibility here..."
+                    ],
+                    "min": [
+                        "Total disaster. 💔",
+                        "The universe said NO very loudly.",
+                        "This combination should be illegal.",
+                        "Zero chemistry. Better stay distant friends."
+                    ]
+                }
             },
             "coin": {
                 "description": "Flip a coin.",

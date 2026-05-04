@@ -13,6 +13,7 @@
     "debugCommandUserIds": [
         "f23c7bd6-fdb2-4bb8-b13e-b299e1f0219c"
     ],
+    "commandBlacklistUserIds": [],
     "cmdPrefix": "!",
     "deleteCommandMessagesEnabled": true,
     "deleteCommandMessagesDelayMs": 1000

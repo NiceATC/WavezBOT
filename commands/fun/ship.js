@@ -1,7 +1,7 @@
 function splitTargets(raw) {
   if (!raw) return [];
   return raw
-    .split(/\s*(?:\+|\/|&|,)\s*|\s+x\s+/i)
+    .split(/\s*(?:\+|\/|&|,)\s*|\s+x\s+|\s+/i)
     .map((part) => part.trim())
     .filter(Boolean);
 }
@@ -26,6 +26,14 @@ function shipEmoji(percent) {
   return "💔";
 }
 
+function shipTier(percent) {
+  if (percent >= 90) return "max";
+  if (percent >= 70) return "high";
+  if (percent >= 50) return "mid";
+  if (percent >= 30) return "low";
+  return "min";
+}
+
 export default {
   name: "ship",
   aliases: ["love", "casal"],
@@ -35,7 +43,7 @@ export default {
   deleteOn: 60_000,
 
   async execute(ctx) {
-    const { bot, sender, t, reply } = ctx;
+    const { bot, sender, t, tArray, reply } = ctx;
     const raw = String(ctx.rawArgs ?? "").trim();
     const parts = splitTargets(raw);
     const senderName =
@@ -58,6 +66,11 @@ export default {
     const percent = Math.floor(Math.random() * 101);
     const bar = shipBar(percent);
     const emoji = shipEmoji(percent);
+    const tier = shipTier(percent);
+    const messages = tArray("commands.fun.ship.messages." + tier);
+    const message = Array.isArray(messages)
+      ? messages[Math.floor(Math.random() * messages.length)]
+      : "";
 
     await reply(
       t("commands.fun.ship.reply", {
@@ -66,6 +79,7 @@ export default {
         percent,
         bar,
         emoji,
+        message,
       }),
     );
   },

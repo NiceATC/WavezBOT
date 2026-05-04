@@ -29,6 +29,7 @@
             "shop": true,
             "buy": true,
             "casino": true,
+            "marriage": true,
             "steal": true,
             "transfer": true,
             "top": true

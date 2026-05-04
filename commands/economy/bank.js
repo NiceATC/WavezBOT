@@ -211,7 +211,9 @@ const insurance = {
       const discounted = Math.floor(baseTotal * (1 - discountFraction));
       const totalPriceInt = toPointsInt(discounted);
 
-      const spent = await bot.spendEconomyPoints(userId, discounted, identity);
+      const spent = await bot.spendEconomyPoints(userId, discounted, identity, {
+        allowMarriagePool: true,
+      });
       if (spent == null) {
         await reply(
           t("commands.economy.insurance.insufficient", {
