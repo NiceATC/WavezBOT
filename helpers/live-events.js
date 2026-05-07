@@ -298,6 +298,7 @@ export async function startQuizEvent(bot, options = {}) {
     question,
     options: labeled,
     claimed: false,
+    attemptedUsers: new Set(),
     recentQuestions:
       liveEventsState.quiz?.recentQuestions instanceof Map
         ? liveEventsState.quiz.recentQuestions
@@ -474,9 +475,8 @@ export async function tryClaimDrop(bot, sender, messageText = "") {
   if (!drop || drop.claimed || getNow() > drop.expiresAt) return false;
 
   const content = normalizeText(messageText);
-  const joinCmd = normalizeText(`${bot.cfg.cmdPrefix ?? "!"}evento join`);
   const peguei = normalizeText(`peguei ${drop.code}`);
-  if (content !== peguei && content !== joinCmd) return false;
+  if (content !== peguei) return false;
 
   const userId = String(sender?.userId ?? "").trim();
   if (!userId || bot.isBotUser(userId)) return false;
@@ -504,6 +504,11 @@ export async function tryAnswerQuiz(bot, sender, messageText = "") {
   const userId = String(sender?.userId ?? "").trim();
   if (!userId || bot.isBotUser(userId)) return false;
 
+  if (!(quiz.attemptedUsers instanceof Set)) {
+    quiz.attemptedUsers = new Set();
+  }
+  if (quiz.attemptedUsers.has(userId)) return false;
+
   const contentRaw = String(messageText ?? "").trim();
   if (!contentRaw) return false;
 
@@ -511,13 +516,49 @@ export async function tryAnswerQuiz(bot, sender, messageText = "") {
   const prefix = `${bot.cfg.cmdPrefix ?? "!"}trivia`;
   const prefixNorm = normalizeText(prefix);
   const contentNorm = normalizeText(contentRaw);
-  if (contentNorm.startsWith(prefixNorm)) {
+  const usedTriviaCommand = contentNorm.startsWith(prefixNorm);
+  if (usedTriviaCommand) {
     const cut = contentRaw.slice(prefix.length).trim();
     if (!cut) return false;
     candidate = cut;
   }
 
-  if (normalizeText(candidate) !== quiz.answerNorm) return false;
+  const normalizedOptionTexts = (Array.isArray(quiz.options) ? quiz.options : [])
+    .map((opt) => String(opt ?? "").replace(/^\s*\d+\)\s*/, ""))
+    .map((opt) => normalizeText(opt))
+    .filter(Boolean);
+  const validOptionNorms = new Set(normalizedOptionTexts);
+
+  let candidateNorm = normalizeText(candidate);
+  const isNumericCandidate = /^\d+$/.test(candidate.trim());
+  const selectedOption = isNumericCandidate
+    ? Number.parseInt(candidate, 10)
+    : Number.NaN;
+  if (
+    Number.isInteger(selectedOption) &&
+    selectedOption >= 1 &&
+    selectedOption <= (Array.isArray(quiz.options) ? quiz.options.length : 0)
+  ) {
+    const rawOption = String(quiz.options[selectedOption - 1] ?? "");
+    const optionText = rawOption.replace(/^\s*\d+\)\s*/, "");
+    candidateNorm = normalizeText(optionText);
+  }
+
+  // Ignore regular chat messages during quiz; only explicit/valid answer shapes count as attempts.
+  const isValidNumericOption =
+    Number.isInteger(selectedOption) &&
+    selectedOption >= 1 &&
+    selectedOption <= (Array.isArray(quiz.options) ? quiz.options.length : 0);
+  const isKnownOptionText = validOptionNorms.has(candidateNorm);
+  const shouldCountAttempt =
+    usedTriviaCommand || isValidNumericOption || isKnownOptionText;
+
+  if (!shouldCountAttempt) return false;
+
+  if (candidateNorm !== quiz.answerNorm) {
+    quiz.attemptedUsers.add(userId);
+    return false;
+  }
 
   quiz.claimed = true;
   clearQuizTimer();

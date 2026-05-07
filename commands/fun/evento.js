@@ -85,18 +85,6 @@ export default {
       return;
     }
 
-    if (action === "join") {
-      const ok = await tryClaimDrop(
-        bot,
-        toSender(ctx),
-        `${bot.cfg.cmdPrefix ?? "!"}evento join`,
-      );
-      if (!ok) {
-        await reply(t("commands.fun.evento.noDrop"));
-      }
-      return;
-    }
-
     if (action === "answer" || action === "resposta" || action === "reveal") {
       const answer = await revealQuizAnswer();
       if (!answer) {
